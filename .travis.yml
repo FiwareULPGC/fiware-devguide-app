@@ -11,6 +11,7 @@ services:
 
 env:
   - TEST_DIR=server
+  - COMPOSE_DIR=docker/compose
 
 before_install:
   - npm install -g npm
@@ -19,4 +20,4 @@ before_script:
   - npm install -g grunt-cli
 
 script:
-  - cd $TEST_DIR && npm install && npm test
+  - cd $COMPOSE_DIR && docker-compose -f docker-compose.yml up
