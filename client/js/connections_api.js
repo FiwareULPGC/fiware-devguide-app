@@ -31,8 +31,6 @@ function logged_in(userInfo){
   html += '</ul>'
   document.getElementById("logged_div").innerHTML = html;
   create_and_show_menu(userInfo);
-  //show_roles();
-  //hide_roles();
 
   logout_link = document.getElementById("logout_link");
 
@@ -50,13 +48,8 @@ function create_and_show_menu(userInfo)
   html = '<ul class="nav navbar-nav pull-left" id="logged_menu">';
 
     //check each menu element
-    //TODO check roles
 
-    console.log(userInfo);
     html += '<li class="menu_element"><a href="index.html">Home</a></li>';
-
-    //check each menu element
-
 
     if( has_role(userInfo, "End user") )
     {
@@ -127,32 +120,6 @@ function show_logout(){
 
 }
 
-function show_roles(){
-  roles=JSON.parse(localStorage.getItem("userInfo"))["roles"];
-  
-  html = '<p> You have the roles: </p>';
-  html += '\n<ul>';
-
- 
-  for(i=0, len= roles.length; i< len; i++)
-  {
-    html+= '\n<li>'+roles[i]["name"]+'</li>';
-   
-  }
-
-  html += '\n</ul>'
-
-  document.getElementById("roles_div").innerHTML = html;
-  document.getElementById("roles_div").style.display = 'block';
-
-  return;
-}
-
-function hide_roles(){
-  document.getElementById("roles_div").innerHTML = "";
-  document.getElementById("roles_div").style.display = 'none';
-  return;
-}
 
 
 function login_needed(action)
@@ -192,10 +159,8 @@ function show_message(message, alertType)
   closeButton.setAttribute("data-dismiss", "alert");
   closeButton.innerHTML='X';
   alert.appendChild(closeButton);
-  //alert.innerHTML = 'Log in required';
 
   var navBar =  document.getElementById("top_menu");
-  //map.appendChild(alert);
 
   var main_container = document.getElementsByClassName("container-fluid")[0];
 

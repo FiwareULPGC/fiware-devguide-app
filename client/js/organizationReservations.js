@@ -26,8 +26,6 @@ login_needed(function(){
 
 });
 
-
-
 // else bad url
 //todo translate to common js
 $("tbody").height($(window).height()- $("thead th").height()- $("#logged_div").height()-50);
