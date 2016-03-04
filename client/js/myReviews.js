@@ -10,17 +10,17 @@
 
 */
 //initialization
-var init_reviews = function() {
+var initReviews = function() {
   //only gets reviews if the user is loged
-  login_needed(function() {
+  loginNeeded(function() {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    get_user_reviews(userInfo.displayName);
+    getUserReviews(userInfo.displayName);
   });
 
 
   //todo translate to common js
   $('tbody').height($(window).height() - $('thead th').height() -
-    $('#logged_div').height() - 50);
+    $('#loggedDiv').height() - 50);
 };
 
-addLoadEvent(init_reviews);
+addLoadEvent(initReviews);

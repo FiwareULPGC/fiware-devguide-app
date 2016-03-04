@@ -1,6 +1,6 @@
 'use strict';
 /*
- * js_utils.js
+ * JSUtils.js
  * Copyright(c) 2016 Universidad de Las Palmas de Gran Canaria
  * Authors:
  *   Jaisiel Santana <jaisiel@gmail.com>,
@@ -27,11 +27,11 @@ function addLoadEvent(func) {
 }
 
   
-function prepareXHR(method, url, failure_callback) {
+function prepareXHR(method, url, failureCallback) {
   var xhr = new XMLHttpRequest();
   
   xhr.onerror = function(e) {
-    failure_callback(this.response);
+    failureCallback(this.response);
   };
 
   xhr.open(method, url, true);
@@ -40,15 +40,16 @@ function prepareXHR(method, url, failure_callback) {
   return xhr;
 }
 
-function get_ajax_petition(url, on_success_callback, on_failure_callback) {
-  var xhr = prepareXHR('GET', url, on_failure_callback);
+
+function getAjaxRequest(url, successCallback, failureCallback) {
+  var xhr = prepareXHR('GET', url, failureCallback);
 
   xhr.onload = function(e) {
     if (200 == this.status) {
-      on_success_callback(this.response);
+      successCallback(this.response);
     }
     else {
-      on_failure_callback(this.response);
+      failureCallback(this.response);
     }
   };
 
@@ -56,15 +57,15 @@ function get_ajax_petition(url, on_success_callback, on_failure_callback) {
 }
 
 
-function delete_ajax_petition(url, on_success_callback, on_failure_callback) {
-  var xhr = prepareXHR('DELETE', url, on_failure_callback);
+function deleteAjaxRequest(url, successCallback, failureCallback) {
+  var xhr = prepareXHR('DELETE', url, failureCallback);
 
   xhr.onload = function(e) {
     if (204 == this.status) {
-      on_success_callback(this.response);
+      successCallback(this.response);
     }
     else {
-      on_failure_callback(this.response);
+      failureCallback(this.response);
     }
   };
 
@@ -72,15 +73,15 @@ function delete_ajax_petition(url, on_success_callback, on_failure_callback) {
 }
 
 
-function post_ajax_petition(url, on_success_callback, on_failure_callback, data) {
-  var xhr = prepareXHR('POST', url, on_failure_callback);
+function postAjaxRequest(url, successCallback, failureCallback, data) {
+  var xhr = prepareXHR('POST', url, failureCallback);
 
   xhr.onload = function(e) {
-    if (200 == this.status) {
-      on_success_callback(this.response);
+    if (200 == this.status || this.status == 201) {
+      successCallback(this.response);
     }
     else {
-      on_failure_callback(this.response);
+      failureCallback(this.response);
     }
   };
   
@@ -89,15 +90,15 @@ function post_ajax_petition(url, on_success_callback, on_failure_callback, data)
 }
 
 
-function patch_ajax_petition(url, on_success_callback, on_failure_callback, data) {
-  var xhr = prepareXHR('PATCH', url, on_failure_callback);
+function patchAjaxRequest(url, successCallback, failureCallback, data) {
+  var xhr = prepareXHR('PATCH', url, failureCallback);
 
   xhr.onload = function(e) {
     if ((201 == this.status) || (204 == this.status)) {
-      on_success_callback(this.response);
+      successCallback(this.response);
     }
     else {
-      on_failure_callback(this.response);
+      failureCallback(this.response);
     }
   };
 

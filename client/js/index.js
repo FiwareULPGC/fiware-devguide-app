@@ -11,13 +11,13 @@
 */
 var map;
 //initialization
-var init_index = function() {
+var initIndex = function() {
 
-  $('#pop_window').modal();
+  $('#popWindow').modal();
   map = L.map('map').setView([42.90816007196054, -2.52960205078125], 8);
 
   //only gets restaurants if the user is logged
-  login_needed(function() {get_all_restaurants();});
+  loginNeeded(function() {getAllRestaurants();});
   //set tile layer
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution:
@@ -27,4 +27,4 @@ var init_index = function() {
 
 };
 
-addLoadEvent(init_index);
+addLoadEvent(initIndex);
