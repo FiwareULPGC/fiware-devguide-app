@@ -11,7 +11,7 @@
 */
 //initialization
 var map;
-var init_index = function() {
+var initIndex = function() {
   map = L.map('map').setView([42.90816007196054, -2.52960205078125], 8);
 
 
@@ -20,7 +20,7 @@ var init_index = function() {
   var franchise = window.location.search.replace('?', '');
   var prefix = 'franchise=';
   if (franchise.slice(0, prefix.length) == prefix) {
-    get_organization_restaurants(franchise.slice(prefix.length));
+    getOrganizationRestaurants(franchise.slice(prefix.length));
   }
 
 
@@ -45,4 +45,4 @@ var init_index = function() {
 
 };
 
-addLoadEvent(init_index);
+addLoadEvent(initIndex);

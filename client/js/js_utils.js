@@ -27,7 +27,7 @@ function addLoadEvent(func) {
 }
 
 
-function get_ajax_petition(url, on_success_callback, on_failure_callback) {
+function getAjaxRequest(url, successCallback, failureCallback) {
   var xmlhttp;
 
   if (window.XMLHttpRequest) {
@@ -43,22 +43,22 @@ function get_ajax_petition(url, on_success_callback, on_failure_callback) {
     if (xmlhttp.readyState == XMLHttpRequest.DONE) {
 
       if (xmlhttp.status == 200) {
-        on_success_callback(xmlhttp.responseText);
+        successCallback(xmlhttp.responseText);
       }
       else if (xmlhttp.status == 404) {
         try {
-          on_failure_callback();
+          failureCallback();
         }
        catch (err) {
-          on_failure_callback(xmlhttp.responseText);
+          failureCallback(xmlhttp.responseText);
         }
       }
       else {
         try {
-          on_failure_callback();
+          failureCallback();
         }
         catch (err) {
-          on_failure_callback(xmlhttp.responseText);
+          failureCallback(xmlhttp.responseText);
         }
       }
     }
@@ -69,7 +69,7 @@ function get_ajax_petition(url, on_success_callback, on_failure_callback) {
 }
 
 
-function delete_ajax_petition(url, on_success_callback, on_failure_callback) {
+function deleteAjaxRequest(url, successCallback, failureCallback) {
   var xmlhttp;
 
   if (window.XMLHttpRequest) {
@@ -85,23 +85,23 @@ function delete_ajax_petition(url, on_success_callback, on_failure_callback) {
     if (xmlhttp.readyState == XMLHttpRequest.DONE) {
       console.log(xmlhttp.responseText);
       if (xmlhttp.status == 204) {
-        on_success_callback(xmlhttp.responseText);
+        successCallback(xmlhttp.responseText);
       }
       else if (xmlhttp.status == 404) {
         try {
-          on_failure_callback();
+          failureCallback();
         }
         catch (err) {
-          on_failure_callback(xmlhttp.responseText);
+          failureCallback(xmlhttp.responseText);
         }
 
       }
       else {
         try {
-          on_failure_callback();
+          failureCallback();
         }
         catch (err) {
-          on_failure_callback(xmlhttp.responseText);
+          failureCallback(xmlhttp.responseText);
         }
       }
     }
@@ -113,7 +113,7 @@ function delete_ajax_petition(url, on_success_callback, on_failure_callback) {
 
 
 
-function post_ajax_petition(url, on_success_callback, on_failure_callback, data) {
+function postAjaxRequest(url, successCallback, failureCallback, data) {
   var xmlhttp;
 
   if (window.XMLHttpRequest) {
@@ -128,22 +128,22 @@ function post_ajax_petition(url, on_success_callback, on_failure_callback, data)
   xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == XMLHttpRequest.DONE) {
       if (xmlhttp.status == 201) {
-        on_success_callback(xmlhttp.responseText);
+        successCallback(xmlhttp.responseText);
       }
       else if (xmlhttp.status == 404) {
         try {
-          on_failure_callback();
+          failureCallback();
         }
           catch (err) {
-          on_failure_callback(xmlhttp.responseText);
+          failureCallback(xmlhttp.responseText);
         }
       }
       else {
         try {
-          on_failure_callback();
+          failureCallback();
         }
         catch (err) {
-          on_failure_callback(xmlhttp.responseText);
+          failureCallback(xmlhttp.responseText);
         }
       }
     }
@@ -155,7 +155,7 @@ function post_ajax_petition(url, on_success_callback, on_failure_callback, data)
 }
 
 
-function patch_ajax_petition(url, on_success_callback, on_failure_callback, data) {
+function patchAjaxRequest(url, successCallback, failureCallback, data) {
   console.log('patch debug:');
   console.log('url: ' + url);
   console.log(data);
@@ -173,24 +173,24 @@ function patch_ajax_petition(url, on_success_callback, on_failure_callback, data
   xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == XMLHttpRequest.DONE) {
       if ((xmlhttp.status == 201) || xmlhttp.status == 204) {
-        on_success_callback(xmlhttp.responseText);
+        successCallback(xmlhttp.responseText);
       }
       else if (xmlhttp.status == 404) {
         try
         {
-          on_failure_callback();
+          failureCallback();
         }
         catch (err)
         {
-          on_failure_callback(xmlhttp.responseText);
+          failureCallback(xmlhttp.responseText);
         }
       }
       else {
         try {
-          on_failure_callback();
+          failureCallback();
         }
         catch (err) {
-          on_failure_callback(xmlhttp.responseText);
+          failureCallback(xmlhttp.responseText);
         }
      }
     }

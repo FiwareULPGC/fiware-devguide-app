@@ -10,14 +10,14 @@
 
 */
 //initialization
-var init_reservations = function() {
+var initReservations = function() {
 
   $('#pop_window').modal();
 
   //only gets reservations if the user is logged
-  login_needed(function() {
+  loginNeeded(function() {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    get_user_reservation(userInfo.displayName);
+    getUserReservation(userInfo.displayName);
   });
 
 
@@ -27,4 +27,4 @@ var init_reservations = function() {
 
 };
 
-addLoadEvent(init_reservations);
+addLoadEvent(initReservations);

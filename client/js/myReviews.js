@@ -10,11 +10,11 @@
 
 */
 //initialization
-var init_reviews = function() {
+var initReviews = function() {
   //only gets reviews if the user is loged
-  login_needed(function() {
+  loginNeeded(function() {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    get_user_reviews(userInfo.displayName);
+    getUserReviews(userInfo.displayName);
   });
 
 
@@ -23,4 +23,4 @@ var init_reviews = function() {
     $('#logged_div').height() - 50);
 };
 
-addLoadEvent(init_reviews);
+addLoadEvent(initReviews);
