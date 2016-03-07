@@ -1,6 +1,6 @@
 'use strict';
 /*
- * restaurants_api.js
+ * restaurantsAPI.js
  * Copyright(c) 2016 Universidad de Las Palmas de Gran Canaria
  * Authors:
  *   Jaisiel Santana <jaisiel@gmail.com>,
