@@ -147,17 +147,60 @@ function showRestaurants(restaurants) {
 
     //add mark to map
     restaurantMarks[i].mark = L.marker(restaurantMarks[i].coords);
-    var popHtml = '<div class="markPopUp"><b>' + restaurantMarks[i].name +
-      '</b><br>Address: ' + restaurantMarks[i].address +
-      '<br>Phone: ' + restaurantMarks[i].telephone +
-      '<br><a onclick="getAndShowRestaurantReviews(\'' +
-        restaurantMarks[i].name + '\')">Show reviews </a>' +
-      '<br><a onclick="getAndShowRestaurantReservations(\'' +
-        restaurantMarks[i].name + '\')">Show reservations </a>' +
-      '<br>' + addCreateReviewLink(restaurantMarks[i].name) +
-      '<br>' + addCreateReservationLink(restaurantMarks[i].name) +
-      '</div>';
-    restaurantMarks[i].mark.bindPopup(popHtml);
+
+    var popHTML = document.createElement('DIV');
+    popHTML.className = 'markPopUp';
+
+    var restaurantName = document.createElement('B');
+    restaurantName.textContent = restaurantMarks[i].name;
+    popHTML.appendChild(restaurantName);
+
+    var addressP = document.createElement('P');
+    addressP.textContent = 'Address: ' + restaurantMarks[i].address;
+    popHTML.appendChild(addressP);
+
+    var phoneP = document.createElement('P');
+    phoneP.textContent = 'Phone: ' + restaurantMarks[i].telephone;
+    popHTML.appendChild(phoneP);
+
+    var showReviews = document.createElement('A');
+    showReviews.textContent = 'Show reviews';
+    showReviews.onclick = (function (restaurantName) {
+        return function() {
+          getAndShowRestaurantReviews(restaurantName);
+        }
+    })(restaurantMarks[i].name);
+
+    popHTML.appendChild(showReviews);
+    popHTML.appendChild(document.createElement('BR'));
+
+    var showReservations = document.createElement('A');
+    showReservations.textContent = 'Show reservations';
+    showReservations.onclick = (function (restaurantName) {
+        return function() {
+          getAndShowRestaurantReservations(restaurantName);
+        }
+    })(restaurantMarks[i].name);
+
+    popHTML.appendChild(showReservations);
+    popHTML.appendChild(document.createElement('BR'));
+
+
+    var createReview = addCreateReviewLink(restaurantMarks[i].name);
+    if (null != createReview ) {
+        popHTML.appendChild(createReview);
+        popHTML.appendChild(document.createElement('BR'));
+    }
+
+    var createReservation = addCreateReservationLink(restaurantMarks[i].name);
+    if (null != createReservation) {
+        popHTML.appendChild(createReservation);
+    }
+    
+
+    popHTML.appendChild(createReservation);
+
+    restaurantMarks[i].mark.bindPopup(popHTML);
 
     //reference all mark info for use from leaflet
     restaurantMarks[i].mark.extraInfo = restaurantMarks[i];
@@ -183,11 +226,18 @@ function addCreateReviewLink(restaurantName) {
   var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
   if (! hasRole(userInfo, 'End user')) {
-    return '';
+    return null;
   }
 
-  return '<a onclick="editNewReview(\'' + restaurantName +
-    '\')"> Create review</a>';
+  var createReviewLink = document.createElement('A');
+  createReviewLink.textContent = 'Create review';
+  createReviewLink.onclick = (function (restaurantName) {
+    return function() {
+      editNewReview(restaurantName);
+    }
+  })(restaurantName);
+
+  return createReviewLink;
 }
 
 
@@ -195,26 +245,51 @@ function addCreateReviewLink(restaurantName) {
 function editNewReview(restaurantName) {
 
   var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  document.getElementById('popTitle').innerHTML = '' + restaurantName;
-  var reviewForm = '';
-  reviewForm += '\n<form name="editReviewForm" class="editReviewForm">';
-  reviewForm += '\nYour review:<br>';
-  reviewForm += '\n<textarea name="reviewBody"></textarea><br>';
-  reviewForm += '\nRating value:';
-  reviewForm += '\n<select name="ratingValue">';
-  reviewForm += '\n<option value="0">0 Stars</option>';
-  reviewForm += '\n<option value="1">1 Star</option>';
-  reviewForm += '\n<option value="2">2 Stars</option>';
-  reviewForm += '\n<option value="3">3 Stars</option>';
-  reviewForm += '\n<option value="4">4 Stars</option>';
-  reviewForm += '\n<option value="5">5 Stars</option>';
-  reviewForm += '\n</select>';
-  reviewForm += '\n</form>';
-  reviewForm += '\n<input type="submit" value="Create Review"' +
-    ' onclick="createNewReview(\'' + restaurantName + '\')">';
-  reviewForm += '\n</form>';
+  document.getElementById('popTitle').textContent = restaurantName;
+  var reviewForm = document.createElement('FORM');
+  reviewForm.name = 'editReviewForm';
+  reviewForm.className = 'editReviewForm';
 
-  document.getElementById('popContent').innerHTML = reviewForm;
+  var reviewLabel = document.createElement('LABEL');
+  reviewLabel.textContent = 'Your review: ';
+  reviewForm.appendChild(reviewLabel);
+  reviewForm.appendChild(document.createElement('BR'));
+
+  var reviewBody = document.createElement('TEXTAREA');
+  reviewBody.name = 'reviewBody';
+  reviewForm.appendChild(reviewBody);
+  reviewForm.appendChild(document.createElement('BR'));
+
+  var ratingLabel = document.createElement('LABEL');
+  ratingLabel.textContent = 'Rating value: ';
+  reviewForm.appendChild(ratingLabel);
+
+  var ratingValueSelect = document.createElement('SELECT');
+
+  var option;
+  for (var i =0; i<= 5; i++) {
+    option = document.createElement('OPTION');
+    option.value = i;
+    option.textContent = i + ' Star' + (1!=i?'s':'');
+    ratingValueSelect.appendChild(option);
+  }
+
+  reviewForm.appendChild(ratingValueSelect);
+
+  var submit = document.createElement('INPUT');
+  submit.type = 'submit';
+  submit.value = 'Create Review';
+  submit.onclik = (function (restaurantName) {
+    return function() {
+      createNewReview(restaurantName);
+    }
+  })(restaurantName);
+
+  reviewForm.appendChild(submit);
+
+  document.getElementById('popContent').innerHTML = '';
+
+  document.getElementById('popContent').appendChild(reviewForm);
 
   openPopUpWindow();
 }
@@ -438,13 +513,19 @@ function addCreateReservationLink(restaurantName) {
   var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
   if (! hasRole(userInfo, 'End user')) {
-    return '';
+    return null;
   }
 
-  return '<a onclick="editNewReservation(\'' + restaurantName +
-    '\')"> Make a reservation</a>';
-}
+  var createReservationLink = document.createElement('A');
+  createReservationLink.textContent = 'Make a reservation';
+  createReservationLink.onclick = (function (restaurantName) {
+    return function() {
+      editNewReservation(restaurantName);
+    }
+  })(restaurantName);
 
+  return createReservationLink;
+}
 
 
 function editNewReservation(restaurantName) {
