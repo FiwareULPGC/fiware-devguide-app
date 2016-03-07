@@ -20,7 +20,7 @@ var initReviews = function() {
 
   //todo translate to common js
   $('tbody').height($(window).height() - $('thead th').height() -
-    $('#logged_div').height() - 50);
+    $('#loggedDiv').height() - 50);
 };
 
 addLoadEvent(initReviews);

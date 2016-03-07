@@ -13,7 +13,7 @@ var map;
 //initialization
 var initIndex = function() {
 
-  $('#pop_window').modal();
+  $('#popWindow').modal();
   map = L.map('map').setView([42.90816007196054, -2.52960205078125], 8);
 
   //only gets restaurants if the user is logged

@@ -35,7 +35,7 @@ var initIndex = function() {
   d.yyyymmdd();
 
 
-  $('#reservation_date').datepicker({
+  $('#reservationDate').datepicker({
     dateFormat: 'yy-mm-dd',
     minDate: '-0d',//only allow future reservations
     maxDate: '+90d', // 3 month max

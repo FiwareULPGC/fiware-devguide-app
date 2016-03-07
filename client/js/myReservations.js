@@ -12,7 +12,7 @@
 //initialization
 var initReservations = function() {
 
-  $('#pop_window').modal();
+  $('#popWindow').modal();
 
   //only gets reservations if the user is logged
   loginNeeded(function() {
@@ -23,7 +23,7 @@ var initReservations = function() {
 
   //todo translate to common js
   $('tbody').height($(window).height() - $('thead th').height() -
-    $('#logged_div').height() - 50);
+    $('#loggedDiv').height() - 50);
 
 };
 

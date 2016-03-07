@@ -24,17 +24,17 @@ function loggedIn(userInfo) {
 
   userInfo = JSON.parse(userInfo);
   var html = '<ul class="nav navbar-nav pull-right" id="log_out_menu">';
-  html += '\n<li class="menu_element" id="hi_user"><p>Hi,' +
+  html += '\n<li class="menuElement" id="hiUser"><p>Hi,' +
     userInfo.displayName + '!</p></li>';
-  html += '<li class="menu_element" id="log_out" ><a id="logout_link" ' +
+  html += '<li class="menuElement" id="logOut" ><a id="logoutLink" ' +
     'href="http://tourguide/logout">Log Out</a></li>';
   html += '</ul>';
-  document.getElementById('logged_div').innerHTML = html;
+  document.getElementById('loggedDiv').innerHTML = html;
   createAndShowMenu(userInfo);
   //show_roles();
   //hide_roles();
 
-  var logoutLink = document.getElementById('logout_link');
+  var logoutLink = document.getElementById('logoutLink');
 
   logoutLink.onclick = function() {
     console.log('LOGOUT');
@@ -45,13 +45,13 @@ function loggedIn(userInfo) {
 }
 
 function createAndShowMenu(userInfo) {
-  var html = '<ul class="nav navbar-nav pull-left" id="logged_menu">';
+  var html = '<ul class="nav navbar-nav pull-left" id="loggedMenu">';
 
   //check each menu element
   //TODO check roles
 
   console.log(userInfo);
-  html += '<li class="menu_element"><a href="index.html">Home</a></li>';
+  html += '<li class="menuElement"><a href="index.html">Home</a></li>';
 
   //check each menu element
 
@@ -83,18 +83,18 @@ function createAndShowMenu(userInfo) {
   }
 
   if (hasRole(userInfo, 'End user')) {
-    html += '<li class="menu_element"><a href="myReservations.html">' +
+    html += '<li class="menuElement"><a href="myReservations.html">' +
       'My Reservations</a></li>';
   }
 
   if (hasRole(userInfo, 'End user')) {
-    html += '<li class="menu_element"><a href="myReviews.html">My reviews' +
+    html += '<li class="menuElement"><a href="myReviews.html">My reviews' +
       '</a></li>';
   }
 
   html += '</ul>';
   //insert menu inside logged_div
-  document.getElementById('logged_div').innerHTML += html;
+  document.getElementById('loggedDiv').innerHTML += html;
 }
 
 function hasRole(userInfo, role) {
@@ -108,9 +108,9 @@ function hasRole(userInfo, role) {
 
 function notLoggedIn() {
   localStorage.removeItem('userInfo');
-  var html = '<div id="log_in"><p><a href="http://tourguide/auth">Log in</a>' +
+  var html = '<div id="logIn"><p><a href="http://tourguide/auth">Log in</a>' +
     '</p></div>';
-  document.getElementById('logged_div').innerHTML = html;
+  document.getElementById('loggedDiv').innerHTML = html;
   return;
 }
 
@@ -132,15 +132,15 @@ function showRoles() {
 
   html += '\n</ul>';
 
-  document.getElementById('roles_div').innerHTML = html;
-  document.getElementById('roles_div').style.display = 'block';
+  document.getElementById('rolesDiv').innerHTML = html;
+  document.getElementById('rolesDiv').style.display = 'block';
 
   return;
 }
 
 function hideRoles() {
-  document.getElementById('roles_div').innerHTML = '';
-  document.getElementById('roles_div').style.display = 'none';
+  document.getElementById('rolesDiv').innerHTML = '';
+  document.getElementById('rolesDiv').style.display = 'none';
   return;
 }
 

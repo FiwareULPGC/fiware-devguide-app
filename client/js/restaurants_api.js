@@ -195,7 +195,7 @@ function addCreateReviewLink(restaurantName) {
 function editNewReview(restaurantName) {
 
   var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  document.getElementById('pop_title').innerHTML = '' + restaurantName;
+  document.getElementById('popTitle').innerHTML = '' + restaurantName;
   var reviewForm = '';
   reviewForm += '\n<form name="editReviewForm" class="editReviewForm">';
   reviewForm += '\nYour review:<br>';
@@ -214,7 +214,7 @@ function editNewReview(restaurantName) {
     ' onclick="createNewReview(\'' + restaurantName + '\')">';
   reviewForm += '\n</form>';
 
-  document.getElementById('pop_content').innerHTML = reviewForm;
+  document.getElementById('popContent').innerHTML = reviewForm;
 
   openPopUpWindow();
 }
@@ -243,7 +243,7 @@ function showEditReview(reviewResponse) {
   var review = reviewResponse[0];
 
 
-  document.getElementById('pop_title').innerHTML = 'Edit review ' +
+  document.getElementById('popTitle').innerHTML = 'Edit review ' +
     review.name + ' for ' + review.itemReviewed.name;
   var reviewForm = '';
   reviewForm += '\n<form name="editReviewForm" class="editReviewForm">';
@@ -265,7 +265,7 @@ function showEditReview(reviewResponse) {
   reviewForm += '\n</form>';
 
 
-  document.getElementById('pop_content').innerHTML = reviewForm;
+  document.getElementById('popContent').innerHTML = reviewForm;
 
   //mark the selected
   var selectObject = document.getElementsByName('ratingValue')[0];
@@ -299,7 +299,7 @@ function processViewReview(reviewResponse) {
 
 
   //remove previous content
-  var myNode = document.getElementById('pop_content');
+  var myNode = document.getElementById('popContent');
   while (myNode.firstChild) {
     myNode.removeChild(myNode.lastChild);
   }
@@ -328,8 +328,8 @@ function processViewReview(reviewResponse) {
   var rating = document.createElement('DIV');
   rating.setAttribute('class', 'rating-div');
   rating.innerHTML =
-    '<span class="rating_label">Rating: </span> ' +
-    '<span class="rating_value">' +
+    '<span class="ratingLabel">Rating: </span> ' +
+    '<span class="ratingValue">' +
     review.reviewRating.ratingValue +
     '</span>';
   top.appendChild(rating);
@@ -338,8 +338,8 @@ function processViewReview(reviewResponse) {
   var author = document.createElement('DIV');
   author.setAttribute('class', 'author-div');
   author.innerHTML =
-    '<span class="author_label">Author: </span> ' +
-    '<span class="author_value">' +
+    '<span class="authorLabel">Author: </span> ' +
+    '<span class="authorValue">' +
     review.author.name +
     '</span>';
   top.appendChild(author);
@@ -352,10 +352,10 @@ function processViewReview(reviewResponse) {
   reviewElement.appendChild(hr);
   //body
   var body = document.createElement('DIV');
-  body.setAttribute('class', 'review_body-div');
+  body.setAttribute('class', 'reviewBodyDiv');
   body.innerHTML =
-    '<span class="body_label"></span> ' +
-    '<span class="body_value">' +
+    '<span class="bodyLabel"></span> ' +
+    '<span class="bodyValue">' +
     review.reviewBody +
     '</span>';
   reviewElement.appendChild(body);
@@ -453,14 +453,14 @@ function editNewReservation(restaurantName) {
   reservationsPerDate = null;
 
   getReservationsPerDate(restaurantName);
-  document.getElementById('pop_title').innerHTML = 'Reservation for ' +
+  document.getElementById('popTitle').innerHTML = 'Reservation for ' +
      restaurantName;
   var reservationForm = '';
   reservationForm += '\n<form name="editReservationForm">';
   reservationForm += '<input type="hidden" name="restaurant_name"' +
-    ' id="restaurant_name" value="' + restaurantName + '">';
+    ' id="restaurantName" value="' + restaurantName + '">';
   reservationForm += '\nNumber of diners:<br/>';
-  reservationForm += '\n<select name="partySize" id="party_size">';
+  reservationForm += '\n<select name="partySize" id="partySize">';
   //reservationForm +='\n<option value="0">0</option>';
   reservationForm += '<option disabled selected> -- select an option --' +
     ' </option>';
@@ -475,12 +475,12 @@ function editNewReservation(restaurantName) {
   //min="1" max="20">';
 
   reservationForm += '<br>\nDate:<br>';
-  reservationForm += '\n<input id = "reservation_date" disabled> <br>';
+  reservationForm += '\n<input id = "reservationDate" disabled> <br>';
   //reservationForm +='\n<input type="datetime-local"
   //name="reservationDate"><br>';
   reservationForm += '\nTime:<br>';
-  reservationForm += '\n<input id = "reservation_time" disabled>' +
-    ' <div id="loading_time"><img src="img/loading.gif"/> ' +
+  reservationForm += '\n<input id = "reservationTime" disabled>' +
+    ' <div id="loadingTime"><img src="img/loading.gif"/> ' +
     'Calculating availability</div><br>';
 
   reservationForm += '\n</form>';
@@ -489,11 +489,11 @@ function editNewReservation(restaurantName) {
   reservationForm += '\n</form>';
 
 
-  document.getElementById('pop_content').innerHTML = reservationForm;
+  document.getElementById('popContent').innerHTML = reservationForm;
 
 
   //init elements
-  $('#reservation_date').datepicker({
+  $('#reservationDate').datepicker({
     dateFormat: 'yy-mm-dd',
     minDate: '-0d',//only allow future reservations
     maxDate: '+90d', // 3 month max
@@ -505,7 +505,7 @@ function editNewReservation(restaurantName) {
   });
 
 
-  $('#reservation_time').timepicker({
+  $('#reservationTime').timepicker({
     'timeFormat': 'H:i:s',
     'minTime': minTime + '',
     'maxTime': maxTime + '',
@@ -515,12 +515,12 @@ function editNewReservation(restaurantName) {
   });
 
 
-  document.getElementById('loading_time').style.visibility = 'hidden';
+  document.getElementById('loadingTime').style.visibility = 'hidden';
 
   //party_size does not fire initReservatiomTime yet
    alreadyPartySizeInit = false;
 
-  document.getElementById('party_size').addEventListener('change',
+  document.getElementById('partySize').addEventListener('change',
                         enableCalendar);
 
   //open
@@ -528,19 +528,19 @@ function editNewReservation(restaurantName) {
 }
 
 function enableCalendar() {
-  document.getElementById('reservation_date').removeAttribute('disabled');
+  document.getElementById('reservationDate').removeAttribute('disabled');
 }
 
 function initReservationTime() {
   if (typeof alreadyPartySizeInit === false) {
     //console.log("first init");
     alreadyPartySizeInit = true;
-    document.getElementById('party_size').addEventListener('change',
+    document.getElementById('partySize').addEventListener('change',
       initReservationTime);
   }
   //console.log("init ")
 
-  document.getElementById('loading_time').style.visibility = '';
+  document.getElementById('loadingTime').style.visibility = '';
 
   //call availability for each time
   setTimeAvailability();
@@ -550,8 +550,8 @@ function initReservationTime() {
 
 function setTimeAvailability() {
   //don't allow select time during process
-  document.getElementById('reservation_time').setAttribute('disabled', '');
-  var day = document.getElementById('reservation_date').value;
+  document.getElementById('reservationTime').setAttribute('disabled', '');
+  var day = document.getElementById('reservationDate').value;
   //console.log("day:");
   //console.log(document.getElementById('reservation_date').value);
 
@@ -568,7 +568,7 @@ function setTimeAvailability() {
   availableTimeArray = {};
 
   var URL = baseURL + 'restaurant/' +
-    document.getElementById('restaurant_name').value + '/date/';
+    document.getElementById('restaurantName').value + '/date/';
   while (date.getTime() <= maxDate.getTime()) {
     var time = date.toISOString();
     //console.log(date);
@@ -608,7 +608,7 @@ function processOccupancyResponse(restaurantResponse) {
   }
 
 
-  var nDiners = parseInt(document.getElementById('party_size').value);
+  var nDiners = parseInt(document.getElementById('partySize').value);
 
 
   availableTimeArray[new Date(time).toLocaleTimeString()] =
@@ -622,8 +622,8 @@ function checkEnablereservationTime() {
     //process finished enabled it
     //console.log("ALL FINISHED");
     //console.log(available_time_array);
-    document.getElementById('reservation_time').removeAttribute('disabled');
-    document.getElementById('loading_time').style.visibility = 'hidden';
+    document.getElementById('reservationTime').removeAttribute('disabled');
+    document.getElementById('loadingTime').style.visibility = 'hidden';
     /*for (var key in available_time_array) {
       if (available_time_array.hasOwnProperty(key))
         console.log(key +"-->"+available_time_array[key]);
@@ -643,7 +643,7 @@ function createDisableTimeRanges(dates) {
   for (var key in availableTimeArray) {
     if (availableTimeArray.hasOwnProperty(key)) {
       if (!availableTimeArray[key]) {
-        day = document.getElementById('reservation_date').value;
+        day = document.getElementById('reservationDate').value;
         maxRange = (new Date((new Date((day + ' ' +
                maxTime).replace(/-/g, '/'))).getTime() +
               (1000 * 60 * 29))).toLocaleTimeString();
@@ -653,7 +653,7 @@ function createDisableTimeRanges(dates) {
   }
   //console.log("time to disabled");
   //console.log(disableTimeRanges);
-  $('#reservation_time').timepicker('option', { 'disableTimeRanges':
+  $('#reservationTime').timepicker('option', { 'disableTimeRanges':
                         [disableTimeRanges] });
 }
 
@@ -694,11 +694,11 @@ function createNewReservation(restaurantName) {
 /*get reviews from a restaurant an show it */
 function getAndShowRestaurantReviews(id) {
   var URL = baseURL + 'reviews/restaurant/' + id;
-  document.getElementById('pop_title').innerHTML = id;
+  document.getElementById('popTitle').innerHTML = id;
   getAjaxRequest(URL,
       showRestaurantReviews,
        function() {
-        document.getElementById('pop_content').innerHTML =
+        document.getElementById('popContent').innerHTML =
           '<h2>Cannot get reviews.</h2>';
         openPopUpWindow();
        });
@@ -714,13 +714,13 @@ function showRestaurantReviews(reviewsResponse) {
   //console.log(reviewsResponse);
 
   //remove previous content
-  var myNode = document.getElementById('pop_content');
+  var myNode = document.getElementById('popContent');
   while (myNode.firstChild) {
     myNode.removeChild(myNode.lastChild);
   }
 
   if (reviewsResponse.length < 1) {
-    document.getElementById('pop_content').innerHTML =
+    document.getElementById('popContent').innerHTML =
       '<h2>No reviews are available.</h2>';
     openPopUpWindow();
     return;
@@ -742,8 +742,8 @@ function showRestaurantReviews(reviewsResponse) {
     var rating = document.createElement('DIV');
     rating.setAttribute('class', 'rating-div');
     rating.innerHTML =
-      '<span class="rating_label">Rating: </span> ' +
-      '<span class="rating_value">' +
+      '<span class="ratingLabel">Rating: </span> ' +
+      '<span class="ratingValue">' +
       reviewsResponse[j].reviewRating.ratingValue +
       '</span>';
     top.appendChild(rating);
@@ -752,8 +752,8 @@ function showRestaurantReviews(reviewsResponse) {
     var author = document.createElement('DIV');
     author.setAttribute('class', 'author-div');
     author.innerHTML =
-      '<span class="author_label">Author: </span>' +
-      ' <span class="author_value">' +
+      '<span class="authorLabel">Author: </span>' +
+      ' <span class="authorValue">' +
       reviewsResponse[j].author.name +
       '</span>';
     top.appendChild(author);
@@ -773,9 +773,9 @@ function showRestaurantReviews(reviewsResponse) {
     reviewElement.appendChild(hr);
     //body
     var body = document.createElement('DIV');
-    body.setAttribute('class', 'review_body-div');
-    body.innerHTML = '<span class="body_label"></span>' +
-      ' <span class="body_value">' +
+    body.setAttribute('class', 'reviewBodyDiv');
+    body.innerHTML = '<span class="bodyLabel"></span>' +
+      ' <span class="bodyValue">' +
       reviewsResponse[j].reviewBody +
       '</span>';
     reviewElement.appendChild(body);
@@ -794,11 +794,11 @@ function showRestaurantReviews(reviewsResponse) {
 /*get reservations from a restaurant an show it */
 function getAndShowRestaurantReservations(id) {
   var URL = baseURL + 'reservations/restaurant/' + id;
-  document.getElementById('pop_title').innerHTML = id;
+  document.getElementById('popTitle').innerHTML = id;
   getAjaxRequest(URL,
     showRestaurantReservations,
     function() {
-      document.getElementById('pop_content').innerHTML =
+      document.getElementById('popContent').innerHTML =
         '<h2>Cannot get reservations.</h2>';
        openPopUpWindow();
   });
@@ -810,7 +810,7 @@ function getAndShowRestaurantReservations(id) {
 /* At this moment, only show the reservations without pagination */
 function showRestaurantReservations(reservationsResponse) {
   //remove previous content
-  var myNode = document.getElementById('pop_content');
+  var myNode = document.getElementById('popContent');
   while (myNode.firstChild) {
     myNode.removeChild(myNode.lastChild);
   }
@@ -819,7 +819,7 @@ function showRestaurantReservations(reservationsResponse) {
   reservationsResponse = JSON.parse(reservationsResponse);
 
   if (reservationsResponse.length < 1) {
-    document.getElementById('pop_content').innerHTML =
+    document.getElementById('popContent').innerHTML =
        '<h2>No reservations are available.</h2>';
     openPopUpWindow();
     return;
@@ -886,7 +886,7 @@ function showRestaurantReservations(reservationsResponse) {
   }
 
   reservationsTable.appendChild(tableBody);
-  document.getElementById('pop_content').appendChild(reservationsTable);
+  document.getElementById('popContent').appendChild(reservationsTable);
   openPopUpWindow();
 }
 
@@ -903,30 +903,30 @@ function createReservationsList(reservationsResponse) {
   reservationsResponse = JSON.parse(reservationsResponse);
 
   if (reservationsResponse.length < 1) {
-    document.getElementById('reservations_list_div').innerHTML =
+    document.getElementById('reservationsListDiv').innerHTML =
       '<h2>No reservations are available.</h2>' +
-      document.getElementById('reservations_list_div').innerHTML;
+      document.getElementById('reservationsListDiv').innerHTML;
     return;
   }
 
 
-  document.getElementById('reservation_list').innerHTML = '';
+  document.getElementById('reservationList').innerHTML = '';
   var cancelReservationURLBase = '';
   for (var j = 0, lim = reservationsResponse.length; j < lim; j++) {
     var reservationHTML = '<li>' +
-      '<span class="restaurant_reservation_label">Restaurant:' +
-        ' </span> <span class="restaurant_reservation_">' +
+      '<span class="restaurant_reservationLabel">Restaurant:' +
+        ' </span> <span class="restaurantReservationLabel">' +
         reservationsResponse[j].reservationFor.name +
       '</span>\n' +
-      '<span class="reservation_time_label">Time: </span>' +
-        ' <span class="time_value">' +
+      '<span class="reservationTimeLabel">Time: </span>' +
+        ' <span class="timeValue">' +
          fixBookingTime(reservationsResponse[j].startTime) +
       '</span>\n' +
-      '<span class="diners_number_label">Diners</span>\n' +
+      '<span class="dinersNumberLabel">Diners</span>\n' +
       '<span class="diners">' +
       reservationsResponse[j].partySize +
       '</span>\n' +
-      '<span class="cancel_reservation">' +
+      '<span class="cancelReservation">' +
       '<a href="javascript:cancelReservation(' +
       '\'' + reservationsResponse[j].reservationId + '\'' + ')">' +
       ' cancel reservation </a>' +
@@ -937,7 +937,7 @@ function createReservationsList(reservationsResponse) {
       //reservationsResponse[j]["reservationId"]);
     //console.log(typeof reservationsResponse[j]["reservationId"]);
 
-    document.getElementById('reservation_list').innerHTML +=
+    document.getElementById('reservationList').innerHTML +=
                             reservationHTML;
   }
 }
@@ -948,14 +948,14 @@ function createReservationsTable(reservationsResponse) {
   reservationsResponse = JSON.parse(reservationsResponse);
 
   //clean previous table content
-  var myNode = document.getElementById('reservations_table_body');
+  var myNode = document.getElementById('reservationsTableBody');
     while (myNode.firstChild) {
       myNode.removeChild(myNode.lastChild);
     }
 
 
   if (reservationsResponse.length < 1) {
-    document.getElementById('reservations_table_body').innerHTML =
+    document.getElementById('reservationsTableBody').innerHTML =
       '<tr>No reservations are available.</ts>';
     return;
   }
@@ -983,7 +983,7 @@ function createReservationsTable(reservationsResponse) {
       ' cancel reservation </a>';
     row.appendChild(cancel);
 
-    document.getElementById('reservations_table_body').appendChild(row);
+    document.getElementById('reservationsTableBody').appendChild(row);
   }
 }
 
@@ -1020,34 +1020,34 @@ function createReviewsList(reviewsResponse) {
   //console.log(reviewsResponse);
 
   if (reviewsResponse.length < 1) {
-    document.getElementById('reviews_list_div').innerHTML =
+    document.getElementById('reviewsListDiv').innerHTML =
       '<h2>No reviews are available.</h2>' +
-       document.getElementById('reviews_list_div').innerHTML;
+       document.getElementById('reviewsListDiv').innerHTML;
     return;
   }
 
 
-  document.getElementById('review_list').innerHTML = '';
+  document.getElementById('reviewList').innerHTML = '';
   var cancelReservationURLBase = '';
   for (var j = 0, lim = reviewsResponse.length; j < lim; j++) {
     var reservationHTML = '<li>' +
-      '<span class="restaurant_review_label">Restaurant: </span>' +
-        ' <span class="restaurant_review_">' +
+      '<span class="restaurantReviewLabel">Restaurant: </span>' +
+        ' <span class="restaurantReview_">' +
         reviewsResponse[j].itemReviewed.name +
       '</span>\n' +
-      '<span class="review_rating_value">Rating: </span>' +
-      ' <span class="rating_value">' +
+      '<span class="reviewRating_value">Rating: </span>' +
+      ' <span class="ratingValue">' +
          reviewsResponse[j].reviewRating.ratingValue +
       '</span>\n' +
-      '<span class="view_review"><a href="javascript:viewReview(' +
+      '<span class="viewReview"><a href="javascript:viewReview(' +
       '\'' + reviewsResponse[j].name + '\'' + ')">' +
       ' View review </a>' +
       '</span>\n' +
-      '<span class="edit_review"><a href="javascript:editReview(' +
+      '<span class="editReview"><a href="javascript:editReview(' +
       '\'' + reviewsResponse[j].name + '\'' +
       ')"> Edit review </a>' +
       '</span>\n' +
-      '<span class="delete_review"><a href="javascript:deleteReview(' +
+      '<span class="deleteReview"><a href="javascript:deleteReview(' +
       '\'' + reviewsResponse[j].name + '\'' +
       ')"> Delete review </a>' +
       '</span>\n' +
@@ -1057,7 +1057,7 @@ function createReviewsList(reviewsResponse) {
     //reviewHTML.replace("__review_id__",reviewsResponse[j]["reviewId"]);
     //console.log(typeof reviewsResponse[j]["reviewId"]);
 
-    document.getElementById('review_list').innerHTML += reservationHTML;
+    document.getElementById('reviewList').innerHTML += reservationHTML;
   }
 }
 
@@ -1066,13 +1066,13 @@ function createReviewsTable(reviewsResponse) {
   reviewsResponse = JSON.parse(reviewsResponse);
 
   if (reviewsResponse.length < 1) {
-    document.getElementById('reviews_table_body').innerHTML =
+    document.getElementById('reviewsTableBody').innerHTML =
       '<tr>No reviews are available.</tr>';
     return;
   }
 
   //clean previous table content
-  var myNode = document.getElementById('reviews_table_body');
+  var myNode = document.getElementById('reviewsTableBody');
     while (myNode.firstChild) {
       myNode.removeChild(myNode.lastChild);
     }
@@ -1110,7 +1110,7 @@ function createReviewsTable(reviewsResponse) {
     del.setAttribute('class', 'col-xs-2');
     row.appendChild(del);
 
-    document.getElementById('reviews_table_body').appendChild(row);
+    document.getElementById('reviewsTableBody').appendChild(row);
   }
 }
 
@@ -1136,7 +1136,7 @@ function openPopUpWindow() {
   document.getElementById("pop_window").className =
     document.getElementById("pop_window").className.replace('  ', ' ');
   */
-  $('#pop_window').modal('show');
+  $('#popWindow').modal('show');
 }
 
 /*aux function that close the PopUp window */
@@ -1147,7 +1147,7 @@ function closePopUpWindow() {
     document.getElementById("pop_window").className =
       document.getElementById("pop_window").className + ' hidden';
   */
-  $('#pop_window').modal('hide');
+  $('#popWindow').modal('hide');
 }
 
 /* axu function, it change the format date to print reservations */
@@ -1174,7 +1174,7 @@ var reservations_per_date = {
 
 function calcCurrentReservations(date, restaurantName) {
   if (date < new Date()) {
-    return [false, 'past_date', ''];
+    return [false, 'pastDate', ''];
   }
 
   var stringDate = date.toLocaleDateString();
@@ -1184,23 +1184,23 @@ function calcCurrentReservations(date, restaurantName) {
   //console.log(date);
 
   if ('undefined' === typeof(reservationsPerDate[stringDate])) {
-    return [true, 'available_reservations', ''];
+    return [true, 'availableReservations', ''];
   }
 
   if (0 > reservationsPerDate[stringDate]) {
-    return [false, 'not_allowed full_reservations',
+    return [false, 'notAllowed fullReservations',
         'No reservations allowed for this day'];
   }
 
   if (5 > reservationsPerDate[stringDate]) {
-    return [true, 'available_reservations', reservationsPerDate[date]];
+    return [true, 'availableReservations', reservationsPerDate[date]];
   }
 
-  if (10 > reservationsPer_Date[stringDate]) {
-    return [true, 'last_reservations', reservationsPerDate[date]];
+  if (10 > reservationsPerDate[stringDate]) {
+    return [true, 'lastReservations', reservationsPerDate[date]];
   }
 
- return [false, 'full_reservations', 'Full reservations'];
+ return [false, 'fullReservations', 'Full reservations'];
 }
 
 function getReservationsPerDate(restaurantName) {

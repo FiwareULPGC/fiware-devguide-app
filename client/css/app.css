@@ -28,7 +28,7 @@
 }
 
 
-#logged_div{
+#loggedDiv{
 	position: fixed;
 	width: 100%;
 	/*background-color: rgba(255,165,0,0.6);*/
@@ -39,28 +39,28 @@
 	z-index: 1000;
 }
 
-#logged_div div{
+#loggedDiv div{
 	float: right;
 	margin-right: 1.5em;
 	margin-left: 0.5em;
 	font-size: 0.8em;
 }
 
-#logged_menu{
+#loggedMenu{
 	float:left !important;
 	padding-left: 60px;
 }
 
-.menu_element{
+.menuElement{
 	float: left;
 }
 
-.menu_element:after{
+.menuElement:after{
 	/*content: ' | ';*/
 }
 
 
-#logged_div p{
+#loggedDiv p{
 	padding-top: 13px;
 }
 /*
@@ -103,15 +103,15 @@
 .hidden{
 	display: none;
 }
-#roles_div{
+#rolesDiv{
 	margin-top: 30px;
 	margin-bottom:10px;
 	height: auto;
 }
-#roles_div ul{
+#rolesDiv ul{
 	padding-left: 0;
 }
-#roles_div ul li{
+#rolesDiv ul li{
 	float:left;
 	margin-left: 10px;
 	padding-left: 0;
@@ -139,12 +139,12 @@
 	float: right;
 }
 
-.rating_label{
+.ratingLabel{
 	font-weight: bold;
 	font-size: 1.15em;
 }
 
-.author_label{
+.authorLabel{
 	font-weight: bold;
 	font-size: 1.15em;
 }
@@ -160,70 +160,70 @@
 	margin-bottom: 10px;
 }
 
-.review_label{
+.reviewLabel{
 	font-weight: bold;
 	font-size: 1.15em;
 }
-.reservation_time_label{
+.reservationTimeLabel{
 	font-weight: bold;
 	font-size: 1.15em;
 }
-.under_name_reservation_label{
-	font-weight: bold;
-	font-size: 1.15em;
-}
-
-.restaurant_reservation_label{
+.underNameReservationLabel{
 	font-weight: bold;
 	font-size: 1.15em;
 }
 
-.diners_number_label{
+.restaurantReservationLabel{
 	font-weight: bold;
 	font-size: 1.15em;
 }
 
-#reservation_list, #review_list{
+.dinersNumberLabel{
+	font-weight: bold;
+	font-size: 1.15em;
+}
+
+#reservationList, #reviewList{
 	list-style-type: none;
 }
 
 
-#reservations_list_div,#reviews_list_div{
+#reservationsListDiv,#reviewsListDiv{
 	margin-top: 50px;
 }
 
-#reservation_list li, #reviews_list li{
+#reservationList li, #reviewsList li{
 	font-size: 0.9em;
 	border: 1px black solid;
 }
 
-#reservation_list li:nth-child(even), #review_list li:nth-child(even){
+#reservationList li:nth-child(even), #reviewList li:nth-child(even){
 	background-color: lightblue;
 }
 
-#reservation_list li:nth-child(odd), #review_list li:nth-child(odd){
+#reservationList li:nth-child(odd), #reviewList li:nth-child(odd){
 	background-color: lightgreen;
 }
 
-#reservation_list li span:nth-child(even), #review_list li span:nth-child(even){
+#reservationList li span:nth-child(even), #reviewList li span:nth-child(even){
 	width: 200px;
 }
 
-#reservation_list li span:nth-child(odd), #review_list li span:nth-child(odd){
+#reservationList li span:nth-child(odd), #reviewList li span:nth-child(odd){
 	width: 200px;
 }
 
 	
 /* calendar */
-.ui-datepicker-calendartd .available_reservations .ui-state-default{
+.ui-datepicker-calendartd .availableReservations .ui-state-default{
   color: green !important;
 }
 
-.ui-datepicker-calendar td.last_reservations .ui-state-default{
+.ui-datepicker-calendar td.lastReservations .ui-state-default{
   color: orange;
 }
 
-.ui-datepicker-calendar td.full_reservations .ui-state-default{
+.ui-datepicker-calendar td.fullReservations .ui-state-default{
   color: red;
 }
 
@@ -266,22 +266,22 @@
   border-bottom-width: 0;
 }
 
-#reservations_table th, #reservations_table td{
+#reservationsTable th, #reservationsTable td{
 	width: 25%;
 }
 
-#reviews_table th, #reviews_table td{
+#reviewsTable th, #reviewsTable td{
 	
 	/*max-height: 2em;*/	
 
 }
 
-#reservations_table th, #reservations_table td, #reviews_table th, #reviews_table td{
+#reservationsTable th, #reservationsTable td, #reviewsTable th, #reviewsTable td{
 	overflow: hidden;
 	white-space: nowrap; 
 	text-overflow: ellipsis;
 }
-#reviews_table a:hover, #reservations_table a:hover{
+#reviewsTable a:hover, #reservationsTable a:hover{
 	color:white !important;
 }
 
@@ -306,7 +306,7 @@
 
 }
 
-#loading_time img{
+#loadingTime img{
 	max-height: 1.2em;
 }
 
