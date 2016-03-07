@@ -23,78 +23,153 @@ function loggedIn(userInfo) {
   localStorage.setItem('userInfo', userInfo);
 
   userInfo = JSON.parse(userInfo);
-  var html = '<ul class="nav navbar-nav pull-right" id="log_out_menu">';
-  html += '\n<li class="menuElement" id="hiUser"><p>Hi,' +
-    userInfo.displayName + '!</p></li>';
-  html += '<li class="menuElement" id="logOut" ><a id="logoutLink" ' +
-    'href="http://tourguide/logout">Log Out</a></li>';
-  html += '</ul>';
-  document.getElementById('loggedDiv').innerHTML = html;
-  createAndShowMenu(userInfo);
-  //show_roles();
-  //hide_roles();
 
-  var logoutLink = document.getElementById('logoutLink');
+  var logOutMenu = document.createElement('UL');
+  logOutMenu.classList.add('nav', 'navbar-nav', 'pull-right');
+  logOutMenu.id = 'logOutMenu';
+
+  var hiUserLi = document.createElement('LI');
+  hiUserLi.id = 'hiUser';
+  hiUserLi.className = 'menuElement';
+
+  var hiUserText = document.createElement('P');
+  hiUserText.textContent = 'Hi ' + userInfo.displayName + '!';
+
+  hiUserLi.appendChild(hiUserText);
+  logOutMenu.appendChild(hiUserLi);
+
+
+  var logOutLi = document.createElement('LI');
+  logOutLi.id = 'logOut';
+  logOutLi.className = 'menuElement';
+
+  var logoutLink = document.createElement('A');
+  logoutLink.id = 'logOutLink';
+  logoutLink.href = 'http://tourguide/logout';
+  logoutLink.textContent = 'Log out';
+
 
   logoutLink.onclick = function() {
     console.log('LOGOUT');
     localStorage.removeItem('userInfo');
   };
 
+  logOutLi.appendChild(logoutLink);
+  logOutMenu.appendChild(logOutLi);
+
+  document.getElementById('loggedDiv').innerHTML = '';
+
+  document.getElementById('loggedDiv').appendChild(logOutMenu);
+
+  createAndShowMenu(userInfo);
+
   return;
 }
 
 function createAndShowMenu(userInfo) {
-  var html = '<ul class="nav navbar-nav pull-left" id="loggedMenu">';
 
-  //check each menu element
+
   //TODO check roles
 
-  console.log(userInfo);
-  html += '<li class="menuElement"><a href="index.html">Home</a></li>';
+  var loggedMenu = document.createElement('UL');
+  loggedMenu.id = 'loggedMenu';
+  loggedMenu.classList.add('nav', 'navbar-nav', 'pull-left');
+
+  var home = document.createElement('LI');
+  home.className = 'menuElement';
+
+  var homeLink = document.createElement('A');
+  homeLink.href = 'index.html';
+  homeLink.textContent = 'Home';
+
+  home.appendChild(homeLink);
+  loggedMenu.appendChild(home);
 
   //check each menu element
 
   //view organizations restaurants
   if (hasRole(userInfo, 'Restaurant Viewer') ||
       hasRole(userInfo, 'Global manager') || true) {//hacked
+    
     //we should ask before for each organization but the user hasn't yet
     if (userInfo.organizations.length > 0) {
 
-      html += '<li class="dropdown">\n';
-      html += '<a  id="myRestaurantsButtonLink" class="dropdown-toggle" ' +
-        'data-toggle="dropdown" role="button" href="#">';
-      html += 'My restaurants <b class="caret"></b></a>\n';
-      html += '<ul class ="dropdown-menu" ' +
-        'aria-labelledby="myRestaurantsButtonLink" role="menu">';
-        //html += '<li role="presentation">';
+      var myRestaurantsLi = document.createElement('LI');
+      myRestaurantsLi.className = 'dropdown';
+
+      var myRestaurantsA = document.createElement('A');
+      myRestaurantsA.id = 'myRestaurantsButtonLink';
+      myRestaurantsA.className = 'dropdown-toggle';
+      myRestaurantsA.setAttribute('data-toggle', 'dropdown');
+      myRestaurantsA.setAttribute('role', 'button');
+      myRestaurantsA.href = '#';
+      myRestaurantsA.textContent = 'My restaurants';
+
+      var caret = document.createElement('B');
+      caret.className = 'caret';
+
+      myRestaurantsA.appendChild(caret);
+      myRestaurantsLi.appendChild(myRestaurantsA);
+
+      var organizationsMenu = document.createElement('UL');
+      organizationsMenu.className = 'dropdown-menu';
+      organizationsMenu.setAttribute('aria-labelledby', 
+                                    'myRestaurantsButtonLink');
+      organizationsMenu.setAttribute('role', 'menu');
+
       for (var index = 0; index < userInfo.organizations.length; index++) {
-        html += '<li role="presentation">';
-          html += '<a href="myRestaurants.html?franchise=' +
-            userInfo.organizations[index].name +
-            '" tabindex="-1" role="menuitem">' +
-            userInfo.organizations[index].name + '</a>';
-        html += '</li>';
+        var organizationLi = document.createElement('LI');
+        organizationLi.setAttribute('role', 'presentation');
+        
+        var organizationA = document.createElement('A');
+        organizationA.setAttribute('role', 'menuitem');
+        organizationA.setAttribute('tabindex', '-1');
+        organizationA.href = 
+          'myRestaurants.html?franchise=' + userInfo.organizations[index].name;
+        organizationA.textContent = userInfo.organizations[index].name;
+
+        organizationLi.appendChild(organizationA);
+        organizationsMenu.appendChild(organizationA);
       }
 
-      html += '</ul>';
-      html += '</li>';
+      myRestaurantsLi.appendChild(organizationsMenu);
+
+      loggedMenu.appendChild(myRestaurantsLi);
     }
+
+
   }
 
   if (hasRole(userInfo, 'End user')) {
-    html += '<li class="menuElement"><a href="myReservations.html">' +
-      'My Reservations</a></li>';
+    var myReservations = document.createElement('LI');
+    myReservations.className = 'menuElement';
+
+    var myReservationsA = document.createElement('A');
+    myReservationsA.href = 'myReservations.html';
+    myReservationsA.textContent = 'My reservations';
+
+    myReservations.appendChild(myReservationsA);
+    loggedMenu.appendChild(myReservations);
   }
 
   if (hasRole(userInfo, 'End user')) {
-    html += '<li class="menuElement"><a href="myReviews.html">My reviews' +
-      '</a></li>';
-  }
+    var myReviews = document.createElement('LI');
+    myReviews.className = 'menuElement';
 
-  html += '</ul>';
+    var myReviewsA = document.createElement('A');
+    myReviewsA.href = 'myReviews.html';
+    myReviewsA.textContent = 'My reviews';
+
+    myReviews.appendChild(myReviewsA);
+    loggedMenu.appendChild(myReviews);
+  }
+  
+
+
   //insert menu inside logged_div
-  document.getElementById('loggedDiv').innerHTML += html;
+  document.getElementById('loggedDiv').innerHTML += '';
+  document.getElementById('loggedDiv').appendChild(loggedMenu);
+
 }
 
 function hasRole(userInfo, role) {
@@ -108,9 +183,24 @@ function hasRole(userInfo, role) {
 
 function notLoggedIn() {
   localStorage.removeItem('userInfo');
-  var html = '<div id="logIn"><p><a href="http://tourguide/auth">Log in</a>' +
-    '</p></div>';
-  document.getElementById('loggedDiv').innerHTML = html;
+
+  var logInMenu = document.createElement('UL');
+  logInMenu.classList.add('nav', 'navbar-nav', 'pull-right');
+  logInMenu.id = 'logIn';
+
+
+  var logInLi = document.createElement('LI');
+  logInLi.className = 'menuElement';
+
+  var logInA = document.createElement('A');
+  logInA.href = 'http://tourguide/auth';
+  logInA.textContent = 'Log in';
+
+  logInLi.appendChild(logInA);
+  logInMenu.appendChild(logInLi);
+
+  document.getElementById('loggedDiv').innerHTML = '';
+  document.getElementById('loggedDiv').appendChild(logInMenu);
   return;
 }
 
@@ -119,30 +209,9 @@ function showLogout() {
 
 }
 
-function showRoles() {
-  var roles = JSON.parse(localStorage.getItem('userInfo')).roles;
-
-  var html = '<p> You have the roles: </p>';
-  html += '\n<ul>';
 
 
-  for (var i = 0, len = roles.length; i < len; i++) {
-    html += '\n<li>' + roles[i].name + '</li>';
-  }
 
-  html += '\n</ul>';
-
-  document.getElementById('rolesDiv').innerHTML = html;
-  document.getElementById('rolesDiv').style.display = 'block';
-
-  return;
-}
-
-function hideRoles() {
-  document.getElementById('rolesDiv').innerHTML = '';
-  document.getElementById('rolesDiv').style.display = 'none';
-  return;
-}
 
 
 function loginNeeded(action) {
@@ -177,7 +246,7 @@ function showMessage(message, alertType) {
   alert.appendChild(closeButton);
   //alert.innerHTML = 'Log in required';
 
-  var navBar = document.getElementById('top_menu');
+  var navBar = document.getElementById('topMenu');
   //map.appendChild(alert);
 
   var mainContainer = document.getElementsByClassName('container-fluid')[0];
