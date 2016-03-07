@@ -457,7 +457,7 @@ function editNewReservation(restaurantName) {
      restaurantName;
   var reservationForm = '';
   reservationForm += '\n<form name="editReservationForm">';
-  reservationForm += '<input type="hidden" name="restaurant_name"' +
+  reservationForm += '<input type="hidden" name="restaurantName"' +
     ' id="restaurantName" value="' + restaurantName + '">';
   reservationForm += '\nNumber of diners:<br/>';
   reservationForm += '\n<select name="partySize" id="partySize">';
@@ -664,8 +664,8 @@ function createNewReservation(restaurantName) {
 
 
   var reservationDatetime =
-    document.forms.editReservationForm.reservation_date.value + 'T' +
-    document.forms.editReservationForm.reservation_time.value;
+    document.forms.editReservationForm.reservationDate.value + 'T' +
+    document.forms.editReservationForm.reservationTime.value;
 
 
 
@@ -914,7 +914,7 @@ function createReservationsList(reservationsResponse) {
   var cancelReservationURLBase = '';
   for (var j = 0, lim = reservationsResponse.length; j < lim; j++) {
     var reservationHTML = '<li>' +
-      '<span class="restaurant_reservationLabel">Restaurant:' +
+      '<span class="restaurantReservationLabel">Restaurant:' +
         ' </span> <span class="restaurantReservationLabel">' +
         reservationsResponse[j].reservationFor.name +
       '</span>\n' +
@@ -1032,10 +1032,10 @@ function createReviewsList(reviewsResponse) {
   for (var j = 0, lim = reviewsResponse.length; j < lim; j++) {
     var reservationHTML = '<li>' +
       '<span class="restaurantReviewLabel">Restaurant: </span>' +
-        ' <span class="restaurantReview_">' +
+        ' <span class="restaurantReviewLabel">' +
         reviewsResponse[j].itemReviewed.name +
       '</span>\n' +
-      '<span class="reviewRating_value">Rating: </span>' +
+      '<span class="reviewRatingValue">Rating: </span>' +
       ' <span class="ratingValue">' +
          reviewsResponse[j].reviewRating.ratingValue +
       '</span>\n' +
