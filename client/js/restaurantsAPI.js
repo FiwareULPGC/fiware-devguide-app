@@ -1017,12 +1017,12 @@ function showRestaurantReservations(reservationsResponse) {
 
     var time = document.createElement('TD');
     time.classList.add('class', 'col-xs-4');
-    time.innerHTML = fixBookingTime(reservationsResponse[j].startTime);
+    time.textContent = fixBookingTime(reservationsResponse[j].startTime);
     row.appendChild(time);
 
     var diners = document.createElement('TD');
     diners.classList.add('class', 'col-xs-2');
-    diners.innerHTML = reservationsResponse[j].partySize;
+    diners.textContent = reservationsResponse[j].partySize;
     row.appendChild(diners);
 
 
@@ -1187,8 +1187,8 @@ function cancelReservation(reservationId) {
 
 
 
-function getUserReviews(username) {
-  var URL = baseURL + 'reviews/user/' + username;
+function getUserReviews(userName) {
+  var URL = baseURL + 'reviews/user/' + userName;
   getAjaxRequest(URL,
     //create_reviews_list,
     createReviewsTable,
@@ -1264,12 +1264,12 @@ function createReviewsTable(reviewsResponse) {
     var row = document.createElement('TR');
 
     var name = document.createElement('TD');
-    name.innerHTML = reviewsResponse[j].itemReviewed.name;
+    name.textContent = reviewsResponse[j].itemReviewed.name;
     name.className = 'col-xs-4';
     row.appendChild(name);
 
     var rating = document.createElement('TD');
-    rating.innerHTML = reviewsResponse[j].reviewRating.ratingValue;
+    rating.textContent = reviewsResponse[j].reviewRating.ratingValue;
     rating.className = 'col-xs-2';
     row.appendChild(rating);
 

@@ -123,7 +123,7 @@ function createAndShowMenu(userInfo) {
 
         var organizationA = document.createElement('A');
         organizationA.setAttribute('role', 'menuitem');
-        organizationA.setAttribute('tabindex', '-1');
+        organizationA.tabIndex = -1;
         organizationA.href =
           'myRestaurants.html?franchise=' + userInfo.organizations[index].name;
         organizationA.textContent = userInfo.organizations[index].name;
@@ -236,13 +236,13 @@ function showMessage(message, alertType) {
   alertType = typeof alertType !== 'undefined' ? alertType : 'alert-warning';
 
   var alert = document.createElement('DIV');
-  alert.setAttribute('class', 'alert fade in ' + alertType);
-  alert.innerHTML = message;
+  alert.classList.add('alert', 'fade', 'in', alertType);
+  alert.textContent = message;
 
   var closeButton = document.createElement('BUTTON');
-  closeButton.setAttribute('class', 'close');
+  closeButton.className = 'close';
   closeButton.setAttribute('data-dismiss', 'alert');
-  closeButton.innerHTML = 'X';
+  closeButton.textContent = 'X';
   alert.appendChild(closeButton);
   //alert.innerHTML = 'Log in required';
 
