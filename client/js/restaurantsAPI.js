@@ -165,7 +165,7 @@ function showRestaurants(restaurants) {
 
     var showReviews = document.createElement('A');
     showReviews.textContent = 'Show reviews';
-    showReviews.onclick = (function (restaurantName) {
+    showReviews.onclick = (function(restaurantName) {
         return function() {
           getAndShowRestaurantReviews(restaurantName);
         }
@@ -176,7 +176,7 @@ function showRestaurants(restaurants) {
 
     var showReservations = document.createElement('A');
     showReservations.textContent = 'Show reservations';
-    showReservations.onclick = (function (restaurantName) {
+    showReservations.onclick = (function(restaurantName) {
         return function() {
           getAndShowRestaurantReservations(restaurantName);
         }
@@ -187,7 +187,7 @@ function showRestaurants(restaurants) {
 
 
     var createReview = addCreateReviewLink(restaurantMarks[i].name);
-    if (null != createReview ) {
+    if (null != createReview) {
         popHTML.appendChild(createReview);
         popHTML.appendChild(document.createElement('BR'));
     }
@@ -196,7 +196,7 @@ function showRestaurants(restaurants) {
     if (null != createReservation) {
         popHTML.appendChild(createReservation);
     }
-    
+
 
     popHTML.appendChild(createReservation);
 
@@ -231,7 +231,7 @@ function addCreateReviewLink(restaurantName) {
 
   var createReviewLink = document.createElement('A');
   createReviewLink.textContent = 'Create review';
-  createReviewLink.onclick = (function (restaurantName) {
+  createReviewLink.onclick = (function(restaurantName) {
     return function() {
       editNewReview(restaurantName);
     }
@@ -269,10 +269,10 @@ function editNewReview(restaurantName) {
 
 
   var option;
-  for (var i =0; i<= 5; i++) {
+  for (var i = 0; i <= 5; i++) {
     option = document.createElement('OPTION');
     option.value = i;
-    option.textContent = i + ' Star' + (1!=i?'s':'');
+    option.textContent = i + ' Star' + (1 != i ? 's' : '');
     ratingValueSelect.appendChild(option);
   }
 
@@ -281,7 +281,7 @@ function editNewReview(restaurantName) {
   var submit = document.createElement('INPUT');
   submit.type = 'submit';
   submit.value = 'Create Review';
-  submit.onclik = (function (restaurantName) {
+  submit.onclik = (function(restaurantName) {
     return function() {
       createNewReview(restaurantName);
     }
@@ -344,10 +344,10 @@ function showEditReview(reviewResponse) {
   ratingValueSelect.name = 'ratingValue';
 
   var option;
-  for (var i =0; i<= 5; i++) {
+  for (var i = 0; i <= 5; i++) {
     option = document.createElement('OPTION');
     option.value = i;
-    option.textContent = i + ' Star' + (1!=i?'s':'');
+    option.textContent = i + ' Star' + (1 != i ? 's' : '');
     ratingValueSelect.appendChild(option);
   }
 
@@ -356,7 +356,7 @@ function showEditReview(reviewResponse) {
   var submit = document.createElement('INPUT');
   submit.type = 'submit';
   submit.value = 'Update review';
-  submit.onclik = (function (reviewName) {
+  submit.onclik = (function(reviewName) {
     return function() {
       updateReview(reviewName);
     }
@@ -560,7 +560,7 @@ function addCreateReservationLink(restaurantName) {
 
   var createReservationLink = document.createElement('A');
   createReservationLink.textContent = 'Make a reservation';
-  createReservationLink.onclick = (function (restaurantName) {
+  createReservationLink.onclick = (function(restaurantName) {
     return function() {
       editNewReservation(restaurantName);
     }
@@ -859,7 +859,7 @@ function showRestaurantReviews(reviewsResponse) {
 
     //top container
     var top = document.createElement('DIV');
-    top.className ='review-top';
+    top.className = 'review-top';
 
     //rating
     var rating = document.createElement('DIV');
@@ -886,7 +886,7 @@ function showRestaurantReviews(reviewsResponse) {
     authorLabel.className = 'authorLabel';
     authorLabel.textContent = 'Author: ';
 
-    var authorValue =  document.createElement('SPAN');
+    var authorValue = document.createElement('SPAN');
     authorValue.className = 'authorValue';
     authorValue.textContent = reviewsResponse[j].author.name;
 
@@ -1065,7 +1065,7 @@ function createReservationsList(reservationsResponse) {
 
     var restaurantReservationValue = document.createElement('SPAN');
     restaurantReservationValue.className = 'restaurantReservationLabel';
-    restaurantReservationValue.textContent = 
+    restaurantReservationValue.textContent =
       reservationsResponse[j].reservationFor.name;
 
     reservationHTML.appendChild(restaurantReservationLabel);
@@ -1098,8 +1098,8 @@ function createReservationsList(reservationsResponse) {
 
     var cancelReservationLink = document.createElement('A');
     cancelReservation.textContent = 'Cancel reservation';
-    cancelReservationLink.onclick = (function (reservationId) {
-      return function () {
+    cancelReservationLink.onclick = (function(reservationId) {
+      return function() {
         cancelReservation(reservationId);
       }
     })(reservationsResponse[j].reservationId);
@@ -1284,7 +1284,7 @@ function createReviewsTable(reviewsResponse) {
         viewReview(reviewId);
       }
     })(reviewsResponse[j].name);
-    
+
     view.appendChild(viewLink);
     row.appendChild(view);
 
@@ -1293,12 +1293,12 @@ function createReviewsTable(reviewsResponse) {
 
     var editLink = document.createElement('A');
     editLink.textContent = 'Edit review';
-    editLink.onclick = (function (reviewId) {
+    editLink.onclick = (function(reviewId) {
       return function() {
         editReview(reviewId);
       }
     })(reviewsResponse[j].name);
-    
+
     edit.appendChild(editLink);
     row.appendChild(edit);
 
@@ -1307,12 +1307,12 @@ function createReviewsTable(reviewsResponse) {
 
     var delLink = document.createElement('A');
     delLink.textContent = 'Delete review';
-    delLink.onclick = (function (reviewId) {
+    delLink.onclick = (function(reviewId) {
       return function() {
         deleteReview(reviewId);
       }
     })(reviewsResponse[j].name);
-    
+
     del.appendChild(delLink);
     row.appendChild(del);
 
