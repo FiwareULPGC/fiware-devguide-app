@@ -170,7 +170,7 @@ function showRestaurants(restaurants) {
 
     var showReviews = document.createElement('A');
     showReviews.textContent = 'Show reviews';
-    showReviews.onclick = (function (restaurantName) {
+    showReviews.onclick = (function(restaurantName) {
         return function() {
           getAndShowRestaurantReviews(restaurantName);
         }
@@ -181,7 +181,7 @@ function showRestaurants(restaurants) {
 
     var showReservations = document.createElement('A');
     showReservations.textContent = 'Show reservations';
-    showReservations.onclick = (function (restaurantName) {
+    showReservations.onclick = (function(restaurantName) {
         return function() {
           getAndShowRestaurantReservations(restaurantName);
         }
@@ -192,7 +192,7 @@ function showRestaurants(restaurants) {
 
 
     var createReview = addCreateReviewLink(restaurantMarks[i].name);
-    if (null != createReview ) {
+    if (null != createReview) {
         popHTML.appendChild(createReview);
         popHTML.appendChild(document.createElement('BR'));
     }
@@ -201,7 +201,7 @@ function showRestaurants(restaurants) {
     if (null != createReservation) {
         popHTML.appendChild(createReservation);
     }
-    
+
 
     popHTML.appendChild(createReservation);
 
@@ -236,7 +236,7 @@ function addCreateReviewLink(restaurantName) {
 
   var createReviewLink = document.createElement('A');
   createReviewLink.textContent = 'Create review';
-  createReviewLink.onclick = (function (restaurantName) {
+  createReviewLink.onclick = (function(restaurantName) {
     return function() {
       editNewReview(restaurantName);
     }
@@ -274,10 +274,10 @@ function editNewReview(restaurantName) {
 
 
   var option;
-  for (var i =0; i<= 5; i++) {
+  for (var i = 0; i <= 5; i++) {
     option = document.createElement('OPTION');
     option.value = i;
-    option.textContent = i + ' Star' + (1!=i?'s':'');
+    option.textContent = i + ' Star' + (1 != i ? 's' : '');
     ratingValueSelect.appendChild(option);
   }
 
@@ -286,7 +286,7 @@ function editNewReview(restaurantName) {
   var submit = document.createElement('INPUT');
   submit.type = 'submit';
   submit.value = 'Create Review';
-  submit.onclik = (function (restaurantName) {
+  submit.onclik = (function(restaurantName) {
     return function() {
       createNewReview(restaurantName);
     }
@@ -349,10 +349,10 @@ function showEditReview(reviewResponse) {
   ratingValueSelect.name = 'ratingValue';
 
   var option;
-  for (var i =0; i<= 5; i++) {
+  for (var i = 0; i <= 5; i++) {
     option = document.createElement('OPTION');
     option.value = i;
-    option.textContent = i + ' Star' + (1!=i?'s':'');
+    option.textContent = i + ' Star' + (1 != i ? 's' : '');
     ratingValueSelect.appendChild(option);
   }
 
@@ -361,7 +361,7 @@ function showEditReview(reviewResponse) {
   var submit = document.createElement('INPUT');
   submit.type = 'submit';
   submit.value = 'Update review';
-  submit.onclik = (function (reviewName) {
+  submit.onclik = (function(reviewName) {
     return function() {
       updateReview(reviewName);
     }
@@ -559,7 +559,7 @@ function addCreateReservationLink(restaurantName) {
 
   var createReservationLink = document.createElement('A');
   createReservationLink.textContent = 'Make a reservation';
-  createReservationLink.onclick = (function (restaurantName) {
+  createReservationLink.onclick = (function(restaurantName) {
     return function() {
       editNewReservation(restaurantName);
     }
@@ -807,8 +807,9 @@ function getAndShowRestaurantReviews(id) {
   getAjaxRequest(URL,
       showRestaurantReviews,
        function() {
-        document.getElementById('popContent').textContent =
-          '<h2>Cannot get reviews.</h2>';
+        var error = document.createElement('H2');
+        error.textContent = 'Cannot get reviews.';
+        document.getElementById('popContent').appendChild(error);
         openPopUpWindow();
        });
 }
@@ -829,8 +830,9 @@ function showRestaurantReviews(reviewsResponse) {
   }
 
   if (reviewsResponse.length < 1) {
-    document.getElementById('popContent').textContent =
-      '<h2>No reviews are available.</h2>';
+    var error = document.createElement('H2');
+    error.textContent = 'No reviews are available';
+    document.getElementById('popContent').appendChild(error);
     openPopUpWindow();
     return;
   }
@@ -845,7 +847,7 @@ function showRestaurantReviews(reviewsResponse) {
 
     //top container
     var top = document.createElement('DIV');
-    top.className ='review-top';
+    top.className = 'review-top';
 
     //rating
     var rating = document.createElement('DIV');
@@ -872,7 +874,7 @@ function showRestaurantReviews(reviewsResponse) {
     authorLabel.className = 'authorLabel';
     authorLabel.textContent = 'Author: ';
 
-    var authorValue =  document.createElement('SPAN');
+    var authorValue = document.createElement('SPAN');
     authorValue.className = 'authorValue';
     authorValue.textContent = reviewsResponse[j].author.name;
 
@@ -928,9 +930,10 @@ function getAndShowRestaurantReservations(id) {
   getAjaxRequest(URL,
     showRestaurantReservations,
     function() {
-      document.getElementById('popContent').textContent =
-        '<h2>Cannot get reservations.</h2>';
-       openPopUpWindow();
+      var error = document.createElement('H2');
+      error.textContent = 'Cannot get reservations.';
+      document.getElementById('popContent').appendChild(error);
+      openPopUpWindow();
   });
 }
 
@@ -948,8 +951,9 @@ function showRestaurantReservations(reservationsResponse) {
   reservationsResponse = JSON.parse(reservationsResponse);
 
   if (reservationsResponse.length < 1) {
-    document.getElementById('popContent').textContent =
-       '<h2>No reservations are available.</h2>';
+    var error = document.createElement('H2');
+    error.textContent = 'No reservations are available.';
+    document.getElementById('popContent').appendChild(error);
     openPopUpWindow();
     return;
   }
@@ -1002,12 +1006,12 @@ function showRestaurantReservations(reservationsResponse) {
 
     var time = document.createElement('TD');
     time.classList.add('class', 'col-xs-4');
-    time.innerHTML = fixBookingTime(reservationsResponse[j].startTime);
+    time.textContent = fixBookingTime(reservationsResponse[j].startTime);
     row.appendChild(time);
 
     var diners = document.createElement('TD');
     diners.classList.add('class', 'col-xs-2');
-    diners.innerHTML = reservationsResponse[j].partySize;
+    diners.textContent = reservationsResponse[j].partySize;
     row.appendChild(diners);
 
     tableBody.appendChild(row);
@@ -1027,6 +1031,7 @@ function getUserReservation(username) {
     function() {alert('cannot get your reservations');});
 }
 
+/* should be totally replace by createReservationsTable*/
 function createReservationsList(reservationsResponse) {
   reservationsResponse = JSON.parse(reservationsResponse);
 
@@ -1049,7 +1054,7 @@ function createReservationsList(reservationsResponse) {
 
     var restaurantReservationValue = document.createElement('SPAN');
     restaurantReservationValue.className = 'restaurantReservationLabel';
-    restaurantReservationValue.textContent = 
+    restaurantReservationValue.textContent =
       reservationsResponse[j].reservationFor.name;
 
     reservationHTML.appendChild(restaurantReservationLabel);
@@ -1082,8 +1087,8 @@ function createReservationsList(reservationsResponse) {
 
     var cancelReservationLink = document.createElement('A');
     cancelReservation.textContent = 'Cancel reservation';
-    cancelReservationLink.onclick = (function (reservationId) {
-      return function () {
+    cancelReservationLink.onclick = (function(reservationId) {
+      return function() {
         cancelReservation(reservationId);
       }
     })(reservationsResponse[j].reservationId);
@@ -1113,8 +1118,9 @@ function createReservationsTable(reservationsResponse) {
 
 
   if (reservationsResponse.length < 1) {
-    document.getElementById('reservationsTableBody').textContent =
-      '<tr>No reservations are available.</tr>';
+    var error = document.createElement('TR');
+    error.textContent = 'No reservations are available';
+    document.getElementById('reservationsTableBody').appendChild(error); 
     return;
   }
 
@@ -1171,8 +1177,8 @@ function cancelReservation(reservationId) {
 
 
 
-function getUserReviews(username) {
-  var URL = baseURL + 'reviews/user/' + username;
+function getUserReviews(userName) {
+  var URL = baseURL + 'reviews/user/' + userName;
   getAjaxRequest(URL,
     //create_reviews_list,
     createReviewsTable,
@@ -1232,8 +1238,9 @@ function createReviewsTable(reviewsResponse) {
   reviewsResponse = JSON.parse(reviewsResponse);
 
   if (reviewsResponse.length < 1) {
-    document.getElementById('reviewsTableBody').textContent =
-      '<tr>No reviews are available.</tr>';
+    var error = document.createElement('TR');
+    error.textContent = 'No reviews are available.';
+    document.getElementById('reviewsTableBody').appendChild(error);
     return;
   }
 
@@ -1248,12 +1255,12 @@ function createReviewsTable(reviewsResponse) {
     var row = document.createElement('TR');
 
     var name = document.createElement('TD');
-    name.innerHTML = reviewsResponse[j].itemReviewed.name;
+    name.textContent = reviewsResponse[j].itemReviewed.name;
     name.className = 'col-xs-4';
     row.appendChild(name);
 
     var rating = document.createElement('TD');
-    rating.innerHTML = reviewsResponse[j].reviewRating.ratingValue;
+    rating.textContent = reviewsResponse[j].reviewRating.ratingValue;
     rating.className = 'col-xs-2';
     row.appendChild(rating);
 
@@ -1268,7 +1275,7 @@ function createReviewsTable(reviewsResponse) {
         viewReview(reviewId);
       }
     })(reviewsResponse[j].name);
-    
+
     view.appendChild(viewLink);
     row.appendChild(view);
 
@@ -1277,12 +1284,12 @@ function createReviewsTable(reviewsResponse) {
 
     var editLink = document.createElement('A');
     editLink.textContent = 'Edit review';
-    editLink.onclick = (function (reviewId) {
+    editLink.onclick = (function(reviewId) {
       return function() {
         editReview(reviewId);
       }
     })(reviewsResponse[j].name);
-    
+
     edit.appendChild(editLink);
     row.appendChild(edit);
 
@@ -1291,12 +1298,12 @@ function createReviewsTable(reviewsResponse) {
 
     var delLink = document.createElement('A');
     delLink.textContent = 'Delete review';
-    delLink.onclick = (function (reviewId) {
+    delLink.onclick = (function(reviewId) {
       return function() {
         deleteReview(reviewId);
       }
     })(reviewsResponse[j].name);
-    
+
     del.appendChild(delLink);
     row.appendChild(del);
 

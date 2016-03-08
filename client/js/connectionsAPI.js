@@ -90,7 +90,7 @@ function createAndShowMenu(userInfo) {
   //view organizations restaurants
   if (hasRole(userInfo, 'Restaurant Viewer') ||
       hasRole(userInfo, 'Global manager') || true) {//hacked
-    
+
     //we should ask before for each organization but the user hasn't yet
     if (userInfo.organizations.length > 0) {
 
@@ -113,18 +113,18 @@ function createAndShowMenu(userInfo) {
 
       var organizationsMenu = document.createElement('UL');
       organizationsMenu.className = 'dropdown-menu';
-      organizationsMenu.setAttribute('aria-labelledby', 
+      organizationsMenu.setAttribute('aria-labelledby',
                                     'myRestaurantsButtonLink');
       organizationsMenu.setAttribute('role', 'menu');
 
       for (var index = 0; index < userInfo.organizations.length; index++) {
         var organizationLi = document.createElement('LI');
         organizationLi.setAttribute('role', 'presentation');
-        
+
         var organizationA = document.createElement('A');
         organizationA.setAttribute('role', 'menuitem');
-        organizationA.setAttribute('tabindex', '-1');
-        organizationA.href = 
+        organizationA.tabIndex = -1;
+        organizationA.href =
           'myRestaurants.html?franchise=' + userInfo.organizations[index].name;
         organizationA.textContent = userInfo.organizations[index].name;
 
@@ -163,7 +163,7 @@ function createAndShowMenu(userInfo) {
     myReviews.appendChild(myReviewsA);
     loggedMenu.appendChild(myReviews);
   }
-  
+
 
 
   //insert menu inside logged_div
@@ -236,13 +236,13 @@ function showMessage(message, alertType) {
   alertType = typeof alertType !== 'undefined' ? alertType : 'alert-warning';
 
   var alert = document.createElement('DIV');
-  alert.setAttribute('class', 'alert fade in ' + alertType);
-  alert.innerHTML = message;
+  alert.classList.add('alert', 'fade', 'in', alertType);
+  alert.textContent = message;
 
   var closeButton = document.createElement('BUTTON');
-  closeButton.setAttribute('class', 'close');
+  closeButton.className = 'close';
   closeButton.setAttribute('data-dismiss', 'alert');
-  closeButton.innerHTML = 'X';
+  closeButton.textContent = 'X';
   alert.appendChild(closeButton);
   //alert.innerHTML = 'Log in required';
 
