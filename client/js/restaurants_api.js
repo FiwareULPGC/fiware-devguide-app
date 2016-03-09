@@ -384,22 +384,19 @@ function createNewReview(restaurant_name) {
   var ratingValue = document.forms.editReviewForm.ratingValue.value;
   var reviewBody = document.forms.editReviewForm.reviewBody.value;
 
-
-
   var data = {
-      '@type': 'Review',
-      'itemReviewed': {
+    '@type': 'Review',
+    'itemReviewed': {
       '@type': 'Restaurant',
       'name': '' + restaurant_name,
-      },
-      'name': 'Rating description',
-      'reviewBody': '' + reviewBody,
-      'reviewRating': {
+    },
+    'name': 'Rating description',
+    'reviewBody': '' + reviewBody,
+    'reviewRating': {
       '@type': 'Rating',
       'ratingValue': parseInt(ratingValue, 10)
-      }
-    };
-
+    }
+  };
 
 
   post_ajax_petition(base_url + 'review/',
@@ -414,14 +411,12 @@ function updateReview(reviewId) {
 
 
   var data = {
-
-      'reviewBody': '' + reviewBody,
-      'reviewRating': {
+    'reviewBody': '' + reviewBody,
+    'reviewRating': {
       '@type': 'Rating',
       'ratingValue': parseInt(ratingValue, 10)
-      }
-    };
-
+    }
+  };
 
 
   patch_ajax_petition(base_url + 'review/' + reviewId,
@@ -514,7 +509,7 @@ function editNewReservation(restaurant_name) {
   //party_size does not fire initReservatiomTime yet
    already_party_size_init = false;
 
-  document.getElementById('party_size').addEventListener('change',
+  document.getElementById('partySize').addEventListener('change',
                         enableCalendar);
 
   //open
@@ -653,28 +648,26 @@ function createDisableTimeRanges(dates) {
 
 
 function createNewReservation(restaurant_name) {
-
-  var partySize = document.forms.editReservationForm.partySize.valueAsNumber;
-  var reservationDate =
-      document.forms.editReservationForm.reservation_date.value;
-
+  var partySize = 
+    document.forms.editReservationForm.partySize.valueAsNumber;
+  var reservationDate = 
+    document.forms.editReservationForm.reservation_date.value;
 
   var reservation_datetime =
     document.forms.editReservationForm.reservation_date.value + 'T' +
     document.forms.editReservationForm.reservation_time.value;
 
 
-
   var data = {
-        '@type': 'FoodEstablishmentReservation',
-        'partySize': partySize,
-          'reservationFor': {
-          '@type': 'FoodEstablishment',
-        'name': '' + restaurant_name
-        },
-        'startTime': reservation_datetime+'Z'
-      };
-
+    '@type': 'FoodEstablishmentReservation',
+    'partySize': partySize,
+    'reservationFor': {
+      '@type': 'FoodEstablishment',
+      'name': '' + restaurant_name
+    },
+    'startTime': reservation_datetime+'Z'
+  };
+  
 
   post_ajax_petition(base_url + 'reservation/',
     closePopUpWindow,
