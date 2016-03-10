@@ -783,7 +783,7 @@ function createDisableTimeRanges(dates) {
 function createNewReservation(restaurantName) {
   var partySize = document.forms.editReservationForm.partySize.value;
   var reservationDate =
-    document.forms.editReservationForm.reservation_date.value;
+    document.forms.editReservationForm.reservationDate.value;
 
 
   var reservationDatetime =
@@ -821,8 +821,9 @@ function getAndShowRestaurantReviews(id) {
   getAjaxRequest(URL,
       showRestaurantReviews,
        function() {
-        document.getElementById('popContent').textContent =
-          '<h2>Cannot get reviews.</h2>';
+        var error = document.createElement('H2');
+        error.textContent = 'Cannot get reviews.';
+        document.getElementById('popContent').appendChild(error);
         openPopUpWindow();
        });
 }
@@ -843,8 +844,9 @@ function showRestaurantReviews(reviewsResponse) {
   }
 
   if (reviewsResponse.length < 1) {
-    document.getElementById('popContent').textContent =
-      '<h2>No reviews are available.</h2>';
+    var error = document.createElement('H2');
+    error.textContent = 'No reviews are available';
+    document.getElementById('popContent').appendChild(error);
     openPopUpWindow();
     return;
   }
@@ -942,9 +944,10 @@ function getAndShowRestaurantReservations(id) {
   getAjaxRequest(URL,
     showRestaurantReservations,
     function() {
-      document.getElementById('popContent').textContent =
-        '<h2>Cannot get reservations.</h2>';
-       openPopUpWindow();
+      var error = document.createElement('H2');
+      error.textContent = 'Cannot get reservations.';
+      document.getElementById('popContent').appendChild(error);
+      openPopUpWindow();
   });
 }
 
@@ -963,8 +966,9 @@ function showRestaurantReservations(reservationsResponse) {
   reservationsResponse = JSON.parse(reservationsResponse);
 
   if (reservationsResponse.length < 1) {
-    document.getElementById('popContent').textContent =
-       '<h2>No reservations are available.</h2>';
+    var error = document.createElement('H2');
+    error.textContent = 'No reservations are available.';
+    document.getElementById('popContent').appendChild(error);
     openPopUpWindow();
     return;
   }
@@ -1043,6 +1047,7 @@ function getUserReservation(username) {
     function() {alert('cannot get your reservations');});
 }
 
+/* should be totally replace by createReservationsTable*/
 function createReservationsList(reservationsResponse) {
   reservationsResponse = JSON.parse(reservationsResponse);
 
@@ -1129,8 +1134,9 @@ function createReservationsTable(reservationsResponse) {
 
 
   if (reservationsResponse.length < 1) {
-    document.getElementById('reservationsTableBody').textContent =
-      '<tr>No reservations are available.</tr>';
+    var error = document.createElement('TR');
+    error.textContent = 'No reservations are available';
+    document.getElementById('reservationsTableBody').appendChild(error); 
     return;
   }
 
@@ -1248,8 +1254,9 @@ function createReviewsTable(reviewsResponse) {
   reviewsResponse = JSON.parse(reviewsResponse);
 
   if (reviewsResponse.length < 1) {
-    document.getElementById('reviewsTableBody').textContent =
-      '<tr>No reviews are available.</tr>';
+    var error = document.createElement('TR');
+    error.textContent = 'No reviews are available.';
+    document.getElementById('reviewsTableBody').appendChild(error);
     return;
   }
 
