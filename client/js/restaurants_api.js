@@ -473,12 +473,10 @@ function editNewReservation(restaurant_name) {
   reservationForm += '\n</form>';
 
 
-
-
+  document.getElementById('pop_content').innerHTML = reservationForm;
+  
   document.getElementById('partySize').addEventListener('change',
                                                 enableCalendar);
-  document.getElementById('pop_content').innerHTML = reservationForm;
-
 
 
   //init elements
