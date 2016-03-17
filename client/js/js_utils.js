@@ -118,11 +118,5 @@ function patch_ajax_petition(url, on_success_callback, on_failure_callback, data
   xhr.send(JSON.stringify(data));
 }
 
-Date.prototype.yyyymmdd = function() {
-  var yyyy = this.getFullYear().toString();
-  var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
-  var dd = this.getDate().toString();
-  return yyyy + '-' + (mm.length === 2 ? mm : '0' + mm[0]) + '-' +
-   (dd[1] ? dd : '0' + dd[0]); // padding
-};
+
 
