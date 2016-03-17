@@ -18,8 +18,14 @@ var proxyurl = '';
 var base_url = 'http://tourguide/api/orion/';
 
 var reservations_per_date;
-var minTime = '12:30';
-var maxTime = '22:30';
+var minTime = {
+  hours : 12,
+  minutes: 30
+}
+var maxTime = {
+  hours : 22,
+  minutes: 30
+};
 var already_party_size_init = false;
 
 var availability_time_count;
@@ -492,8 +498,8 @@ function editNewReservation(restaurant_name) {
 
   $('#reservation_time').timepicker({
     'timeFormat': 'H:i:s',
-    'minTime': minTime + '',
-    'maxTime': maxTime + '',
+    'minTime': minTime.hours + ':' + minTime.minutes,
+    'maxTime': maxTime.hours + ':'+maxTime.minutes,
     'disableTimeRanges': [
       ['4pm', '8:01pm']
     ]
@@ -537,15 +543,18 @@ function initReservationTime() {
 function set_time_availability() {
   //don't allow select time during process
   document.getElementById('reservation_time').setAttribute('disabled', '');
-  var day = document.getElementById('reservation_date').value;
-  //console.log("day:");
-  //console.log(document.getElementById('reservation_date').value);
+  var day = new Date(document.getElementById('reservation_date').value);
+  console.log("day:");
+  console.log(day);
 
   //console.log("minTime:");
   //console.log(minTime);
-  var max_date = new Date((day + ' ' + maxTime).replace(/-/g, '/'));
-  var date = new Date((day + ' ' + minTime).replace(/-/g, '/'));
-  //console.log(date);
+  
+  var max_date = new Date(day.getTime());
+  max_date.setHours(maxTime.hours, maxTime.minutes);
+
+  var date = new Date(day.getTime());;
+  date.setHours(minTime.hours, minTime.minutes);
 
   availability_time_count = (max_date.getTime() -
     date.getTime()) / 1000 / 60 / 30; //get number of steps (30 min)
@@ -625,13 +634,16 @@ function createDisableTimeRanges(dates) {
   var disableTimeRanges = [];
   var day;
   var max_range;
+  var max_date;
   for (var key in available_time_array) {
     if (available_time_array.hasOwnProperty(key)) {
       if (!available_time_array[key]) {
-        day = document.getElementById('reservation_date').value;
-        max_range = (new Date((new Date((day + ' ' +
-               maxTime).replace(/-/g, '/'))).getTime() +
-              (1000 * 60 * 29))).toLocaleTimeString();
+        day = new Date(document.getElementById('reservation_date').value);
+        
+        max_date = day;
+        max_date.setHours(maxTime.hours, maxTime.minutes);
+        max_range = 
+          new Date(max_date.getTime() + (1000 * 60 * 29) ).toLocaleTimeString();
         disableTimeRanges.push([key, max_range]);
       }
     }
@@ -645,22 +657,14 @@ function createDisableTimeRanges(dates) {
 function createNewReservation(restaurant_name) {
   var partySize = 
     document.forms.editReservationForm.partySize.valueAsNumber;
-  var reservationDate = 
-    document.forms.editReservationForm.reservation_date.value;
-
   var reservation_datetime =
-    document.forms.editReservationForm.reservation_date.value + 'T' +
-    document.forms.editReservationForm.reservation_time.value;
+    new Date(document.forms.editReservationForm.reservation_date.value);
+  var reservation_time = 
+    new Date($('#reservation_time').timepicker('getTime'));
+  
 
-  var data = {
-        '@type': 'FoodEstablishmentReservation',
-        'partySize': partySize,
-        'reservationFor': {
-        '@type': 'FoodEstablishment',
-        'name': '' + restaurant_name
-        },
-        'startTime': reservation_datetime
-      };
+  reservation_datetime.setHours(reservation_time.getHours(), 
+                                reservation_time.getMinutes());
 
   var data = {
     '@type': 'FoodEstablishmentReservation',
@@ -669,7 +673,7 @@ function createNewReservation(restaurant_name) {
       '@type': 'FoodEstablishment',
       'name': '' + restaurant_name
     },
-    'startTime': reservation_datetime+'Z'
+    'startTime': reservation_datetime.toISOString()
   };
 
 
