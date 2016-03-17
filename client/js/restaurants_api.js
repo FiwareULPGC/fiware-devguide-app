@@ -460,11 +460,11 @@ function editNewReservation(restaurant_name) {
   //min="1" max="20">';
 
   reservationForm += '<br>\nDate:<br>';
-  reservationForm += '\n<input id = "reservation_date" disabled> <br>';
+  reservationForm += '\n<input type="date" id = "reservation_date" disabled> <br>';
   //reservationForm +='\n<input type="datetime-local"
   //name="reservationDate"><br>';
   reservationForm += '\nTime:<br>';
-  reservationForm += '\n<input id = "reservation_time" disabled>' +
+  reservationForm += '\n<input type="time" id = "reservation_time" disabled>' +
     ' <div id="loading_time"><img src="img/loading.gif"/> ' +
     'Calculating availability</div><br>';
 
