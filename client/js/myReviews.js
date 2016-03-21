@@ -12,9 +12,9 @@
 //initialization
 var initReviews = function() {
   //only gets reviews if the user is loged
-  loginNeeded(function() {
+  connectionsAPI.loginNeeded(function() {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    getUserReviews(userInfo.displayName);
+    restaurantsAPI.getUserReviews(userInfo.displayName);
   });
 
 
