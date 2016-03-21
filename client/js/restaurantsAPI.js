@@ -254,6 +254,10 @@ function editNewReview(restaurantName) {
   var reviewForm = document.createElement('FORM');
   reviewForm.name = 'editReviewForm';
   reviewForm.className = 'editReviewForm';
+  reviewForm.onsubmit = function() {
+      createNewReview(restaurantName);
+      return false;
+  }
 
   var reviewLabel = document.createElement('LABEL');
   reviewLabel.textContent = 'Your review: ';
@@ -286,12 +290,12 @@ function editNewReview(restaurantName) {
   var submit = document.createElement('INPUT');
   submit.type = 'submit';
   submit.value = 'Create Review';
-  submit.onclik = (function(restaurantName) {
+  /*submit.onclik = (function(restaurantName) {
     return function() {
       createNewReview(restaurantName);
     }
   })(restaurantName);
-
+*/
   reviewForm.appendChild(submit);
 
   document.getElementById('popContent').innerHTML = '';
@@ -330,6 +334,10 @@ function showEditReview(reviewResponse) {
   var reviewForm = document.createElement('FORM');
   reviewForm.name = 'editReviewForm';
   reviewForm.className = 'editReviewForm';
+  reviewForm.onsubmit = function() {
+      updateReview(review.name);
+      return false;
+    }
 
   var reviewLabel = document.createElement('LABEL');
   reviewLabel.textContent = 'Your review: ';
@@ -361,11 +369,12 @@ function showEditReview(reviewResponse) {
   var submit = document.createElement('INPUT');
   submit.type = 'submit';
   submit.value = 'Update review';
-  submit.onclik = (function(reviewName) {
+  /*submit.onclik = (function(reviewName) {
     return function() {
       updateReview(reviewName);
     }
   })(review.name);
+  */
 
   reviewForm.appendChild(submit);
 
