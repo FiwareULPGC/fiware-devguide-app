@@ -15,9 +15,9 @@ var initReservations = function() {
   $('#popWindow').modal();
 
   //only gets reservations if the user is logged
-  loginNeeded(function() {
+  connectionsAPI.loginNeeded(function() {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    getUserReservation(userInfo.displayName);
+    restaurantsAPI.getUserReservations(userInfo.displayName);
   });
 
 

@@ -18,7 +18,7 @@ var initIndex = function() {
   var franchise = window.location.search.replace('?', '');
   var prefix = 'franchise=';
   if (franchise.slice(0, prefix.length) == prefix) {
-    getOrganizationRestaurants(franchise.slice(prefix.length));
+    restaurantsAPI.getOrganizationRestaurants(franchise.slice(prefix.length));
   }
 
 
@@ -27,17 +27,6 @@ var initIndex = function() {
     attribution:
     '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
-
-
-
-
-  $('#reservationDate').datepicker({
-    dateFormat: 'yy-mm-dd',
-    minDate: '-0d',//only allow future reservations
-    maxDate: '+90d', // 3 month max
-    firstDay: 0,
-    beforeShowDay: calcCurrentReservations
-  });
 
 };
 
