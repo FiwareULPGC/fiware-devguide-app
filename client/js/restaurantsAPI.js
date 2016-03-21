@@ -586,31 +586,90 @@ function editNewReservation(restaurantName) {
   getReservationsPerDate(restaurantName);
   document.getElementById('popTitle').textContent = 'Reservation for ' +
      restaurantName;
-  var reservationForm = '';
-  reservationForm += '\n<form name="editReservationForm">';
-  reservationForm += '<input type="hidden" name="restaurantName"' +
-    ' id="restaurantName" value="' + restaurantName + '">';
-  reservationForm += '\nNumber of Diners:<br/>';
-  reservationForm += '\n<input type="number" name="partySize" id="partySize" min="1">';
-  //reservationForm +='\n<input type="number" name="partySize"
-  //min="1" max="20">';
 
-  reservationForm += '<br>\nDate:<br>';
-  reservationForm += '\n<input type="date" id = "reservationDate" disabled> <br>';
-  //reservationForm +='\n<input type="datetime-local"
-  //name="reservationDate"><br>';
-  reservationForm += '\nTime:<br>';
-  reservationForm += '\n<input type="time" id = "reservationTime" disabled>' +
-    ' <div id="loadingTime"><img src="img/loading.gif"/> ' +
-    'Calculating availability</div><br>';
+  var reservationForm = document.createElement('FORM');
+  reservationForm.name = 'editReservationForm';
+  reservationForm.onsubmit = function () {
+      //abort if not ready submit
+      if (document.getElementById('submitReservation').disabled) {
+        return false;
+      }
+      createNewReservation(restaurantName);
+      return false;
+    }
 
-  reservationForm += '\n</form>';
-  reservationForm += '\n<input type="submit" value="Create reservation"' +
-    ' onclick="createNewReservation(\'' + restaurantName + '\')">';
-  reservationForm += '\n</form>';
+  var name = document.createElement('INPUT');
+  name.type = 'hidden';
+  name.name = 'restaurantName';
+  name.id = 'restaurantName';
+  name.value = restaurantName;
+  reservationForm.appendChild(name);
+
+  var dinersLabel = document.createElement('SPAN');
+  dinersLabel.textContent = 'Number of diners';
+  reservationForm.appendChild(dinersLabel);
+
+  reservationForm.appendChild(document.createElement('BR'));
+  reservationForm.appendChild(document.createElement('BR'));
+  var nDiners = document.createElement('INPUT');
+  nDiners.name = 'partySize';
+  nDiners.id = 'partySize';
+  nDiners.type = 'number';
+  nDiners.setAttribute('min','1');
+  reservationForm.appendChild(nDiners);
+
+  reservationForm.appendChild(document.createElement('BR'));
+
+  var dateLabel = document.createElement('SPAN');
+  dateLabel.textContent = 'Date';
+  reservationForm.appendChild(dateLabel);
+
+  reservationForm.appendChild(document.createElement('BR'));
+
+  var reservationDate = document.createElement('INPUT');
+  reservationDate.type = 'date';
+  reservationDate.id = 'reservationDate';
+  reservationDate.disabled = true;
+  reservationForm.appendChild(reservationDate);
+
+  reservationForm.appendChild(document.createElement('BR'));
+
+  var timeLabel = document.createElement('SPAN');
+  timeLabel.textContent = 'Time:';
+  reservationForm.appendChild(timeLabel);
+
+  reservationForm.appendChild(document.createElement('BR'));
+
+  var reservationTime = document.createElement('INPUT');
+  reservationTime.type = 'time';
+  reservationTime.id = 'reservationTime';
+  reservationTime.disabled = true;
+  reservationForm.appendChild(reservationTime);
+
+  reservationForm.appendChild(document.createElement('BR'));
+
+  var loadingTime = document.createElement('DIV');
+  loadingTime.id = 'loadingTime';
+  loadingTime.textContent = 'Calculating availability';
+  loadingTime.style.visibility = 'hidden';
+  
+  var loadingTimeImg = document.createElement('IMG');
+  loadingTimeImg.src = 'img/loading.gif';
+  loadingTime.appendChild(loadingTimeImg);
+
+  reservationForm.appendChild(loadingTime);
+
+  var submit = document.createElement('INPUT');
+  submit.type = 'submit';
+  submit.id = 'submitReservation';
+  submit.value = 'Create Reservation';
+  submit.disabled = true;
+  reservationForm.appendChild(submit);
 
 
-  document.getElementById('popContent').innerHTML = reservationForm;
+  document.getElementById('popContent').innerHTML = '';
+
+  document.getElementById('popContent').appendChild(reservationForm);
 
 
   //init elements
@@ -635,14 +694,31 @@ function editNewReservation(restaurantName) {
     ]
   });
 
+  $('#reservationTime').on('changeTime', function() {
+      console.log("CHANGE");
+      if ( document.getElementById('reservationTime').value !== '' ) {
+        document.getElementById('submitReservation').disabled = false;
+      }
+    }
+  );
 
-  document.getElementById('loadingTime').style.visibility = 'hidden';
+
+  
 
   //party_size does not fire initReservatiomTime yet
    alreadyPartySizeInit = false;
 
   document.getElementById('partySize').addEventListener('change',
                         enableCalendar);
+
+  /*document.getElementById('reservationTime').addEventListener('change',
+    function() {
+      console.log("CHANGE");
+      if ( document.getElementById('reservationTime').value !== '' ) {
+        document.getElementById('submitReservation').disabled = false;
+      }
+    }
+  );*/
 
   //open
   openPopUpWindow();
@@ -654,7 +730,7 @@ function enableCalendar() {
 
 
 function initReservationTime() {
-  if (typeof alreadyPartySizeInit === false) {
+  if (alreadyPartySizeInit === false) {
     //console.log("first init");
     alreadyPartySizeInit = true;
     document.getElementById('partySize').addEventListener('change',
@@ -672,7 +748,8 @@ function initReservationTime() {
 
 function setTimeAvailability() {
   //don't allow select time during process
-  document.getElementById('reservationTime').setAttribute('disabled', '');
+  document.getElementById('reservationTime').disabled = true;
+  document.getElementById('submitReservation').disabled = true;
   var day = new Date(document.getElementById('reservationDate').value);
   
   var maxDate = new Date(day.getTime());
@@ -741,6 +818,9 @@ function checkEnablereservationTime() {
     //console.log(available_time_array);
     document.getElementById('reservationTime').disabled = false;
     document.getElementById('loadingTime').style.visibility = 'hidden';
+    if (document.getElementById('reservationTime').value !== '') {
+      document.getElementById('submitReservation').disabled = false;
+    }
     /*for (var key in available_time_array) {
       if (available_time_array.hasOwnProperty(key))
         console.log(key +"-->"+available_time_array[key]);
