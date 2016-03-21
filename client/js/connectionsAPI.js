@@ -50,7 +50,6 @@ function loggedIn(userInfo) {
 
 
   logoutLink.onclick = function() {
-    console.log('LOGOUT');
     localStorage.removeItem('userInfo');
   };
 
@@ -244,10 +243,8 @@ function showMessage(message, alertType) {
   closeButton.setAttribute('data-dismiss', 'alert');
   closeButton.textContent = 'X';
   alert.appendChild(closeButton);
-  //alert.innerHTML = 'Log in required';
 
   var navBar = document.getElementById('topMenu');
-  //map.appendChild(alert);
 
   var mainContainer = document.getElementsByClassName('container-fluid')[0];
 
