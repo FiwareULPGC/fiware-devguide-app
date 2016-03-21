@@ -392,9 +392,7 @@ function processViewReview(reviewResponse) {
 
   //remove previous content
   var myNode = document.getElementById('popContent');
-  while (myNode.firstChild) {
-    myNode.removeChild(myNode.lastChild);
-  }
+  myNode.innerHTML = '';
 
   var reviewElement = document.createElement('DIV');
   reviewElement.className = 'reviewElement';
@@ -850,9 +848,7 @@ function showRestaurantReviews(reviewsResponse) {
 
   //remove previous content
   var myNode = document.getElementById('popContent');
-  while (myNode.firstChild) {
-    myNode.removeChild(myNode.lastChild);
-  }
+  myNode.innerHTML = '';
 
   if (reviewsResponse.length < 1) {
     var error = document.createElement('H2');
@@ -959,9 +955,7 @@ function getAndShowRestaurantReservations(id) {
 function showRestaurantReservations(reservationsResponse) {
   //remove previous content
   var myNode = document.getElementById('popContent');
-  while (myNode.firstChild) {
-    myNode.removeChild(myNode.lastChild);
-  }
+  myNode.innerHTML = '';
 
   reservationsResponse = JSON.parse(reservationsResponse);
 
@@ -1043,9 +1037,7 @@ function createReservationsTable(reservationsResponse) {
 
   //clean previous table content
   var myNode = document.getElementById('reservationsTableBody');
-    while (myNode.firstChild) {
-      myNode.removeChild(myNode.lastChild);
-    }
+  myNode.innerHTML = '';
 
 
   if (reservationsResponse.length < 1) {
@@ -1126,9 +1118,8 @@ function createReviewsTable(reviewsResponse) {
 
   //clean previous table content
   var myNode = document.getElementById('reviewsTableBody');
-    while (myNode.firstChild) {
-      myNode.removeChild(myNode.lastChild);
-    }
+  myNode.innerHTML = '';
+
   var cancelReservationURLBase = '';
   for (var j = 0, lim = reviewsResponse.length; j < lim; j++) {
 
