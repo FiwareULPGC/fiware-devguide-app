@@ -15,7 +15,7 @@ var map; //map instance
 //a proxy should be used if the API is not in the same location as the web app.
 var proxyURL = '';
 
-var baseURL = 'http://tourguide/api/orion/';
+var baseURL = proxyURL + 'http://tourguide/api/orion/';
 
 var reservationsPerDate;
 var minTime = {
@@ -143,7 +143,6 @@ function showRestaurants(restaurants) {
 
     restaurantMarks.push(mark);
   }
-  //console.log("Errors: "+ errors);
 
   /* clustering approach */
   var markerClusters = L.markerClusterGroup({showCoverageOnHover: true});
@@ -219,10 +218,6 @@ function showRestaurants(restaurants) {
     }
   }
 
-  //var group = new L.featureGroup(markers);
-
-  //set the view
-  //map.fitBounds(group.getBounds().pad(0.5));
   map.addLayer(markerClusters);
 }
 
@@ -257,7 +252,7 @@ function editNewReview(restaurantName) {
   reviewForm.onsubmit = function() {
       createNewReview(restaurantName);
       return false;
-  }
+  };
 
   var reviewLabel = document.createElement('LABEL');
   reviewLabel.textContent = 'Your review: ';
@@ -290,12 +285,6 @@ function editNewReview(restaurantName) {
   var submit = document.createElement('INPUT');
   submit.type = 'submit';
   submit.value = 'Create Review';
-  /*submit.onclik = (function(restaurantName) {
-    return function() {
-      createNewReview(restaurantName);
-    }
-  })(restaurantName);
-*/
   reviewForm.appendChild(submit);
 
   document.getElementById('popContent').innerHTML = '';
@@ -320,8 +309,6 @@ function editReview(reviewId) {
 
 function showEditReview(reviewResponse) {
   reviewResponse = JSON.parse(reviewResponse);
-  console.log('Gonna edit review: ');
-  console.log(reviewResponse);
   if (reviewResponse.length != 1) {
     window.alert('Error: more than one review received.');
   }
@@ -337,7 +324,7 @@ function showEditReview(reviewResponse) {
   reviewForm.onsubmit = function() {
       updateReview(review.name);
       return false;
-    }
+    };
 
   var reviewLabel = document.createElement('LABEL');
   reviewLabel.textContent = 'Your review: ';
@@ -369,13 +356,6 @@ function showEditReview(reviewResponse) {
   var submit = document.createElement('INPUT');
   submit.type = 'submit';
   submit.value = 'Update review';
-  /*submit.onclik = (function(reviewName) {
-    return function() {
-      updateReview(reviewName);
-    }
-  })(review.name);
-  */
-
   reviewForm.appendChild(submit);
 
   document.getElementById('popContent').innerHTML = '';
@@ -403,8 +383,6 @@ function viewReview(reviewId) {
 
 function processViewReview(reviewResponse) {
   var reviewResponse = JSON.parse(reviewResponse);
-  console.log('Gonna edit review: ');
-  console.log(reviewResponse);
   if (reviewResponse.length != 1) {
     window.alert('Error: more than one review received.');
   }
@@ -417,20 +395,7 @@ function processViewReview(reviewResponse) {
   while (myNode.firstChild) {
     myNode.removeChild(myNode.lastChild);
   }
-  /*
 
-  document.getElementById("pop_title").innerHTML ='Review '+ review['name']+
-    ' for '+review["itemReviewed"]["name"];
-  reviewInfo = '';
-  reviewInfo +='\n<div id="reviewInfo">';
-  reviewInfo +='\n<h4>Rating: '
-    + review['reviewRating']['ratingValue']+'</h4>';
-  reviewInfo +='\n<h4>Review text:</h4>';
-  reviewInfo +='\n<p">'+review["reviewBody"]+'</p>';
-  reviewInfo +='\n</div>';
-
-
-  */
   var reviewElement = document.createElement('DIV');
   reviewElement.className = 'reviewElement';
 
@@ -558,7 +523,6 @@ function updateReview(reviewId) {
 }
 
 
-
 function addCreateReservationLink(restaurantName) {
   var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
@@ -589,14 +553,14 @@ function editNewReservation(restaurantName) {
 
   var reservationForm = document.createElement('FORM');
   reservationForm.name = 'editReservationForm';
-  reservationForm.onsubmit = function () {
+  reservationForm.onsubmit = function() {
       //abort if not ready submit
       if (document.getElementById('submitReservation').disabled) {
         return false;
       }
       createNewReservation(restaurantName);
       return false;
-    }
+    };
 
   var name = document.createElement('INPUT');
   name.type = 'hidden';
@@ -615,7 +579,7 @@ function editNewReservation(restaurantName) {
   nDiners.name = 'partySize';
   nDiners.id = 'partySize';
   nDiners.type = 'number';
-  nDiners.setAttribute('min','1');
+  nDiners.setAttribute('min', '1');
   reservationForm.appendChild(nDiners);
 
   reservationForm.appendChild(document.createElement('BR'));
@@ -652,7 +616,7 @@ function editNewReservation(restaurantName) {
   loadingTime.id = 'loadingTime';
   loadingTime.textContent = 'Calculating availability';
   loadingTime.style.visibility = 'hidden';
-  
+
   var loadingTimeImg = document.createElement('IMG');
   loadingTimeImg.src = 'img/loading.gif';
   loadingTime.appendChild(loadingTimeImg);
@@ -695,30 +659,20 @@ function editNewReservation(restaurantName) {
   });
 
   $('#reservationTime').on('changeTime', function() {
-      console.log("CHANGE");
-      if ( document.getElementById('reservationTime').value !== '' ) {
+      if (document.getElementById('reservationTime').value !== '') {
         document.getElementById('submitReservation').disabled = false;
       }
     }
   );
 
 
-  
+
 
   //party_size does not fire initReservatiomTime yet
    alreadyPartySizeInit = false;
 
   document.getElementById('partySize').addEventListener('change',
                         enableCalendar);
-
-  /*document.getElementById('reservationTime').addEventListener('change',
-    function() {
-      console.log("CHANGE");
-      if ( document.getElementById('reservationTime').value !== '' ) {
-        document.getElementById('submitReservation').disabled = false;
-      }
-    }
-  );*/
 
   //open
   openPopUpWindow();
@@ -731,12 +685,10 @@ function enableCalendar() {
 
 function initReservationTime() {
   if (alreadyPartySizeInit === false) {
-    //console.log("first init");
     alreadyPartySizeInit = true;
     document.getElementById('partySize').addEventListener('change',
       initReservationTime);
   }
-  //console.log("init ")
 
   document.getElementById('loadingTime').style.visibility = '';
 
@@ -751,7 +703,7 @@ function setTimeAvailability() {
   document.getElementById('reservationTime').disabled = true;
   document.getElementById('submitReservation').disabled = true;
   var day = new Date(document.getElementById('reservationDate').value);
-  
+
   var maxDate = new Date(day.getTime());
   maxDate.setHours(maxTime.hours, maxTime.minutes);
 
@@ -780,14 +732,12 @@ function setTimeAvailability() {
 
 
 function processOccupancyResponse(restaurantResponse) {
-  //console.log("process occupancy response");
   restaurantResponse = JSON.parse(restaurantResponse);
   if (restaurantResponse.length != 1) {
     console.log('ERROR: NOT RETRIEVED EXACTLY ONE RESTAURANT');
   }
 
   restaurantResponse = restaurantResponse[0];
-  //console.log(restaurantResponse);
   var properties = restaurantResponse.additionalProperty;
   var capacity, occupancyLevel, time;
 
@@ -814,22 +764,12 @@ function processOccupancyResponse(restaurantResponse) {
 function checkEnablereservationTime() {
   if (! --availabilityTimeCount) {
     //process finished enabled it
-    //console.log("ALL FINISHED");
-    //console.log(available_time_array);
     document.getElementById('reservationTime').disabled = false;
     document.getElementById('loadingTime').style.visibility = 'hidden';
     if (document.getElementById('reservationTime').value !== '') {
       document.getElementById('submitReservation').disabled = false;
     }
-    /*for (var key in available_time_array) {
-      if (available_time_array.hasOwnProperty(key))
-        console.log(key +"-->"+available_time_array[key]);
-    }
-    */
   }
-
-  //console.log("finish");
-  //console.log(availability_time_count);
   createDisableTimeRanges(availableTimeArray);
 }
 
@@ -850,8 +790,6 @@ function createDisableTimeRanges(dates) {
       }
     }
   }
-  //console.log("time to disabled");
-  //console.log(disableTimeRanges);
   $('#reservationTime').timepicker('option', { 'disableTimeRanges':
                         [disableTimeRanges] });
 }
@@ -909,8 +847,6 @@ function getAndShowRestaurantReviews(id) {
 /* At this moment, show all reviews without pagination */
 function showRestaurantReviews(reviewsResponse) {
   reviewsResponse = JSON.parse(reviewsResponse);
-
-  //console.log(reviewsResponse);
 
   //remove previous content
   var myNode = document.getElementById('popContent');
@@ -974,15 +910,6 @@ function showRestaurantReviews(reviewsResponse) {
 
     reviewElement.appendChild(top);
 
-    //date
-    /*var review_date = document.createElement("DIV");
-    review_date.setAttribute("class", "review_date-div");
-    review_date.innerHTML = '<span class="review_date_label">Date:'+
-      ' </span> <span class="review_date_value">' +
-      reviewsResponse[j][""][""]+
-      '</span>';
-    reviewElemnt.appendChild(review_date);*/
-
     var hr = document.createElement('HR');
     reviewElement.appendChild(hr);
     //body
@@ -1005,7 +932,6 @@ function showRestaurantReviews(reviewsResponse) {
   }
 
   //render the reviews
-  //document.getElementById("pop_content").innerHTML =reviewsHtml;
   myNode.appendChild(reviewList);
 
   openPopUpWindow();
@@ -1079,14 +1005,6 @@ function showRestaurantReservations(reservationsResponse) {
 
   for (var j = 0, lim = reservationsResponse.length; j < lim; j++) {
     var row = document.createElement('TR');
-    //row.setAttribute("class","row");
-    /*
-    var name = document.createElement("TD");
-    name.setAttribute("class", "col-xs-4");
-    name.innerHTML = reservationsResponse[j]["reservationFor"]["name"];
-    row.appendChild(name);
-    */
-
 
     var underName = document.createElement('TD');
     underName.classList.add('class', 'col-xs-6');
@@ -1115,85 +1033,9 @@ function showRestaurantReservations(reservationsResponse) {
 function getUserReservation(username) {
   var URL = baseURL + 'reservations/user/' + username;
   getAjaxRequest(URL,
-    //create_reservations_list,
     createReservationsTable,
     function() {alert('cannot get your reservations');});
 }
-
-/* should be totally replace by createReservationsTable*/
-function createReservationsList(reservationsResponse) {
-  reservationsResponse = JSON.parse(reservationsResponse);
-
-  if (reservationsResponse.length < 1) {
-    document.getElementById('reservationsListDiv').textContent =
-      '<h2>No reservations are available.</h2>' +
-      document.getElementById('reservationsListDiv').textContent;
-    return;
-  }
-
-
-  document.getElementById('reservationList').innerHTML = '';
-  var cancelReservationURLBase = '';
-  for (var j = 0, lim = reservationsResponse.length; j < lim; j++) {
-    var reservationHTML = document.createElement('LI');
-
-    var restaurantReservationLabel = document.createElement('SPAN');
-    restaurantReservationLabel.className = 'restaurantReservationLabel';
-    restaurantReservationLabel.textContent = 'Restaurant: ';
-
-    var restaurantReservationValue = document.createElement('SPAN');
-    restaurantReservationValue.className = 'restaurantReservationLabel';
-    restaurantReservationValue.textContent =
-      reservationsResponse[j].reservationFor.name;
-
-    reservationHTML.appendChild(restaurantReservationLabel);
-    reservationHTML.appendChild(restaurantReservationValue);
-
-    var reservationTimeLabel = document.createElement('SPAN');
-    reservationTimeLabel.className = 'Time :';
-    reservationTimeLabel.textContent = 'reservationTimeLabel';
-
-    var timeValue = document.createElement('SPAN');
-    timeValue.className = 'timeValue';
-    timeValue.textContent = fixBookingTime(reservationsResponse[j].startTime);
-
-    reservationHTML.appendChild(reservationTimeLabel);
-    reservationHTML.appendChild(timeValue);
-
-    var dinersLabel = document.createElement('SPAN');
-    dinersLabel.className = 'dinersNumberLabel';
-    dinersLabel.textContent = 'Diners: ';
-
-    var dinersValue = document.createElement('SPAN');
-    dinersValue.className = 'diners';
-    dinersValue.textContent = reservationsResponse[j].partySize;
-
-    reservationHTML.appendChild(dinersLabel);
-    reservationHTML.appendChild(dinersValue);
-
-    var cancelReservation = document.createElement('SPAN');
-    cancelReservation.className = 'cancelReservation';
-
-    var cancelReservationLink = document.createElement('A');
-    cancelReservation.textContent = 'Cancel reservation';
-    cancelReservationLink.onclick = (function(reservationId) {
-      return function() {
-        cancelReservation(reservationId);
-      }
-    })(reservationsResponse[j].reservationId);
-
-    cancelReservation.appendChild(cancelReservationLink);
-    reservationHTML.appendChild(cancelReservation);
-
-    //reservationHTML = reservationHTML.replace("__reservation_id__",
-      //reservationsResponse[j]["reservationId"]);
-    //console.log(typeof reservationsResponse[j]["reservationId"]);
-
-
-    document.getElementById('reservationList').appendChild(reservationHTML);
-  }
-}
-
 
 
 function createReservationsTable(reservationsResponse) {
@@ -1209,7 +1051,7 @@ function createReservationsTable(reservationsResponse) {
   if (reservationsResponse.length < 1) {
     var error = document.createElement('TR');
     error.textContent = 'No reservations are available';
-    document.getElementById('reservationsTableBody').appendChild(error); 
+    document.getElementById('reservationsTableBody').appendChild(error);
     return;
   }
 
@@ -1251,7 +1093,6 @@ function createReservationsTable(reservationsResponse) {
 
 
 function cancelReservation(reservationId) {
-  //alert("atemp to cancel "+ reservation_id);
   if (!(window.confirm('Delete reservation?'))) {
     return;
   }
@@ -1265,63 +1106,13 @@ function cancelReservation(reservationId) {
 }
 
 
-
 function getUserReviews(userName) {
   var URL = baseURL + 'reviews/user/' + userName;
   getAjaxRequest(URL,
-    //create_reviews_list,
     createReviewsTable,
     function() {alert('cannot get your reviews');});
 }
 
-/* gonna be delete */
-/*
-function createReviewsList(reviewsResponse) {
-  reviewsResponse = JSON.parse(reviewsResponse);
-  //console.log(reviewsResponse);
-
-  if (reviewsResponse.length < 1) {
-    document.getElementById('reviewsListDiv').innerHTML =
-      '<h2>No reviews are available.</h2>' +
-       document.getElementById('reviewsListDiv').innerHTML;
-    return;
-  }
-
-
-  document.getElementById('reviewList').innerHTML = '';
-  var cancelReservationURLBase = '';
-  for (var j = 0, lim = reviewsResponse.length; j < lim; j++) {
-    var reservationHTML = '<li>' +
-      '<span class="restaurantReviewLabel">Restaurant: </span>' +
-        ' <span class="restaurantReviewLabel">' +
-        reviewsResponse[j].itemReviewed.name +
-      '</span>\n' +
-      '<span class="reviewRatingValue">Rating: </span>' +
-      ' <span class="ratingValue">' +
-         reviewsResponse[j].reviewRating.ratingValue +
-      '</span>\n' +
-      '<span class="viewReview"><a href="javascript:viewReview(' +
-      '\'' + reviewsResponse[j].name + '\'' + ')">' +
-      ' View review </a>' +
-      '</span>\n' +
-      '<span class="editReview"><a href="javascript:editReview(' +
-      '\'' + reviewsResponse[j].name + '\'' +
-      ')"> Edit review </a>' +
-      '</span>\n' +
-      '<span class="deleteReview"><a href="javascript:deleteReview(' +
-      '\'' + reviewsResponse[j].name + '\'' +
-      ')"> Delete review </a>' +
-      '</span>\n' +
-      '</li>';
-
-    //reviewHTML =
-    //reviewHTML.replace("__review_id__",reviewsResponse[j]["reviewId"]);
-    //console.log(typeof reviewsResponse[j]["reviewId"]);
-
-    document.getElementById('reviewList').innerHTML += reservationHTML;
-  }
-}
-*/
 
 function createReviewsTable(reviewsResponse) {
   reviewsResponse = JSON.parse(reviewsResponse);
@@ -1414,48 +1205,22 @@ function deleteReview(reviewId) {
 }
 
 
-/* aux function that open the PopUp windows */
+/* aux function that opens the PopUp windows */
 function openPopUpWindow() {
-  /*
-  document.getElementById("pop_window").className =
-    document.getElementById("pop_window").className.replace('hidden', '');
-  document.getElementById("pop_window").className =
-    document.getElementById("pop_window").className.replace('  ', ' ');
-  */
   $('#popWindow').modal('show');
 }
 
-/*aux function that close the PopUp window */
+/*aux function that closes the PopUp window */
 function closePopUpWindow() {
-  /*
-  if (! (document.getElementById("pop_window").className.indexOf('hidden')
-      > -1 ) )
-    document.getElementById("pop_window").className =
-      document.getElementById("pop_window").className + ' hidden';
-  */
   $('#popWindow').modal('hide');
 }
 
-/* axu function, it change the format date to print reservations */
+/* aux function, it change the format date to print reservations */
 function fixBookingTime(bookingTime) {
   var d = new Date(bookingTime);
   return '' + d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
 }
 
-
-
-
-
-/*
-var reservations_per_date = {
-'2016-02-24': 2,
-'2016-02-25': 10,
-'2016-02-23': 7,
-'2016-02-29': -1,
-'2016-02-30': 9
-};
-
-*/
 
 
 function calcCurrentReservations(date, restaurantName) {

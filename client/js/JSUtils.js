@@ -26,10 +26,10 @@ function addLoadEvent(func) {
   }
 }
 
-  
+
 function prepareXHR(method, url, failureCallback) {
   var xhr = new XMLHttpRequest();
-  
+
   xhr.onerror = function(e) {
     failureCallback(this.response);
   };
@@ -84,7 +84,7 @@ function postAjaxRequest(url, successCallback, failureCallback, data) {
       failureCallback(this.response);
     }
   };
-  
+
   xhr.setRequestHeader('Content-type', 'application/json');
   xhr.send(JSON.stringify(data));
 }

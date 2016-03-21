@@ -14,8 +14,6 @@ var map;
 var initIndex = function() {
   map = L.map('map').setView([42.90816007196054, -2.52960205078125], 8);
 
-
-  //var userInfo = JSON.parse(localStorage.getItem('userInfo'));
   //get franchise from url
   var franchise = window.location.search.replace('?', '');
   var prefix = 'franchise=';
