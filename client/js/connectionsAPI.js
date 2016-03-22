@@ -28,7 +28,7 @@ Tourguide.addLoadEvent(initConnections);
     endUser: 'End user',
     restaurantViewer: 'Restaurant Viewer',
     globalManager: 'global manager'
-  }
+  };
 
   function loggedIn(userInfo) {
     localStorage.setItem('userInfo', userInfo);
