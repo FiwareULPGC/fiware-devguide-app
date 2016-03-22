@@ -32,16 +32,16 @@ var Tourguide = Tourguide || {};
   var availabilityTimeCount;
   var availableTimeArray;
 
-  /* get all restaurants and show it */
+  /* get all restaurants and show them */
   function getAllRestaurants() {
     Tourguide.AJAXRequest.get(baseURL + 'restaurants/', showRestaurants,
-      function() {alert('Could not retrive restaurants');});
+      function() {alert('Could not retrieve restaurants');});
   }
 
   function getOrganizationRestaurants(organization) {
     var URL = baseURL + 'restaurants/organization/' + organization;
     Tourguide.AJAXRequest.get(URL,
-      showRestaurants, function() {alert('Could not retrive restaurants');}
+      showRestaurants, function() {alert('Could not retrieve restaurants');}
       );
   }
 
@@ -215,12 +215,12 @@ var Tourguide = Tourguide || {};
 
       restaurantMarks[i].mark.bindPopup(popHTML);
 
-      //reference all mark info for use from leaflet
+      //reference all marks info to be used from leaflet
       restaurantMarks[i].mark.extraInfo = restaurantMarks[i];
 
       markerClusters.addLayer(restaurantMarks[i].mark);
 
-      //group for make a bbox that contains all markers.
+      //group to make a bbox that contains all markers.
       //Skipped Pascual Berganzo because it is in Colombia
       if (restaurantMarks[i].name != 'Pascual Berganzo') {
         markers.push(restaurantMarks[i].mark);
@@ -368,7 +368,6 @@ var Tourguide = Tourguide || {};
     document.getElementById('popContent').innerHTML = '';
     document.getElementById('popContent').appendChild(reviewForm);
 
-
     //mark the selected rating
     var value = review.reviewRating.ratingValue;
     markSelectedValue(ratingValueSelect, value);
@@ -440,9 +439,7 @@ var Tourguide = Tourguide || {};
     author.appendChild(authorValue);
     top.appendChild(author);
 
-
     reviewElement.appendChild(top);
-
 
     var hr = document.createElement('HR');
     reviewElement.appendChild(hr);
@@ -460,7 +457,6 @@ var Tourguide = Tourguide || {};
     body.appendChild(bodyLabel);
     body.appendChild(bodyValue);
     reviewElement.appendChild(body);
-
 
     myNode.appendChild(reviewElement);
 
@@ -517,14 +513,12 @@ var Tourguide = Tourguide || {};
       }
     };
 
-
     Tourguide.AJAXRequest.patch(baseURL + 'review/' + reviewId,
       function() {closePopUpWindow(); location.reload();},
       function(err) {
         alert('Cannot update review'), console.log(err),
         closePopUpWindow();
       }, data);
-
   }
 
 
@@ -635,7 +629,6 @@ var Tourguide = Tourguide || {};
     submit.disabled = true;
     reservationForm.appendChild(submit);
 
-
     document.getElementById('popContent').innerHTML = '';
 
     document.getElementById('popContent').appendChild(reservationForm);
@@ -670,11 +663,8 @@ var Tourguide = Tourguide || {};
       }
     );
 
-
-
-
     //party_size does not fire initReservatiomTime yet
-     alreadyPartySizeInit = false;
+    alreadyPartySizeInit = false;
 
     document.getElementById('partySize').addEventListener('change',
                           enableCalendar);
@@ -757,7 +747,6 @@ var Tourguide = Tourguide || {};
       }
     }
 
-
     var nDiners = document.getElementById('partySize').valueAsNumber;
 
     availableTimeArray[new Date(time).toLocaleTimeString()] =
@@ -830,8 +819,6 @@ var Tourguide = Tourguide || {};
   }
 
 
-
-
   /*get reviews from a restaurant an show it */
   function getAndShowRestaurantReviews(id) {
     var URL = baseURL + 'reviews/restaurant/' + id;
@@ -864,7 +851,6 @@ var Tourguide = Tourguide || {};
       openPopUpWindow();
       return;
     }
-
 
     var reviewList = document.createElement('DIV');
     reviewList.className = 'reviewList';
@@ -974,7 +960,6 @@ var Tourguide = Tourguide || {};
       return;
     }
 
-
     var reservationsTable = document.createElement('DIV');
     reservationsTable.classList.add('table', 'table-fixed', 'table-hover');
 
@@ -1000,7 +985,6 @@ var Tourguide = Tourguide || {};
 
     tableHead.appendChild(row);
     reservationsTable.appendChild(tableHead);
-
 
     var tableBody = document.createElement('TBODY');
 
@@ -1099,7 +1083,6 @@ var Tourguide = Tourguide || {};
         function() {location.reload();},
         function(err) {
           alert('Could not delete the reservation.'); console.log(err);
-         /*location.reload();*/
         });
   }
 
@@ -1216,7 +1199,7 @@ var Tourguide = Tourguide || {};
     $('#popWindow').modal('hide');
   }
 
-  /* aux function, it change the format date to print reservations */
+  /* aux function, it changes the date format to print reservations */
   function fixBookingTime(bookingTime) {
     var d = new Date(bookingTime);
     return '' + d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
@@ -1291,11 +1274,6 @@ var Tourguide = Tourguide || {};
     getAllRestaurants: getAllRestaurants,
     getUserReservations: getUserReservations,
     getUserReviews: getUserReviews,
-    getOrganizationRestaurants: getOrganizationRestaurants/*,
-    getAndShowRestaurantReviews: getAndShowRestaurantReviews,
-    getAndShowRestaurantReservations: getAndShowRestaurantReservations,
-    editNewReview: editNewReview,
-    createNewReview: createNewReview,
-    updateReview: updateReview*/
+    getOrganizationRestaurants: getOrganizationRestaurants
   };
 })(Tourguide);

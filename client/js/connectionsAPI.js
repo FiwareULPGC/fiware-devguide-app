@@ -49,7 +49,6 @@ Tourguide.addLoadEvent(initConnections);
     hiUserLi.appendChild(hiUserText);
     logOutMenu.appendChild(hiUserLi);
 
-
     var logOutLi = document.createElement('LI');
     logOutLi.id = 'logOut';
     logOutLi.className = 'menuElement';
@@ -58,7 +57,6 @@ Tourguide.addLoadEvent(initConnections);
     logoutLink.id = 'logOutLink';
     logoutLink.href = 'http://tourguide/logout';
     logoutLink.textContent = 'Log out';
-
 
     logoutLink.onclick = function() {
       localStorage.removeItem('userInfo');
@@ -77,7 +75,6 @@ Tourguide.addLoadEvent(initConnections);
   }
 
   function createAndShowMenu(userInfo) {
-
 
     //TODO check roles
 
@@ -103,7 +100,6 @@ Tourguide.addLoadEvent(initConnections);
 
       //we should ask before for each organization but the user hasn't yet
       if (userInfo.organizations.length > 0) {
-
         var myRestaurantsLi = document.createElement('LI');
         myRestaurantsLi.className = 'dropdown';
 
@@ -148,7 +144,6 @@ Tourguide.addLoadEvent(initConnections);
         loggedMenu.appendChild(myRestaurantsLi);
       }
 
-
     }
 
     if (hasRole(userInfo, rol.endUser)) {
@@ -175,12 +170,9 @@ Tourguide.addLoadEvent(initConnections);
       loggedMenu.appendChild(myReviews);
     }
 
-
-
     //insert menu inside logged_div
     document.getElementById('loggedDiv').innerHTML += '';
     document.getElementById('loggedDiv').appendChild(loggedMenu);
-
   }
 
   function hasRole(userInfo, role) {

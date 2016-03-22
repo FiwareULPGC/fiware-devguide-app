@@ -23,7 +23,6 @@ var initIndex = function() {
       franchise.slice(prefix.length));
   }
 
-
   //set tile layer
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution:

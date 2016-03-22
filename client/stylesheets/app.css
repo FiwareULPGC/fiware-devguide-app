@@ -2,220 +2,175 @@
  * app.css
  * Copyright(c) 2016 Universidad de Las Palmas de Gran Canaria
  * Authors: 
- *   Jaisiel Santana <jaisiel@gmail.com>,
+ *   Jaisiel Santana <jaisiel@gmail.com>
  *   Alejandro Sánchez <alemagox@gmail.com>
  *   Pablo Fernández <pablo.fernandez@ulpgc.es>
  * MIT Licensed
 
 */
 
- body{
- 	margin: 0;
- 	padding: 0;
+ body {
+  margin: 0;
+  padding: 0;
  }
 
 /* Remove padding from first container */
- body > .container-fluid{
- 	padding-left: 0;
- 	padding-right: 0;
+ body > .container-fluid {
+  padding-left: 0;
+  padding-right: 0;
  }
- #map{
- 	position: fixed;
- 	top:0;
-  	width: 100%;
-  	height: 100%;
-  	margin-top: 45px;
+
+ #map {
+  position: fixed;
+  top:0;
+  width: 100%;
+  height: 100%;
+  margin-top: 45px;
 }
 
-
-#loggedDiv{
-	position: fixed;
-	width: 100%;
-	/*background-color: rgba(255,165,0,0.6);*/
-	top: 0px;
-	left: 0px;
-	height: 45px;
-	clear: both;
-	z-index: 1000;
+#loggedDiv {
+  position: fixed;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  height: 45px;
+  clear: both;
+  z-index: 1000;
 }
 
-#loggedDiv div{
-	float: right;
-	margin-right: 1.5em;
-	margin-left: 0.5em;
-	font-size: 0.8em;
+#loggedDiv div {
+  float: right;
+  margin-right: 1.5em;
+  margin-left: 0.5em;
+  font-size: 0.8em;
 }
 
-#loggedMenu{
-	float:left !important;
-	padding-left: 60px;
+#loggedMenu {
+  float:left !important;
+  padding-left: 60px;
 }
 
-.menuElement{
-	float: left;
+.menuElement {
+  float: left;
 }
 
-.menuElement:after{
-	/*content: ' | ';*/
+#loggedDiv p {
+  padding-top: 13px;
 }
 
-
-#loggedDiv p{
-	padding-top: 13px;
-}
-/*
-#pop_window{
-	position:fixed;
-	top:50px;
-	height: 500px;
-	background-color: rgba(194, 189, 181, 0.8);
-	margin-left: 20%;
-	margin-right: 20%;
-	width: 60%;
-	padding-right: 15px;
-	padding-left: 15px;
-	z-index: 2000;
+.hidden {
+  display: none;
 }
 
-#pop_content{
-	overflow-y:auto;
-	max-height: 400px; 
+#rolesDiv {
+  margin-top: 30px;
+  margin-bottom:10px;
+  height: auto;
 }
 
-
-#top_pop{
-
-}
-#top_pop>button.close_pop{
-	float: right;
+#rolesDiv ul {
+  padding-left: 0;
 }
 
-.markPopUp a{
-	cursor:pointer;
-}
-
-#pop_title{
-	font-size: 1.5em;
-	font-weight: bold;
-}
-
-*/
-.hidden{
-	display: none;
-}
-#rolesDiv{
-	margin-top: 30px;
-	margin-bottom:10px;
-	height: auto;
-}
-#rolesDiv ul{
-	padding-left: 0;
-}
-#rolesDiv ul li{
-	float:left;
-	margin-left: 10px;
-	padding-left: 0;
-	margin-right: 10px;
-	margin-top: -10px;
-	list-style-type: none;
+#rolesDiv ul li {
+  float:left;
+  margin-left: 10px;
+  padding-left: 0;
+  margin-right: 10px;
+  margin-top: -10px;
+  list-style-type: none;
 } 
 
 
-.review-top{
-	/*min-height: 30px;*/
+.reviewElement hr {
+  border: 1px solid #E3E3E3;
+  width: 100%;
+  clear: both;
 }
 
-.reviewElement hr{
-	border: 1px solid #E3E3E3;
-	width: 100%;
-	clear: both;
+.author-div {
+  float: left;
 }
 
-.author-div{
-	float: left;
+.rating-div {
+  float: right;
 }
 
-.rating-div{
-	float: right;
+.ratingLabel {
+  font-weight: bold;
+  font-size: 1.15em;
 }
 
-.ratingLabel{
-	font-weight: bold;
-	font-size: 1.15em;
+.authorLabel {
+  font-weight: bold;
+  font-size: 1.15em;
 }
 
-.authorLabel{
-	font-weight: bold;
-	font-size: 1.15em;
+.reviewElement {
+  border: 1px solid #E3E3E3;
+  padding: 5px;
+  background-color: #F4F4F4;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
-
-.reviewElement{
-	border: 1px solid #E3E3E3;
-	padding: 5px;
-	background-color: #F4F4F4;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	margin-bottom: 10px;
+.reviewLabel {
+  font-weight: bold;
+  font-size: 1.15em;
+}
+.reservationTimeLabel {
+  font-weight: bold;
+  font-size: 1.15em;
+}
+.underNameReservationLabel {
+  font-weight: bold;
+  font-size: 1.15em;
 }
 
-.reviewLabel{
-	font-weight: bold;
-	font-size: 1.15em;
-}
-.reservationTimeLabel{
-	font-weight: bold;
-	font-size: 1.15em;
-}
-.underNameReservationLabel{
-	font-weight: bold;
-	font-size: 1.15em;
-}
-
-.restaurantReservationLabel{
-	font-weight: bold;
-	font-size: 1.15em;
+.restaurantReservationLabel {
+  font-weight: bold;
+  font-size: 1.15em;
 }
 
 .dinersNumberLabel{
-	font-weight: bold;
-	font-size: 1.15em;
+  font-weight: bold;
+  font-size: 1.15em;
 }
 
-#reservationList, #reviewList{
-	list-style-type: none;
+#reservationList, #reviewList {
+  list-style-type: none;
 }
 
-
-#reservationsListDiv,#reviewsListDiv{
-	margin-top: 50px;
+#reservationsListDiv,#reviewsListDiv {
+  margin-top: 50px;
 }
 
-#reservationList li, #reviewsList li{
-	font-size: 0.9em;
-	border: 1px black solid;
+#reservationList li, #reviewsList li {
+  font-size: 0.9em;
+  border: 1px black solid;
 }
 
-#reservationList li:nth-child(even), #reviewList li:nth-child(even){
-	background-color: lightblue;
+#reservationList li:nth-child(even), #reviewList li:nth-child(even) {
+  background-color: lightblue;
 }
 
-#reservationList li:nth-child(odd), #reviewList li:nth-child(odd){
-	background-color: lightgreen;
+#reservationList li:nth-child(odd), #reviewList li:nth-child(odd) {
+  background-color: lightgreen;
 }
 
-#reservationList li span:nth-child(even), #reviewList li span:nth-child(even){
-	width: 200px;
+#reservationList li span:nth-child(even), #reviewList li span:nth-child(even) {
+  width: 200px;
 }
 
-#reservationList li span:nth-child(odd), #reviewList li span:nth-child(odd){
-	width: 200px;
+#reservationList li span:nth-child(odd), #reviewList li span:nth-child(odd) {
+  width: 200px;
 }
 
-	
+  
 /* calendar */
-.ui-datepicker-calendartd .availableReservations .ui-state-default{
+.ui-datepicker-calendartd .availableReservations .ui-state-default {
   color: green !important;
 }
 
@@ -227,38 +182,31 @@
   color: red;
 }
 
-
 /* classes for tables  */
-
-.table-fixed-container{
-	position: fixed;
-	top:0;
-	margin-top: 45px;
-	 width: 100%;
-  	height: 100%;
+.table-fixed-container {
+  position: fixed;
+  top:0;
+  margin-top: 45px;
+   width: 100%;
+  height: 100%;
 }
 
-/*.table-fixed{
-  position: absolute;
-  top: 0;
+.table-fixed tr {
+  width: 100%;
+}
 
-}
-*/
-.table-fixed tr{
-	width: 100%;
-}
 .table-fixed thead {
   width: 97%;
 
 }
+
 .table-fixed tbody {
   overflow-y: auto;
   width: 100%;
 }
 
 .table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
-  display: block;
-  
+  display: block; 
 }
 
 .table-fixed tbody td, .table-fixed thead > tr> th {
@@ -266,54 +214,52 @@
   border-bottom-width: 0;
 }
 
-#reservationsTable th, #reservationsTable td{
-	width: 25%;
+#reservationsTable th, #reservationsTable td {
+  width: 25%;
 }
 
-#reviewsTable th, #reviewsTable td{
-	
-	/*max-height: 2em;*/	
+#reviewsTable th, #reviewsTable td {
 
 }
 
-#reservationsTable th, #reservationsTable td, #reviewsTable th, #reviewsTable td{
-	overflow: hidden;
-	white-space: nowrap; 
-	text-overflow: ellipsis;
-}
-#reviewsTable a:hover, #reservationsTable a:hover{
-	color:white !important;
+#reservationsTable th, #reservationsTable td, #reviewsTable th, #reviewsTable td {
+  overflow: hidden;
+  white-space: nowrap; 
+  text-overflow: ellipsis;
 }
 
-
-.modal-dialog{
-	max-height: 80%;
-}
-.modal-body{
-	overflow: auto;
-	max-height: 80%;
-	height: 100%;
+#reviewsTable a:hover, #reservationsTable a:hover {
+  color:white !important;
 }
 
-.editReviewForm textarea{
-	width: 100%;
-	height: 20em;
-	margin-bottom: 10px;
+.modal-dialog {
+  max-height: 80%;
+}
+
+.modal-body {
+  overflow: auto;
+  max-height: 80%;
+  height: 100%;
+}
+
+.editReviewForm textarea {
+  width: 100%;
+  height: 20em;
+  margin-bottom: 10px;
 }
 
 .editReviewForm input[type="submit"] {
-	float:right;
-
+  float:right;
 }
 
-#loadingTime img{
-	max-height: 1.2em;
+#loadingTime img {
+  max-height: 1.2em;
 }
 
-.alert{
-	position:relative;
-	z-index:50;
-	margin-top: 50px;
-	margin-right: 10px;
-	margin-left: 50px;
+.alert {
+  position:relative;
+  z-index:50;
+  margin-top: 50px;
+  margin-right: 10px;
+  margin-left: 50px;
 }
