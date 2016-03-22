@@ -186,11 +186,6 @@ var Tourguide = Tourguide || {};
       showReviews.textContent = 'Show reviews';
       showReviews.onclick =
         createShowRestaurantReviewsLink(restaurantMarks[i].name);
-      /*(function(restaurantName) {
-          return function() {
-            getAndShowRestaurantReviews(restaurantName);
-          };
-      })(restaurantMarks[i].name);*/
 
       popHTML.appendChild(showReviews);
       popHTML.appendChild(document.createElement('BR'));
@@ -199,11 +194,6 @@ var Tourguide = Tourguide || {};
       showReservations.textContent = 'Show reservations';
       showReservations.onclick =
         createShowRestaurantReservationsLink(restaurantMarks[i].name);
-      /*(function(restaurantName) {
-          return function() {
-            getAndShowRestaurantReservations(restaurantName);
-          };
-      })(restaurantMarks[i].name);*/
 
       popHTML.appendChild(showReservations);
       popHTML.appendChild(document.createElement('BR'));
@@ -1089,12 +1079,6 @@ var Tourguide = Tourguide || {};
       cancelLink.textContent = 'Cancel reservation';
       cancelLink.onclick =
         createCancelReservationLink(reservationsResponse[j].reservationId);
-      /*(function(reservationId) {
-        return function() {
-          cancelReservation(reservationId);
-        };
-      })(reservationsResponse[j].reservationId);*/
-
       cancel.appendChild(cancelLink);
       row.appendChild(cancel);
 
@@ -1178,12 +1162,6 @@ var Tourguide = Tourguide || {};
       var viewLink = document.createElement('A');
       viewLink.textContent = 'View review';
       viewLink.onclick = createViewReviewLink(reviewsResponse[j].name);
-      /*(function(reviewId) {
-        return function() {
-          viewReview(reviewId);
-        };
-      })(reviewsResponse[j].name);
-      */
 
       view.appendChild(viewLink);
       row.appendChild(view);
@@ -1194,13 +1172,7 @@ var Tourguide = Tourguide || {};
       var editLink = document.createElement('A');
       editLink.textContent = 'Edit review';
       editLink.onclick = createEditReviewLink(reviewsResponse[j].name);
-      /*
-      (function(reviewId) {
-        return function() {
-          editReview(reviewId);
-        };
-      })(reviewsResponse[j].name);
-    */
+
       edit.appendChild(editLink);
       row.appendChild(edit);
 
@@ -1210,12 +1182,7 @@ var Tourguide = Tourguide || {};
       var delLink = document.createElement('A');
       delLink.textContent = 'Delete review';
       delLink.onclick = createDelReviewLink(reviewsResponse[j].name);
-      /*(function(reviewId) {
-        return function() {
-          deleteReview(reviewId);
-        };
-      })(reviewsResponse[j].name);
-    */
+
       del.appendChild(delLink);
       row.appendChild(del);
 
@@ -1291,7 +1258,6 @@ var Tourguide = Tourguide || {};
           reservationsPerDate = [];
          });
   }
-
 
 
   function setReservationsPerDateVar(reservationsResponse) {
