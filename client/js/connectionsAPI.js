@@ -24,6 +24,12 @@ Tourguide.addLoadEvent(initConnections);
 
  (function(app) {
 
+  var rol = {
+    endUser: 'End user',
+    restaurantViewer: 'Restaurant Viewer',
+    globalManager: 'global manager'
+  }
+
   function loggedIn(userInfo) {
     localStorage.setItem('userInfo', userInfo);
 
@@ -92,8 +98,8 @@ Tourguide.addLoadEvent(initConnections);
     //check each menu element
 
     //view organizations restaurants
-    if (hasRole(userInfo, 'Restaurant Viewer') ||
-        hasRole(userInfo, 'Global manager') || true) {//hacked
+    if (hasRole(userInfo, rol.restaurantViewer) ||
+        hasRole(userInfo, rol.globalManager) || true) {//hacked
 
       //we should ask before for each organization but the user hasn't yet
       if (userInfo.organizations.length > 0) {
@@ -145,7 +151,7 @@ Tourguide.addLoadEvent(initConnections);
 
     }
 
-    if (hasRole(userInfo, 'End user')) {
+    if (hasRole(userInfo, rol.endUser)) {
       var myReservations = document.createElement('LI');
       myReservations.className = 'menuElement';
 
@@ -157,7 +163,7 @@ Tourguide.addLoadEvent(initConnections);
       loggedMenu.appendChild(myReservations);
     }
 
-    if (hasRole(userInfo, 'End user')) {
+    if (hasRole(userInfo, rol.endUser)) {
       var myReviews = document.createElement('LI');
       myReviews.className = 'menuElement';
 
@@ -231,7 +237,8 @@ Tourguide.addLoadEvent(initConnections);
     loginNeeded: loginNeeded,
     loggedIn: loggedIn,
     notLoggedIn: notLoggedIn,
-    hasRole: hasRole
+    hasRole: hasRole,
+    rol: rol
   };
 })(Tourguide);
 /* alerType could be alert-warning(default) or alert-danger*/

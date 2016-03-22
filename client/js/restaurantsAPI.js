@@ -234,7 +234,8 @@ var Tourguide = Tourguide || {};
   function addCreateReviewLink(restaurantName) {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-    if (! Tourguide.connectionsAPI.hasRole(userInfo, 'End user')) {
+    if (! Tourguide.connectionsAPI.hasRole(userInfo, 
+        Tourguide.connectionsAPI.rol.endUser)) {
       return null;
     }
 
@@ -530,7 +531,8 @@ var Tourguide = Tourguide || {};
   function addCreateReservationLink(restaurantName) {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-    if (! Tourguide.connectionsAPI.hasRole(userInfo, 'End user')) {
+    if (! Tourguide.connectionsAPI.hasRole(userInfo, 
+        Tourguide.connectionsAPI.rol.endUser)) {
       return null;
     }
 
