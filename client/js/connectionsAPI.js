@@ -10,17 +10,19 @@
 
 */
 
+var Tourguide = Tourguide || {};
+
 var initConnections = function() {
   //check if user is logged in
-  AJAXRequest.get('http://tourguide/client/user', connectionsAPI.loggedIn,
-    connectionsAPI.notLoggedIn);
+  Tourguide.AJAXRequest.get('http://tourguide/client/user',
+    Tourguide.connectionsAPI.loggedIn,
+    Tourguide.connectionsAPI.notLoggedIn);
 };
 
 
-addLoadEvent(initConnections);
+Tourguide.addLoadEvent(initConnections);
 
-var connectionsAPI = (function() {
-
+ (function(app) {
 
   function loggedIn(userInfo) {
     localStorage.setItem('userInfo', userInfo);
@@ -127,7 +129,8 @@ var connectionsAPI = (function() {
           organizationA.setAttribute('role', 'menuitem');
           organizationA.tabIndex = -1;
           organizationA.href =
-            'myRestaurants.html?franchise=' + userInfo.organizations[index].name;
+            'myRestaurants.html?franchise=' +
+            userInfo.organizations[index].name;
           organizationA.textContent = userInfo.organizations[index].name;
 
           organizationLi.appendChild(organizationA);
@@ -206,12 +209,6 @@ var connectionsAPI = (function() {
     return;
   }
 
-  function showLogout() {
-
-
-  }
-
-
 
   function loginNeeded(action) {
     if (null != localStorage.getItem('userInfo')) {
@@ -230,13 +227,13 @@ var connectionsAPI = (function() {
     }, 500);
   }
 
-  return {
+  app.connectionsAPI = {
     loginNeeded: loginNeeded,
     loggedIn: loggedIn,
     notLoggedIn: notLoggedIn,
     hasRole: hasRole
   };
-})();
+})(Tourguide);
 /* alerType could be alert-warning(default) or alert-danger*/
 function showMessage(message, alertType) {
   alertType = typeof alertType !== 'undefined' ? alertType : 'alert-warning';

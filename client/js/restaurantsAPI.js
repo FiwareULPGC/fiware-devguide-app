@@ -12,7 +12,8 @@
 
 //global vars
 var map; //map instance
-var restaurantsAPI = (function() {
+var Tourguide = Tourguide || {};
+(function(app) {
   //proxy should be used if the API is not in the same location as the web app.
   var proxyURL = '';
 
@@ -33,15 +34,28 @@ var restaurantsAPI = (function() {
 
   /* get all restaurants and show it */
   function getAllRestaurants() {
-    AJAXRequest.get(baseURL + 'restaurants/', showRestaurants,
+    Tourguide.AJAXRequest.get(baseURL + 'restaurants/', showRestaurants,
       function() {alert('Could not retrive restaurants');});
   }
 
   function getOrganizationRestaurants(organization) {
     var URL = baseURL + 'restaurants/organization/' + organization;
-    AJAXRequest.get(URL,
+    Tourguide.AJAXRequest.get(URL,
       showRestaurants, function() {alert('Could not retrive restaurants');}
       );
+  }
+
+
+  function createShowRestaurantReviewsLink(restaurantName) {
+    return function() {
+      getAndShowRestaurantReviews(restaurantName);
+    };
+  }
+
+  function createShowRestaurantReservationsLink(restaurantName) {
+    return function() {
+      getAndShowRestaurantReservations(restaurantName);
+    };
   }
 
   /*show restaurants from the API response*/
@@ -50,7 +64,8 @@ var restaurantsAPI = (function() {
     //loop over all restaurants
     var restaurantMarks = [];
     var errors = 0;
-    for (var i = 0, len = restaurants.length; i < len; i++) {
+    var i, len; //iterators
+    for (i = 0, len = restaurants.length; i < len; i++) {
 
       var restaurant = restaurants[i];
       var mark = {'name': restaurant.name};
@@ -148,8 +163,7 @@ var restaurantsAPI = (function() {
     /* clustering approach */
     var markerClusters = L.markerClusterGroup({showCoverageOnHover: true});
     var markers = [];
-    for (var i = 0, len = restaurantMarks.length; i < len; i++) {
-
+    for (i = 0, len = restaurantMarks.length; i < len; i++) {
       //add mark to map
       restaurantMarks[i].mark = L.marker(restaurantMarks[i].coords);
 
@@ -170,22 +184,26 @@ var restaurantsAPI = (function() {
 
       var showReviews = document.createElement('A');
       showReviews.textContent = 'Show reviews';
-      showReviews.onclick = (function(restaurantName) {
+      showReviews.onclick =
+        createShowRestaurantReviewsLink(restaurantMarks[i].name);
+      /*(function(restaurantName) {
           return function() {
             getAndShowRestaurantReviews(restaurantName);
-          }
-      })(restaurantMarks[i].name);
+          };
+      })(restaurantMarks[i].name);*/
 
       popHTML.appendChild(showReviews);
       popHTML.appendChild(document.createElement('BR'));
 
       var showReservations = document.createElement('A');
       showReservations.textContent = 'Show reservations';
-      showReservations.onclick = (function(restaurantName) {
+      showReservations.onclick =
+        createShowRestaurantReservationsLink(restaurantMarks[i].name);
+      /*(function(restaurantName) {
           return function() {
             getAndShowRestaurantReservations(restaurantName);
-          }
-      })(restaurantMarks[i].name);
+          };
+      })(restaurantMarks[i].name);*/
 
       popHTML.appendChild(showReservations);
       popHTML.appendChild(document.createElement('BR'));
@@ -226,7 +244,7 @@ var restaurantsAPI = (function() {
   function addCreateReviewLink(restaurantName) {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-    if (! connectionsAPI.hasRole(userInfo, 'End user')) {
+    if (! Tourguide.connectionsAPI.hasRole(userInfo, 'End user')) {
       return null;
     }
 
@@ -235,7 +253,7 @@ var restaurantsAPI = (function() {
     createReviewLink.onclick = (function(restaurantName) {
       return function() {
         editNewReview(restaurantName);
-      }
+      };
     })(restaurantName);
 
     return createReviewLink;
@@ -244,8 +262,6 @@ var restaurantsAPI = (function() {
 
 
   function editNewReview(restaurantName) {
-
-    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
     document.getElementById('popTitle').textContent = restaurantName;
     var reviewForm = document.createElement('FORM');
     reviewForm.name = 'editReviewForm';
@@ -298,9 +314,8 @@ var restaurantsAPI = (function() {
 
 
   function editReview(reviewId) {
-    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
     var URL = baseURL + 'review/' + reviewId;
-    AJAXRequest.get(URL,
+    Tourguide.AJAXRequest.get(URL,
         showEditReview,
          function() {
           window.alert('Cannot get review ' + reviewId);
@@ -372,9 +387,8 @@ var restaurantsAPI = (function() {
 
 
   function viewReview(reviewId) {
-    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
     var URL = baseURL + 'review/' + reviewId;
-    AJAXRequest.get(URL,
+    Tourguide.AJAXRequest.get(URL,
         processViewReview,
          function() {
           window.alert('Cannot get review ' + reviewId);
@@ -383,14 +397,15 @@ var restaurantsAPI = (function() {
 
 
   function processViewReview(reviewResponse) {
-    var reviewResponse = JSON.parse(reviewResponse);
+    reviewResponse = JSON.parse(reviewResponse);
     if (reviewResponse.length != 1) {
       window.alert('Error: more than one review received.');
     }
 
     var review = reviewResponse[0];
 
-
+    document.getElementById('popTitle').textContent = 'Edit review ' +
+      review.name + ' for ' + review.itemReviewed.name;
     //remove previous content
     var myNode = document.getElementById('popContent');
     myNode.innerHTML = '';
@@ -493,7 +508,7 @@ var restaurantsAPI = (function() {
       }
     };
 
-    AJAXRequest.post(baseURL + 'review/',
+    Tourguide.AJAXRequest.post(baseURL + 'review/',
       closePopUpWindow,
       function(err) {alert('Cannot add review'); console.log(err);}, data);
   }
@@ -512,7 +527,7 @@ var restaurantsAPI = (function() {
     };
 
 
-    AJAXRequest.patch(baseURL + 'review/' + reviewId,
+    Tourguide.AJAXRequest.patch(baseURL + 'review/' + reviewId,
       function() {closePopUpWindow(); location.reload();},
       function(err) {
         alert('Cannot update review'), console.log(err),
@@ -525,7 +540,7 @@ var restaurantsAPI = (function() {
   function addCreateReservationLink(restaurantName) {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-    if (! connectionsAPI.hasRole(userInfo, 'End user')) {
+    if (! Tourguide.connectionsAPI.hasRole(userInfo, 'End user')) {
       return null;
     }
 
@@ -534,7 +549,7 @@ var restaurantsAPI = (function() {
     createReservationLink.onclick = (function(restaurantName) {
       return function() {
         editNewReservation(restaurantName);
-      }
+      };
     })(restaurantName);
 
     return createReservationLink;
@@ -542,7 +557,6 @@ var restaurantsAPI = (function() {
 
 
   function editNewReservation(restaurantName) {
-    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
     reservationsPerDate = null;
 
@@ -719,9 +733,9 @@ var restaurantsAPI = (function() {
       document.getElementById('restaurantName').value + '/date/';
     while (date.getTime() <= maxDate.getTime()) {
       var time = date.toISOString();
-      AJAXRequest.get(URL + time,
+      Tourguide.AJAXRequest.get(URL + time,
         processOccupancyResponse,
-        function() { console.log('fail');checkEnablereservationTime();}
+        checkEnablereservationTime
         );
 
       //add 30 minutes to reservation date
@@ -755,7 +769,7 @@ var restaurantsAPI = (function() {
     var nDiners = document.getElementById('partySize').valueAsNumber;
 
     availableTimeArray[new Date(time).toLocaleTimeString()] =
-      !((capacity - occupancyLevel - nDiners) < 0);
+      ((capacity - occupancyLevel - nDiners) >= 0);
 
     checkEnablereservationTime();
   }
@@ -815,7 +829,7 @@ var restaurantsAPI = (function() {
     };
 
 
-    AJAXRequest.post(baseURL + 'reservation/',
+    Tourguide.AJAXRequest.post(baseURL + 'reservation/',
       closePopUpWindow,
       function(err) {
         alert('Cannot add reservation');
@@ -830,7 +844,7 @@ var restaurantsAPI = (function() {
   function getAndShowRestaurantReviews(id) {
     var URL = baseURL + 'reviews/restaurant/' + id;
     document.getElementById('popTitle').textContent = id;
-    AJAXRequest.get(URL,
+    Tourguide.AJAXRequest.get(URL,
         showRestaurantReviews,
          function() {
           var error = document.createElement('H2');
@@ -939,7 +953,7 @@ var restaurantsAPI = (function() {
   function getAndShowRestaurantReservations(id) {
     var URL = baseURL + 'reservations/restaurant/' + id;
     document.getElementById('popTitle').textContent = id;
-    AJAXRequest.get(URL,
+    Tourguide.AJAXRequest.get(URL,
       showRestaurantReservations,
       function() {
         var error = document.createElement('H2');
@@ -999,7 +1013,7 @@ var restaurantsAPI = (function() {
     var tableBody = document.createElement('TBODY');
 
     for (var j = 0, lim = reservationsResponse.length; j < lim; j++) {
-      var row = document.createElement('TR');
+      row = document.createElement('TR'); //defined previously
 
       var underName = document.createElement('TD');
       underName.classList.add('class', 'col-xs-6');
@@ -1027,11 +1041,16 @@ var restaurantsAPI = (function() {
 
   function getUserReservations(username) {
     var URL = baseURL + 'reservations/user/' + username;
-    AJAXRequest.get(URL,
+    Tourguide.AJAXRequest.get(URL,
       createReservationsTable,
       function() {alert('cannot get your reservations');});
   }
 
+  function createCancelReservationLink(reservationId) {
+    return function() {
+      cancelReservation(reservationId);
+    };
+  }
 
   function createReservationsTable(reservationsResponse) {
     reservationsResponse = JSON.parse(reservationsResponse);
@@ -1049,7 +1068,6 @@ var restaurantsAPI = (function() {
     }
 
 
-    var cancelReservationURLBase = '';
     for (var j = 0, lim = reservationsResponse.length; j < lim; j++) {
       var row = document.createElement('TR');
 
@@ -1069,11 +1087,13 @@ var restaurantsAPI = (function() {
 
       var cancelLink = document.createElement('A');
       cancelLink.textContent = 'Cancel reservation';
-      cancelLink.onclick = (function(reservationId) {
+      cancelLink.onclick =
+        createCancelReservationLink(reservationsResponse[j].reservationId);
+      /*(function(reservationId) {
         return function() {
           cancelReservation(reservationId);
-        }
-      })(reservationsResponse[j].reservationId);
+        };
+      })(reservationsResponse[j].reservationId);*/
 
       cancel.appendChild(cancelLink);
       row.appendChild(cancel);
@@ -1084,13 +1104,12 @@ var restaurantsAPI = (function() {
 
 
 
-
   function cancelReservation(reservationId) {
     if (!(window.confirm('Delete reservation?'))) {
       return;
     }
 
-    AJAXRequest.del(baseURL + 'reservation/' + reservationId,
+    Tourguide.AJAXRequest.del(baseURL + 'reservation/' + reservationId,
         function() {location.reload();},
         function(err) {
           alert('Could not delete the reservation.'); console.log(err);
@@ -1101,11 +1120,28 @@ var restaurantsAPI = (function() {
 
   function getUserReviews(userName) {
     var URL = baseURL + 'reviews/user/' + userName;
-    AJAXRequest.get(URL,
+    Tourguide.AJAXRequest.get(URL,
       createReviewsTable,
       function() {alert('cannot get your reviews');});
   }
 
+  function createViewReviewLink(reviewId) {
+    return function() {
+      viewReview(reviewId);
+    };
+  }
+
+  function createEditReviewLink(reviewId) {
+    return function() {
+      editReview(reviewId);
+    };
+  }
+
+  function createDelReviewLink(reviewId) {
+    return function() {
+      deleteReview(reviewId);
+    };
+  }
 
   function createReviewsTable(reviewsResponse) {
     reviewsResponse = JSON.parse(reviewsResponse);
@@ -1121,7 +1157,6 @@ var restaurantsAPI = (function() {
     var myNode = document.getElementById('reviewsTableBody');
     myNode.innerHTML = '';
 
-    var cancelReservationURLBase = '';
     for (var j = 0, lim = reviewsResponse.length; j < lim; j++) {
 
       var row = document.createElement('TR');
@@ -1142,11 +1177,13 @@ var restaurantsAPI = (function() {
 
       var viewLink = document.createElement('A');
       viewLink.textContent = 'View review';
-      viewLink.onclick = (function(reviewId) {
+      viewLink.onclick = createViewReviewLink(reviewsResponse[j].name);
+      /*(function(reviewId) {
         return function() {
           viewReview(reviewId);
-        }
+        };
       })(reviewsResponse[j].name);
+      */
 
       view.appendChild(viewLink);
       row.appendChild(view);
@@ -1156,12 +1193,14 @@ var restaurantsAPI = (function() {
 
       var editLink = document.createElement('A');
       editLink.textContent = 'Edit review';
-      editLink.onclick = (function(reviewId) {
+      editLink.onclick = createEditReviewLink(reviewsResponse[j].name);
+      /*
+      (function(reviewId) {
         return function() {
           editReview(reviewId);
-        }
+        };
       })(reviewsResponse[j].name);
-
+    */
       edit.appendChild(editLink);
       row.appendChild(edit);
 
@@ -1170,12 +1209,13 @@ var restaurantsAPI = (function() {
 
       var delLink = document.createElement('A');
       delLink.textContent = 'Delete review';
-      delLink.onclick = (function(reviewId) {
+      delLink.onclick = createDelReviewLink(reviewsResponse[j].name);
+      /*(function(reviewId) {
         return function() {
           deleteReview(reviewId);
-        }
+        };
       })(reviewsResponse[j].name);
-
+    */
       del.appendChild(delLink);
       row.appendChild(del);
 
@@ -1190,7 +1230,7 @@ var restaurantsAPI = (function() {
       return;
     }
 
-    AJAXRequest.del(baseURL + 'review/' + reviewId,
+    Tourguide.AJAXRequest.del(baseURL + 'review/' + reviewId,
         function() {location.reload();},
         function(err) {alert('Could not delete the review.');
         console.log(err); /*location.reload();*/});
@@ -1245,7 +1285,7 @@ var restaurantsAPI = (function() {
 
   function getReservationsPerDate(restaurantName) {
     var URL = baseURL + 'reservations/restaurant/' + restaurantName;
-    AJAXRequest.get(URL,
+    Tourguide.AJAXRequest.get(URL,
         setReservationsPerDateVar,
          function() {
           reservationsPerDate = [];
@@ -1279,7 +1319,7 @@ var restaurantsAPI = (function() {
     }
   }
 
-  return {
+  app.restaurantsAPI = {
     getAllRestaurants: getAllRestaurants,
     getUserReservations: getUserReservations,
     getUserReviews: getUserReviews,
@@ -1290,4 +1330,4 @@ var restaurantsAPI = (function() {
     createNewReview: createNewReview,
     updateReview: updateReview*/
   };
-})();
+})(Tourguide);

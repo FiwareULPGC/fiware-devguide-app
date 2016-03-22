@@ -9,7 +9,8 @@
  * MIT Licensed
 
 */
-var map;
+var map,
+    Tourguide;
 //initialization
 var initIndex = function() {
 
@@ -17,7 +18,9 @@ var initIndex = function() {
   map = L.map('map').setView([42.90816007196054, -2.52960205078125], 8);
 
   //only gets restaurants if the user is logged
-  connectionsAPI.loginNeeded(function() {restaurantsAPI.getAllRestaurants();});
+  Tourguide.connectionsAPI.loginNeeded(function() {
+    Tourguide.restaurantsAPI.getAllRestaurants();
+  });
   //set tile layer
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution:
@@ -27,4 +30,4 @@ var initIndex = function() {
 
 };
 
-addLoadEvent(initIndex);
+Tourguide.addLoadEvent(initIndex);
