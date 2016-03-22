@@ -10,23 +10,28 @@
 
 */
 
+var Tourguide = Tourguide || {};
 
-function addLoadEvent(func) {
-  var oldonload = window.onload;
-  if (typeof window.onload != 'function') {
-    window.onload = func;
+(function(app) {
+  function addLoadEvent(func) {
+    var oldonload = window.onload;
+    if (typeof window.onload != 'function') {
+      window.onload = func;
+    }
+    else {
+      window.onload = function() {
+        if (oldonload) {
+          oldonload();
+        }
+        func();
+      };
+    }
   }
-  else {
-    window.onload = function() {
-      if (oldonload) {
-        oldonload();
-      }
-      func();
-    };
-  }
-}
 
-var AJAXRequest = (function() {
+  Tourguide.addLoadEvent = addLoadEvent;
+})(Tourguide);
+
+(function(app) {
   function _prepareXHR(method, url, failureCallback) {
     var xhr = new XMLHttpRequest();
 
@@ -106,11 +111,11 @@ var AJAXRequest = (function() {
     xhr.send(JSON.stringify(data));
   }
 
-  return {
+  Tourguide.AJAXRequest = {
     get: getAjaxRequest,
     post: postAjaxRequest,
     del: deleteAjaxRequest,
     patch: patchAjaxRequest
   };
 
-})();
+})(Tourguide);
