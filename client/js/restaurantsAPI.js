@@ -12,12 +12,8 @@
 
 //global vars
 var map; //map instance
-var Tourguide = Tourguide || {};
-(function(app) {
-  //proxy should be used if the API is not in the same location as the web app.
-  var proxyURL = '';
-
-  var baseURL = proxyURL + 'http://tourguide/api/orion/';
+var restaurantsAPI = (function() {
+  var baseURL = 'http://tourguide/api/orion/';
 
   var reservationsPerDate;
   var minTime = {
@@ -31,16 +27,17 @@ var Tourguide = Tourguide || {};
   var alreadyPartySizeInit = false;
   var availabilityTimeCount;
   var availableTimeArray;
+  var maxRating = 5;
 
   /* get all restaurants and show them */
   function getAllRestaurants() {
-    Tourguide.AJAXRequest.get(baseURL + 'restaurants/', showRestaurants,
+    AJAXRequest.get(baseURL + 'restaurants/', showRestaurants,
       function() {alert('Could not retrieve restaurants');});
   }
 
   function getOrganizationRestaurants(organization) {
     var URL = baseURL + 'restaurants/organization/' + organization;
-    Tourguide.AJAXRequest.get(URL,
+    AJAXRequest.get(URL,
       showRestaurants, function() {alert('Could not retrieve restaurants');}
       );
   }
@@ -61,181 +58,184 @@ var Tourguide = Tourguide || {};
   /*show restaurants from the API response*/
   function showRestaurants(restaurants) {
     restaurants = JSON.parse(restaurants);
-    //loop over all restaurants
+
     var restaurantMarks = [];
-    var errors = 0;
-    var i, len; //iterators
-    for (i = 0, len = restaurants.length; i < len; i++) {
 
-      var restaurant = restaurants[i];
-      var mark = {'name': restaurant.name};
+    //get mark info
+    restaurants.forEach(function(restaurant) {
+      setMarkInfo(restaurant, restaurantMarks);
+    });
 
-      //get desired attributes
-      try {
+    /* add marks with clustering approach */
+    var markerClusters = L.markerClusterGroup({showCoverageOnHover: true});
+    restaurantMarks.forEach(function(currentMark) {
+      addRestaurantMark(currentMark, markerClusters);
+    });
+
+    map.addLayer(markerClusters);
+  }
+
+  function setMarkInfo(restaurant, marks) {
+    var mark = {'name': restaurant.name};
+
+    //get desired attributes
+    if (restaurant.address) {
+      if (restaurant.address.streetAddress) {
         mark.address = restaurant.address.streetAddress;
       }
-      catch (err) {
+      else {
         console.log('Cannot get street address for ' + restaurant.name);
       }
 
-      try {
+      if (restaurant.address.addressLocality) {
         mark.locality = restaurant.address.addressLocality;
       }
-      catch (err) {
-        console.log('Cannot get locality address for ' +
-          restaurant.name);
+      else {
+        console.log('Cannot get locality address for ' + restaurant.name);
       }
 
-      try {
+      if (restaurant.address.addressRegion) {
         mark.region = restaurant.address.addressRegion;
       }
-      catch (err) {
+      else {
         console.log('Cannot get region address for ' + restaurant.name);
       }
+    }
+    else {
+      console.log('Cannot get address for ' + restaurant.name);
+    }
 
-      try {
-        mark.telephone = restaurant.telephone;
-      }
-      catch (err) {
-        console.log('Cannot get telephone for ' + restaurant.name);
-      }
+    if (restaurant.telephone) {
+      mark.telephone = restaurant.telephone;
+    }
+    else {
+      console.log('Cannot get telephone for ' + restaurant.name);
+    }
 
-      try {
-        mark.description = restaurant.description;
-      }
-      catch (err) {
-        console.log('Cannot get description for ' + restaurant.name);
-      }
+    if (restaurant.description) {
+      mark.description = restaurant.description;
+    }
+    else {
+      console.log('Cannot get description for ' + restaurant.name);
+    }
 
-      try {
+    if (restaurant.aggregateRating) {
+      if (typeof restaurant.aggregateRating.ratingValue === 'number') {
         mark.ratingValue = restaurant.aggregateRating.ratingValue;
       }
-      catch (err) {
+      else {
         console.log('Cannot get ratingValue for ' + restaurant.name);
       }
 
-      try {
+      if (typeof restaurant.aggregateRating.reviewCount === 'number') {
         mark.reviewCount = restaurant.aggregateRating.reviewCount;
       }
-      catch (err) {
+      else {
         console.log('Cannot get reviewCount for ' + restaurant.name);
       }
+    }
+    else {
+      console.log('Cannot get aggregate rating for' + restaurant.name);
+    }
 
-      mark.coords = [];
+    mark.coords = [];
 
-      try {
+    if (restaurant.geo) {
+      if (restaurant.geo.latitude) {
         mark.coords.push(parseFloat(restaurant.geo.latitude));
         if (isNaN(mark.coords[0])) {
-          console.log('invalid latitude ' +
-            restaurant.geo.latitude +
+          console.log('invalid latitude ' + restaurant.geo.latitude +
             ' for restaurant ' + restaurant.name);
-          errors = errors + 1;
-          continue;
+          return;
         }
       }
-      catch (err) {
+      else {
         console.log('Cannot get latitude for ' + restaurant.name);
-        console.log(err);
-        errors = errors + 1;
-        continue;
+        return;
       }
 
-      try {
+      if (restaurant.geo.longitude) {
         mark.coords.push(parseFloat(restaurant.geo.longitude));
         if (isNaN(mark.coords[1])) {
-          console.log('invalid longitude ' +
-            restaurant.geo.longitude + ' for restaurant ' +
-            restaurant.name);
-          errors = errors + 1;
-          continue;
+          console.log('invalid longitude ' + restaurant.geo.longitude +
+            ' for restaurant ' + restaurant.name);
+          return;
         }
       }
-      catch (err) {
+      else {
         console.log('Cannot get longitude for ' + restaurant.name);
-        console.log(err);
-        errors = errors + 1;
-        continue;
-      }
-
-      restaurantMarks.push(mark);
-    }
-
-    /* clustering approach */
-    var markerClusters = L.markerClusterGroup({showCoverageOnHover: true});
-    var markers = [];
-    for (i = 0, len = restaurantMarks.length; i < len; i++) {
-      //add mark to map
-      restaurantMarks[i].mark = L.marker(restaurantMarks[i].coords);
-
-      var popHTML = document.createElement('DIV');
-      popHTML.className = 'markPopUp';
-
-      var restaurantName = document.createElement('B');
-      restaurantName.textContent = restaurantMarks[i].name;
-      popHTML.appendChild(restaurantName);
-
-      var addressP = document.createElement('P');
-      addressP.textContent = 'Address: ' + restaurantMarks[i].address;
-      popHTML.appendChild(addressP);
-
-      var phoneP = document.createElement('P');
-      phoneP.textContent = 'Phone: ' + restaurantMarks[i].telephone;
-      popHTML.appendChild(phoneP);
-
-      var showReviews = document.createElement('A');
-      showReviews.textContent = 'Show reviews';
-      showReviews.onclick =
-        createShowRestaurantReviewsLink(restaurantMarks[i].name);
-
-      popHTML.appendChild(showReviews);
-      popHTML.appendChild(document.createElement('BR'));
-
-      var showReservations = document.createElement('A');
-      showReservations.textContent = 'Show reservations';
-      showReservations.onclick =
-        createShowRestaurantReservationsLink(restaurantMarks[i].name);
-
-      popHTML.appendChild(showReservations);
-      popHTML.appendChild(document.createElement('BR'));
-
-
-      var createReview = addCreateReviewLink(restaurantMarks[i].name);
-      if (null != createReview) {
-          popHTML.appendChild(createReview);
-          popHTML.appendChild(document.createElement('BR'));
-      }
-
-      var createReservation = addCreateReservationLink(restaurantMarks[i].name);
-      if (null != createReservation) {
-          popHTML.appendChild(createReservation);
-      }
-
-
-      popHTML.appendChild(createReservation);
-
-      restaurantMarks[i].mark.bindPopup(popHTML);
-
-      //reference all marks info to be used from leaflet
-      restaurantMarks[i].mark.extraInfo = restaurantMarks[i];
-
-      markerClusters.addLayer(restaurantMarks[i].mark);
-
-      //group to make a bbox that contains all markers.
-      //Skipped Pascual Berganzo because it is in Colombia
-      if (restaurantMarks[i].name != 'Pascual Berganzo') {
-        markers.push(restaurantMarks[i].mark);
+        return;
       }
     }
+    else {
+      console.log('Cannot get coordinates for ' + restaurant.name);
+      return;
+    }
+    marks.push(mark);
+  }
 
-    map.addLayer(markerClusters);
+  function addRestaurantMark(currentMark, markerCluster) {
+    //add mark to map
+    currentMark.mark = L.marker(currentMark.coords);
+
+    var popHTML = document.createElement('DIV');
+    popHTML.className = 'markPopUp';
+
+    var restaurantName = document.createElement('B');
+    restaurantName.textContent = currentMark.name;
+    popHTML.appendChild(restaurantName);
+
+    var addressP = document.createElement('P');
+    addressP.textContent = 'Address: ' + currentMark.address;
+    popHTML.appendChild(addressP);
+
+    var phoneP = document.createElement('P');
+    phoneP.textContent = 'Phone: ' + currentMark.telephone;
+    popHTML.appendChild(phoneP);
+
+    var showReviews = document.createElement('A');
+    showReviews.textContent = 'Show reviews';
+    showReviews.onclick =
+      createShowRestaurantReviewsLink(currentMark.name);
+
+    popHTML.appendChild(showReviews);
+    popHTML.appendChild(document.createElement('BR'));
+
+    var showReservations = document.createElement('A');
+    showReservations.textContent = 'Show reservations';
+    showReservations.onclick =
+      createShowRestaurantReservationsLink(currentMark.name);
+
+    popHTML.appendChild(showReservations);
+    popHTML.appendChild(document.createElement('BR'));
+
+    var createReview = addCreateReviewLink(currentMark.name);
+    if (null != createReview) {
+        popHTML.appendChild(createReview);
+        popHTML.appendChild(document.createElement('BR'));
+    }
+
+    var createReservation = addCreateReservationLink(currentMark.name);
+    if (null != createReservation) {
+        popHTML.appendChild(createReservation);
+    }
+
+    popHTML.appendChild(createReservation);
+
+    currentMark.mark.bindPopup(popHTML);
+
+    //reference all mark info to be used from leaflet
+    currentMark.mark.extraInfo = currentMark;
+
+    markerCluster.addLayer(currentMark.mark);
   }
 
 
   function addCreateReviewLink(restaurantName) {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-    if (! Tourguide.connectionsAPI.hasRole(userInfo,
-        Tourguide.connectionsAPI.rol.endUser)) {
+    if (! connectionsAPI.hasRole(userInfo,
+        connectionsAPI.rol.endUser)) {
       return null;
     }
 
@@ -249,7 +249,6 @@ var Tourguide = Tourguide || {};
 
     return createReviewLink;
   }
-
 
 
   function editNewReview(restaurantName) {
@@ -279,9 +278,8 @@ var Tourguide = Tourguide || {};
     var ratingValueSelect = document.createElement('SELECT');
     ratingValueSelect.name = 'ratingValue';
 
-
     var option;
-    for (var i = 0; i <= 5; i++) {
+    for (var i = 0; i <= maxRating; i++) {
       option = document.createElement('OPTION');
       option.value = i;
       option.textContent = i + ' Star' + (1 != i ? 's' : '');
@@ -303,10 +301,9 @@ var Tourguide = Tourguide || {};
   }
 
 
-
   function editReview(reviewId) {
     var URL = baseURL + 'review/' + reviewId;
-    Tourguide.AJAXRequest.get(URL,
+    AJAXRequest.get(URL,
         showEditReview,
          function() {
           window.alert('Cannot get review ' + reviewId);
@@ -321,7 +318,6 @@ var Tourguide = Tourguide || {};
     }
 
     var review = reviewResponse[0];
-
 
     document.getElementById('popTitle').textContent = 'Edit review ' +
       review.name + ' for ' + review.itemReviewed.name;
@@ -351,7 +347,7 @@ var Tourguide = Tourguide || {};
     ratingValueSelect.name = 'ratingValue';
 
     var option;
-    for (var i = 0; i <= 5; i++) {
+    for (var i = 0; i <= maxRating; i++) {
       option = document.createElement('OPTION');
       option.value = i;
       option.textContent = i + ' Star' + (1 != i ? 's' : '');
@@ -378,7 +374,7 @@ var Tourguide = Tourguide || {};
 
   function viewReview(reviewId) {
     var URL = baseURL + 'review/' + reviewId;
-    Tourguide.AJAXRequest.get(URL,
+    AJAXRequest.get(URL,
         processViewReview,
          function() {
           window.alert('Cannot get review ' + reviewId);
@@ -476,7 +472,6 @@ var Tourguide = Tourguide || {};
   }
 
 
-
   function createNewReview(restaurantName) {
     var ratingValue = parseInt(document.forms.editReviewForm.ratingValue.value);
     var reviewBody = document.forms.editReviewForm.reviewBody.value;
@@ -495,7 +490,7 @@ var Tourguide = Tourguide || {};
       }
     };
 
-    Tourguide.AJAXRequest.post(baseURL + 'review/',
+    AJAXRequest.post(baseURL + 'review/',
       closePopUpWindow,
       function(err) {alert('Cannot add review'); console.log(err);}, data);
   }
@@ -513,7 +508,7 @@ var Tourguide = Tourguide || {};
       }
     };
 
-    Tourguide.AJAXRequest.patch(baseURL + 'review/' + reviewId,
+    AJAXRequest.patch(baseURL + 'review/' + reviewId,
       function() {closePopUpWindow(); location.reload();},
       function(err) {
         alert('Cannot update review'), console.log(err),
@@ -525,8 +520,8 @@ var Tourguide = Tourguide || {};
   function addCreateReservationLink(restaurantName) {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-    if (! Tourguide.connectionsAPI.hasRole(userInfo,
-        Tourguide.connectionsAPI.rol.endUser)) {
+    if (! connectionsAPI.hasRole(userInfo,
+        connectionsAPI.rol.endUser)) {
       return null;
     }
 
@@ -633,7 +628,6 @@ var Tourguide = Tourguide || {};
 
     document.getElementById('popContent').appendChild(reservationForm);
 
-
     //init elements
     $('#reservationDate').datepicker({
       dateFormat: 'yy-mm-dd',
@@ -645,7 +639,6 @@ var Tourguide = Tourguide || {};
       },
       onSelect: initReservationTime //enable select time
     });
-
 
     $('#reservationTime').timepicker({
       'timeFormat': 'H:i:s',
@@ -692,7 +685,6 @@ var Tourguide = Tourguide || {};
   }
 
 
-
   function setTimeAvailability() {
     //don't allow select time during process
     document.getElementById('reservationTime').disabled = true;
@@ -715,7 +707,7 @@ var Tourguide = Tourguide || {};
       document.getElementById('restaurantName').value + '/date/';
     while (date.getTime() <= maxDate.getTime()) {
       var time = date.toISOString();
-      Tourguide.AJAXRequest.get(URL + time,
+      AJAXRequest.get(URL + time,
         processOccupancyResponse,
         checkEnablereservationTime
         );
@@ -810,7 +802,7 @@ var Tourguide = Tourguide || {};
     };
 
 
-    Tourguide.AJAXRequest.post(baseURL + 'reservation/',
+    AJAXRequest.post(baseURL + 'reservation/',
       closePopUpWindow,
       function(err) {
         alert('Cannot add reservation');
@@ -823,7 +815,7 @@ var Tourguide = Tourguide || {};
   function getAndShowRestaurantReviews(id) {
     var URL = baseURL + 'reviews/restaurant/' + id;
     document.getElementById('popTitle').textContent = id;
-    Tourguide.AJAXRequest.get(URL,
+    AJAXRequest.get(URL,
         showRestaurantReviews,
          function() {
           var error = document.createElement('H2');
@@ -832,7 +824,6 @@ var Tourguide = Tourguide || {};
           openPopUpWindow();
          });
   }
-
 
 
   /*show restaurant reviews from a API response */
@@ -931,7 +922,7 @@ var Tourguide = Tourguide || {};
   function getAndShowRestaurantReservations(id) {
     var URL = baseURL + 'reservations/restaurant/' + id;
     document.getElementById('popTitle').textContent = id;
-    Tourguide.AJAXRequest.get(URL,
+    AJAXRequest.get(URL,
       showRestaurantReservations,
       function() {
         var error = document.createElement('H2');
@@ -940,7 +931,6 @@ var Tourguide = Tourguide || {};
         openPopUpWindow();
     });
   }
-
 
 
   /*show restaurant reservations from a API response */
@@ -1017,7 +1007,7 @@ var Tourguide = Tourguide || {};
 
   function getUserReservations(username) {
     var URL = baseURL + 'reservations/user/' + username;
-    Tourguide.AJAXRequest.get(URL,
+    AJAXRequest.get(URL,
       createReservationsTable,
       function() {alert('cannot get your reservations');});
   }
@@ -1043,43 +1033,43 @@ var Tourguide = Tourguide || {};
       return;
     }
 
-
-    for (var j = 0, lim = reservationsResponse.length; j < lim; j++) {
-      var row = document.createElement('TR');
-
-      var name = document.createElement('TD');
-      name.textContent = reservationsResponse[j].reservationFor.name;
-      row.appendChild(name);
-
-      var time = document.createElement('TD');
-      time.textContent = fixBookingTime(reservationsResponse[j].startTime);
-      row.appendChild(time);
-
-      var diners = document.createElement('TD');
-      diners.textContent = reservationsResponse[j].partySize;
-      row.appendChild(diners);
-
-      var cancel = document.createElement('TD');
-
-      var cancelLink = document.createElement('A');
-      cancelLink.textContent = 'Cancel reservation';
-      cancelLink.onclick =
-        createCancelReservationLink(reservationsResponse[j].reservationId);
-      cancel.appendChild(cancelLink);
-      row.appendChild(cancel);
-
-      document.getElementById('reservationsTableBody').appendChild(row);
-    }
+    //add entries
+    reservationsResponse.forEach(createReservationsTableEntry);
   }
 
+  function createReservationsTableEntry(reservation) {
+    var row = document.createElement('TR');
 
+    var name = document.createElement('TD');
+    name.textContent = reservation.reservationFor.name;
+    row.appendChild(name);
+
+    var time = document.createElement('TD');
+    time.textContent = fixBookingTime(reservation.startTime);
+    row.appendChild(time);
+
+    var diners = document.createElement('TD');
+    diners.textContent = reservation.partySize;
+    row.appendChild(diners);
+
+    var cancel = document.createElement('TD');
+
+    var cancelLink = document.createElement('A');
+    cancelLink.textContent = 'Cancel reservation';
+    cancelLink.onclick =
+      createCancelReservationLink(reservation.reservationId);
+    cancel.appendChild(cancelLink);
+    row.appendChild(cancel);
+
+    document.getElementById('reservationsTableBody').appendChild(row);
+  }
 
   function cancelReservation(reservationId) {
     if (!(window.confirm('Delete reservation?'))) {
       return;
     }
 
-    Tourguide.AJAXRequest.del(baseURL + 'reservation/' + reservationId,
+    AJAXRequest.del(baseURL + 'reservation/' + reservationId,
         function() {location.reload();},
         function(err) {
           alert('Could not delete the reservation.'); console.log(err);
@@ -1089,7 +1079,7 @@ var Tourguide = Tourguide || {};
 
   function getUserReviews(userName) {
     var URL = baseURL + 'reviews/user/' + userName;
-    Tourguide.AJAXRequest.get(URL,
+    AJAXRequest.get(URL,
       createReviewsTable,
       function() {alert('cannot get your reviews');});
   }
@@ -1115,6 +1105,10 @@ var Tourguide = Tourguide || {};
   function createReviewsTable(reviewsResponse) {
     reviewsResponse = JSON.parse(reviewsResponse);
 
+    //clean previous table content
+    var myNode = document.getElementById('reviewsTableBody');
+    myNode.innerHTML = '';
+
     if (reviewsResponse.length < 1) {
       var error = document.createElement('TR');
       error.textContent = 'No reviews are available.';
@@ -1122,59 +1116,54 @@ var Tourguide = Tourguide || {};
       return;
     }
 
-    //clean previous table content
-    var myNode = document.getElementById('reviewsTableBody');
-    myNode.innerHTML = '';
-
-    for (var j = 0, lim = reviewsResponse.length; j < lim; j++) {
-
-      var row = document.createElement('TR');
-
-      var name = document.createElement('TD');
-      name.textContent = reviewsResponse[j].itemReviewed.name;
-      name.className = 'col-xs-4';
-      row.appendChild(name);
-
-      var rating = document.createElement('TD');
-      rating.textContent = reviewsResponse[j].reviewRating.ratingValue;
-      rating.className = 'col-xs-2';
-      row.appendChild(rating);
-
-
-      var view = document.createElement('TD');
-      view.className = 'col-xs-2';
-
-      var viewLink = document.createElement('A');
-      viewLink.textContent = 'View review';
-      viewLink.onclick = createViewReviewLink(reviewsResponse[j].name);
-
-      view.appendChild(viewLink);
-      row.appendChild(view);
-
-      var edit = document.createElement('TD');
-      edit.className = 'col-xs-2';
-
-      var editLink = document.createElement('A');
-      editLink.textContent = 'Edit review';
-      editLink.onclick = createEditReviewLink(reviewsResponse[j].name);
-
-      edit.appendChild(editLink);
-      row.appendChild(edit);
-
-      var del = document.createElement('TD');
-      del.className = 'col-xs-2';
-
-      var delLink = document.createElement('A');
-      delLink.textContent = 'Delete review';
-      delLink.onclick = createDelReviewLink(reviewsResponse[j].name);
-
-      del.appendChild(delLink);
-      row.appendChild(del);
-
-      document.getElementById('reviewsTableBody').appendChild(row);
-    }
+    //add entries
+    reviewsResponse.forEach(createReviewsTableEntry);
   }
 
+  function createReviewsTableEntry(review) {
+    var row = document.createElement('TR');
+    var name = document.createElement('TD');
+    name.textContent = review.itemReviewed.name;
+    name.className = 'col-xs-4';
+    row.appendChild(name);
+
+    var rating = document.createElement('TD');
+    rating.textContent = review.reviewRating.ratingValue;
+    rating.className = 'col-xs-2';
+    row.appendChild(rating);
+
+    var view = document.createElement('TD');
+    view.className = 'col-xs-2';
+
+    var viewLink = document.createElement('A');
+    viewLink.textContent = 'View review';
+    viewLink.onclick = createViewReviewLink(review.name);
+
+    view.appendChild(viewLink);
+    row.appendChild(view);
+
+    var edit = document.createElement('TD');
+    edit.className = 'col-xs-2';
+
+    var editLink = document.createElement('A');
+    editLink.textContent = 'Edit review';
+    editLink.onclick = createEditReviewLink(review.name);
+
+    edit.appendChild(editLink);
+    row.appendChild(edit);
+
+    var del = document.createElement('TD');
+    del.className = 'col-xs-2';
+
+    var delLink = document.createElement('A');
+    delLink.textContent = 'Delete review';
+    delLink.onclick = createDelReviewLink(review.name);
+
+    del.appendChild(delLink);
+    row.appendChild(del);
+
+    document.getElementById('reviewsTableBody').appendChild(row);
+  }
 
 
   function deleteReview(reviewId) {
@@ -1182,10 +1171,10 @@ var Tourguide = Tourguide || {};
       return;
     }
 
-    Tourguide.AJAXRequest.del(baseURL + 'review/' + reviewId,
+    AJAXRequest.del(baseURL + 'review/' + reviewId,
         function() {location.reload();},
         function(err) {alert('Could not delete the review.');
-        console.log(err); /*location.reload();*/});
+        console.log(err);});
   }
 
 
@@ -1206,12 +1195,10 @@ var Tourguide = Tourguide || {};
   }
 
 
-
   function calcCurrentReservations(date, restaurantName) {
     if (date < new Date()) {
       return [false, 'pastDate', ''];
     }
-
 
     var stringDate = date.toLocaleDateString();
 
@@ -1237,7 +1224,7 @@ var Tourguide = Tourguide || {};
 
   function getReservationsPerDate(restaurantName) {
     var URL = baseURL + 'reservations/restaurant/' + restaurantName;
-    Tourguide.AJAXRequest.get(URL,
+    AJAXRequest.get(URL,
         setReservationsPerDateVar,
          function() {
           reservationsPerDate = [];
@@ -1270,10 +1257,10 @@ var Tourguide = Tourguide || {};
     }
   }
 
-  app.restaurantsAPI = {
+  return {
     getAllRestaurants: getAllRestaurants,
     getUserReservations: getUserReservations,
     getUserReviews: getUserReviews,
     getOrganizationRestaurants: getOrganizationRestaurants
   };
-})(Tourguide);
+})();

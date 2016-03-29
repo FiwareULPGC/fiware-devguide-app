@@ -10,15 +10,14 @@
 
 */
 //initialization
-var Tourguide;
 var initReservations = function() {
 
   $('#popWindow').modal();
 
   //only gets reservations if the user is logged
-  Tourguide.connectionsAPI.loginNeeded(function() {
+  connectionsAPI.loginNeeded(function() {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    Tourguide.restaurantsAPI.getUserReservations(userInfo.displayName);
+    restaurantsAPI.getUserReservations(userInfo.displayName);
   });
 
 
@@ -28,4 +27,4 @@ var initReservations = function() {
 
 };
 
-Tourguide.addLoadEvent(initReservations);
+utils.addLoadEvent(initReservations);

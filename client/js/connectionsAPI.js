@@ -10,25 +10,26 @@
 
 */
 
-var Tourguide = Tourguide || {};
 
 var initConnections = function() {
   //check if user is logged in
-  Tourguide.AJAXRequest.get('http://tourguide/client/user',
-    Tourguide.connectionsAPI.loggedIn,
-    Tourguide.connectionsAPI.notLoggedIn);
+  AJAXRequest.get('/client/user',
+    connectionsAPI.loggedIn,
+    connectionsAPI.notLoggedIn);
 };
 
 
-Tourguide.addLoadEvent(initConnections);
+utils.addLoadEvent(initConnections);
 
- (function(app) {
+var connectionsAPI = (function() {
 
   var rol = {
     endUser: 'End user',
     restaurantViewer: 'Restaurant Viewer',
     globalManager: 'global manager'
   };
+
+  var loginTimeout = 500;
 
   function loggedIn(userInfo) {
     localStorage.setItem('userInfo', userInfo);
@@ -191,7 +192,6 @@ Tourguide.addLoadEvent(initConnections);
     logInMenu.classList.add('nav', 'navbar-nav', 'pull-right');
     logInMenu.id = 'logIn';
 
-
     var logInLi = document.createElement('LI');
     logInLi.className = 'menuElement';
 
@@ -220,36 +220,16 @@ Tourguide.addLoadEvent(initConnections);
           return;
       }
       else {
-        showMessage('Log in required', 'alert-warning');
+        utils.showMessage('Login required', 'alert-warning');
       }
-    }, 500);
+    }, loginTimeout);
   }
 
-  app.connectionsAPI = {
+  return {
     loginNeeded: loginNeeded,
     loggedIn: loggedIn,
     notLoggedIn: notLoggedIn,
     hasRole: hasRole,
     rol: rol
   };
-})(Tourguide);
-/* alerType could be alert-warning(default) or alert-danger*/
-function showMessage(message, alertType) {
-  alertType = typeof alertType !== 'undefined' ? alertType : 'alert-warning';
-
-  var alert = document.createElement('DIV');
-  alert.classList.add('alert', 'fade', 'in', alertType);
-  alert.textContent = message;
-
-  var closeButton = document.createElement('BUTTON');
-  closeButton.className = 'close';
-  closeButton.setAttribute('data-dismiss', 'alert');
-  closeButton.textContent = 'X';
-  alert.appendChild(closeButton);
-
-  var navBar = document.getElementById('topMenu');
-
-  var mainContainer = document.getElementsByClassName('container-fluid')[0];
-
-  mainContainer.insertBefore(alert, navBar.nextSibling);
-}
+})();

@@ -10,12 +10,11 @@
 
 */
 //initialization
-var Tourguide;
 var initReviews = function() {
-  //only gets reviews if the user is loged
-  Tourguide.connectionsAPI.loginNeeded(function() {
+  //only gets reviews if the user is logged
+  connectionsAPI.loginNeeded(function() {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    Tourguide.restaurantsAPI.getUserReviews(userInfo.displayName);
+    restaurantsAPI.getUserReviews(userInfo.displayName);
   });
 
 
@@ -24,4 +23,4 @@ var initReviews = function() {
     $('#loggedDiv').height() - 50);
 };
 
-Tourguide.addLoadEvent(initReviews);
+utils.addLoadEvent(initReviews);

@@ -9,8 +9,7 @@
  * MIT Licensed
 
 */
-var map,
-    Tourguide;
+var map;
 //initialization
 var initIndex = function() {
 
@@ -18,8 +17,8 @@ var initIndex = function() {
   map = L.map('map').setView([42.90816007196054, -2.52960205078125], 8);
 
   //only gets restaurants if the user is logged
-  Tourguide.connectionsAPI.loginNeeded(function() {
-    Tourguide.restaurantsAPI.getAllRestaurants();
+  connectionsAPI.loginNeeded(function() {
+    restaurantsAPI.getAllRestaurants();
   });
   //set tile layer
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -27,7 +26,6 @@ var initIndex = function() {
         '&copy; <a href="http://osm.org/copyright">' +
         'OpenStreetMap</a> contributors'
   }).addTo(map);
-
 };
 
-Tourguide.addLoadEvent(initIndex);
+utils.addLoadEvent(initIndex);

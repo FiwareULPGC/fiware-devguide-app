@@ -10,8 +10,7 @@
 
 */
 //initialization
-var map,
-    Tourguide;
+var map;
 var initIndex = function() {
   map = L.map('map').setView([42.90816007196054, -2.52960205078125], 8);
 
@@ -19,7 +18,7 @@ var initIndex = function() {
   var franchise = window.location.search.replace('?', '');
   var prefix = 'franchise=';
   if (franchise.slice(0, prefix.length) == prefix) {
-    Tourguide.restaurantsAPI.getOrganizationRestaurants(
+    restaurantsAPI.getOrganizationRestaurants(
       franchise.slice(prefix.length));
   }
 
@@ -28,7 +27,6 @@ var initIndex = function() {
     attribution:
     '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
-
 };
 
-Tourguide.addLoadEvent(initIndex);
+utils.addLoadEvent(initIndex);
