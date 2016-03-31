@@ -3,7 +3,7 @@
  * index.js
  * Copyright(c) 2016 Universidad de Las Palmas de Gran Canaria
  * Authors:
- *   Jaisiel Santana <jaisiel@gmail.com>,
+ *   Jaisiel Santana <jaisiel@gmail.com>
  *   Alejandro Sánchez <alemagox@gmail.com>
  *   Pablo Fernández <pablo.fernandez@ulpgc.es>
  * MIT Licensed
@@ -11,13 +11,15 @@
 */
 var map;
 //initialization
-var init_index = function() {
+var initIndex = function() {
 
-  $('#pop_window').modal();
+  $('#popWindow').modal();
   map = L.map('map').setView([42.90816007196054, -2.52960205078125], 8);
 
   //only gets restaurants if the user is logged
-  login_needed(function() {get_all_restaurants();});
+  connectionsAPI.loginNeeded(function() {
+    restaurantsAPI.getAllRestaurants();
+  });
   //set tile layer
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution:
@@ -27,4 +29,4 @@ var init_index = function() {
 
 };
 
-addLoadEvent(init_index);
+utils.addLoadEvent(initIndex);
