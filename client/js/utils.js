@@ -48,9 +48,17 @@ var utils = (function() {
     }
   }
 
+  function capitalize(str) {
+    return str.split('').map(function(char) {
+      return char.toUpperCase();
+    }).join('');
+  }
+
+
   return {
     addLoadEvent: addLoadEvent,
-    showMessage: showMessage
+    showMessage: showMessage,
+    capitalize: capitalize
   };
 })();
 
@@ -142,3 +150,10 @@ var AJAXRequest = (function() {
   };
 
 })();
+
+
+  if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+      module.exports = utils;
+    }
+  }
