@@ -28,6 +28,11 @@
   margin-top: 45px;
 }
 
+.markPopUp p {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
 #loggedDiv {
   position: fixed;
   width: 100%;
