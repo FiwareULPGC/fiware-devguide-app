@@ -188,6 +188,10 @@ var restaurantsAPI = (function() {
     restaurantName.textContent = currentMark.name;
     popHTML.appendChild(restaurantName);
 
+    var ratingP = document.createElement('P');
+    ratingP.textContent = 'Rating: ' + currentMark.ratingValue;
+    popHTML.appendChild(ratingP);
+
     var addressP = document.createElement('P');
     addressP.textContent = 'Address: ' + currentMark.address;
     popHTML.appendChild(addressP);
