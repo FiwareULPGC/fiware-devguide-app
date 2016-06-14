@@ -323,7 +323,7 @@ var restaurantsAPI = (function() {
     var review = reviewResponse[0];
 
     document.getElementById('popTitle').textContent = 'Edit review ' +
-      review.name + ' for ' + review.itemReviewed.name;
+      ' for ' + review.itemReviewed.name;
     var reviewForm = document.createElement('FORM');
     reviewForm.name = 'editReviewForm';
     reviewForm.className = 'editReviewForm';
@@ -339,6 +339,7 @@ var restaurantsAPI = (function() {
 
     var reviewBody = document.createElement('TEXTAREA');
     reviewBody.name = 'reviewBody';
+    reviewBody.textContent = review.reviewBody;
     reviewForm.appendChild(reviewBody);
     reviewForm.appendChild(document.createElement('BR'));
 
@@ -394,7 +395,7 @@ var restaurantsAPI = (function() {
     var review = reviewResponse[0];
 
     document.getElementById('popTitle').textContent = 'Edit review ' +
-      review.name + ' for ' + review.itemReviewed.name;
+      ' for ' + review.itemReviewed.name;
     //remove previous content
     var myNode = document.getElementById('popContent');
     myNode.innerHTML = '';
@@ -505,10 +506,7 @@ var restaurantsAPI = (function() {
 
     var data = {
       'reviewBody': '' + reviewBody,
-      'reviewRating': {
-        '@type': 'Rating',
-        'ratingValue': parseInt(ratingValue, 10)
-      }
+      'reviewRating':  parseInt(ratingValue, 10)
     };
 
     AJAXRequest.patch(baseURL + 'review/' + reviewId,
