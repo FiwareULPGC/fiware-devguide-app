@@ -1271,3 +1271,10 @@ var restaurantsAPI = (function() {
     getOrganizationRestaurants: getOrganizationRestaurants
   };
 })();
+
+
+if (typeof exports !== 'undefined') {
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = restaurantsAPI;
+  }
+}
