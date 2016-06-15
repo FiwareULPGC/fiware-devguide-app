@@ -749,6 +749,7 @@ var restaurantsAPI = (function() {
     availableTimeArray[new Date(time).toLocaleTimeString()] =
       ((capacity - occupancyLevel - nDiners) >= 0);
 
+
     checkEnablereservationTime();
   }
 
@@ -760,8 +761,9 @@ var restaurantsAPI = (function() {
       if (document.getElementById('reservationTime').value !== '') {
         document.getElementById('submitReservation').disabled = false;
       }
+    
+      createDisableTimeRanges(availableTimeArray);
     }
-    createDisableTimeRanges(availableTimeArray);
   }
 
   function createDisableTimeRanges(dates) {
@@ -774,7 +776,7 @@ var restaurantsAPI = (function() {
         if (!availableTimeArray[key]) {
           day = new Date(document.getElementById('reservationDate').value);
           maxDate = day;
-          maxDate.setHours(maxTime.hours, maxTime.minutes);
+          maxDate.setHours(parseInt(key.split(':')[0]), parseInt(key.split(':')[1]));
           maxRange =
             new Date(maxDate.getTime() + (1000 * 60 * 29)).toLocaleTimeString();
           disableTimeRanges.push([key, maxRange]);
@@ -782,7 +784,7 @@ var restaurantsAPI = (function() {
       }
     }
     $('#reservationTime').timepicker('option', { 'disableTimeRanges':
-                          [disableTimeRanges] });
+                          disableTimeRanges });
   }
 
   function createNewReservation(restaurantName) {
