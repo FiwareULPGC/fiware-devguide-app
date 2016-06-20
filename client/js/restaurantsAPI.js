@@ -61,7 +61,7 @@ var restaurantsAPI = (function() {
   /*show restaurants from the API response*/
   function showRestaurants(restaurants) {
     restaurants = JSON.parse(restaurants);
-
+    //console.log(restaurants);
     var restaurantMarks = [];
 
     //get mark info
@@ -75,6 +75,58 @@ var restaurantsAPI = (function() {
       addRestaurantMark(currentMark, markerClusters);
     });
 
+     /*
+    console.log('\n********************');
+    console.log('CLUSTER');
+    console.log(markerClusters);
+    console.log('\t - Elements -');
+    markerClusters._needsClustering.forEach(function(element) {
+      console.log(element._latlng);
+      if (isNaN(element._latlng.lat)) {
+        console.log('Latitude not a number');
+      }
+      if (isNaN(element._latlng.lng)) {
+        console.log('Longitude not a number');
+      }
+
+    });
+   
+    console.log(' \n\n\n\n');
+    console.log(' -----  FLATEN -----');
+    var flatten = require('flat');
+    console.log(flatten(markerClusters, { maxDepth: 5 }));
+    console.log('*********************\n');
+
+    console.log(map);
+
+    console.log('test LF layer example');
+
+    var littleton = L.marker([39.61, -105.02]).
+      bindPopup('This is Littleton, CO.'),
+    denver = L.marker([39.74, -104.99]).
+      bindPopup('This is Denver, CO.'),
+    aurora = L.marker([39.73, -104.8]).
+      bindPopup('This is Aurora, CO.'),
+    golden = L.marker([39.77, -105.23]).
+      bindPopup('This is Golden, CO.');
+
+    var cities = L.layerGroup([littleton, denver, aurora, golden]);
+    //map.addLayer(cities);
+    cities;
+
+    setTimeout(function() {
+       markerClusters._needsClustering.forEach(function(element) {
+          console.log(element._latlng);
+          if (isNaN(element._latlng.lat)) {
+            console.log('Latitude not a number');
+          }
+          if (isNaN(element._latlng.lng)) {
+            console.log('Longitude not a number');
+          }
+      });
+      map.addLayer(markerClusters);
+    }, 8000);
+    */
     map.addLayer(markerClusters);
   }
 
@@ -179,6 +231,7 @@ var restaurantsAPI = (function() {
 
   function addRestaurantMark(currentMark, markerCluster) {
     //add mark to map
+    //console.log(currentMark);
     currentMark.mark = L.marker(currentMark.coords);
 
     var popHTML = document.createElement('DIV');
@@ -227,7 +280,11 @@ var restaurantsAPI = (function() {
         popHTML.appendChild(createReservation);
     }
 
-    popHTML.appendChild(createReservation);
+    //console.log(popHTML);
+    //console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+    //console.log(window);
+    //console.log(document);
+    //popHTML.appendChild(createReservation);
 
     currentMark.mark.bindPopup(popHTML);
 
@@ -510,7 +567,7 @@ var restaurantsAPI = (function() {
 
     var data = {
       'reviewBody': '' + reviewBody,
-      'reviewRating':  parseInt(ratingValue, 10)
+      'reviewRating': parseInt(ratingValue, 10)
     };
 
     AJAXRequest.patch(baseURL + 'review/' + reviewId,
@@ -761,7 +818,7 @@ var restaurantsAPI = (function() {
       if (document.getElementById('reservationTime').value !== '') {
         document.getElementById('submitReservation').disabled = false;
       }
-    
+
       createDisableTimeRanges(availableTimeArray);
     }
   }
@@ -776,7 +833,8 @@ var restaurantsAPI = (function() {
         if (!availableTimeArray[key]) {
           day = new Date(document.getElementById('reservationDate').value);
           maxDate = day;
-          maxDate.setHours(parseInt(key.split(':')[0]), parseInt(key.split(':')[1]));
+          maxDate.setHours(parseInt(key.split(':')[0]),
+                           parseInt(key.split(':')[1]));
           maxRange =
             new Date(maxDate.getTime() + (1000 * 60 * 29)).toLocaleTimeString();
           disableTimeRanges.push([key, maxRange]);
@@ -818,6 +876,27 @@ var restaurantsAPI = (function() {
   }
 
 
+  function getRestaurantReviews(id, callback, error_cb) {
+    if(!((callback && typeof callback == "function"))) {
+      callback = showRestaurantReviews;
+    }
+
+    if(!((error_cb && typeof error_cb == "function"))) {
+      error_cb = function() {
+          var error = document.createElement('H2');
+          error.textContent = 'Cannot get reviews.';
+          document.getElementById('popContent').appendChild(error);
+          openPopUpWindow();
+         };
+    }
+
+    var URL = baseURL + 'reviews/restaurant/' + id;
+    AJAXRequest.get(URL,
+        callback,
+        error_cb
+    );
+  }
+
   /*get reviews from a restaurant an show it */
   function getAndShowRestaurantReviews(id) {
     var URL = baseURL + 'reviews/restaurant/' + id;
@@ -838,6 +917,7 @@ var restaurantsAPI = (function() {
   function showRestaurantReviews(reviewsResponse) {
     reviewsResponse = JSON.parse(reviewsResponse);
 
+    console.log(reviewsResponse);
     //remove previous content
     var myNode = document.getElementById('popContent');
     myNode.innerHTML = '';
@@ -1264,11 +1344,17 @@ var restaurantsAPI = (function() {
     }
   }
 
+  function setMap(newMap) {
+    map = newMap;
+  }
+
   return {
     getAllRestaurants: getAllRestaurants,
     getUserReservations: getUserReservations,
     getUserReviews: getUserReviews,
-    getOrganizationRestaurants: getOrganizationRestaurants
+    getOrganizationRestaurants: getOrganizationRestaurants,
+    getRestaurantReviews:getRestaurantReviews,
+    setMap: setMap
   };
 })();
 
@@ -1276,5 +1362,31 @@ var restaurantsAPI = (function() {
 if (typeof exports !== 'undefined') {
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = restaurantsAPI;
+    AJAXRequest = require('./AJAXRequest.js');
+    connectionsAPI = require('./connectionsAPI.js');
+
+    /* jshint ignore:start */
+    //var jsdom = require('jsdom').jsdom;
+
+
+    //allows to load leaflet
+    /*GLOBAL.window = {};
+    GLOBAL.document = {
+      documentElement: {
+        style: {}
+      },
+      getElementsByTagName: function() { return []; },
+      createElement: function() { return {}; },
+      getElementById: function() { return []; }
+    };*/
+
+
+    /*GLOBAL.L = require('../addons/leaflet/leaflet.js');
+    require(
+      '../addons/leaflet/leaflet.markercluster.js');
+    */
+    /* jshint ignore:end */
+
+     GLOBAL.localStorage = require('localStorage');
   }
 }

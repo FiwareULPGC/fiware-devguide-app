@@ -67,5 +67,7 @@ var utils = (function() {
 if (typeof exports !== 'undefined') {
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = utils;
+
+    GLOBAL.window = {};
   }
 }

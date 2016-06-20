@@ -171,9 +171,11 @@ var connectionsAPI = (function() {
   }
 
   function hasRole(userInfo, role) {
-    for (var index = 0, len = userInfo.roles.length; index < len; ++index) {
-      if (role == userInfo.roles[index].name) {
-        return true;
+    if (userInfo) {
+      for (var index = 0, len = userInfo.roles.length; index < len; ++index) {
+        if (role == userInfo.roles[index].name) {
+          return true;
+        }
       }
     }
     return false;
@@ -237,4 +239,17 @@ var initConnections = function() {
 };
 
 
+
+if (typeof exports !== 'undefined') {
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = connectionsAPI;
+    utils = require('./utils.js');
+  }
+}
+
+
+
+
 utils.addLoadEvent(initConnections);
+
+
