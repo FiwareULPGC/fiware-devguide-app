@@ -1,15 +1,30 @@
-/*var restaurantsAPI = require('../js/restaurantsAPI.js');
+var restaurantsAPI = require('../js/restaurantsAPI.js');
 var AJAXRequest = require('../js/AJAXRequest.js');
 var chai = require('chai');
 var assert = require('chai').assert;
+var expect = require('chai').expect;
+//var $ = require('jQuery');
 
 var jsdom = require("jsdom").jsdom;
+
+
+//var jq = require('jQuery').create();
+//jQuery = require('jQuery').create(myWindow);
+
+/*
+var jsdom = require('jsdom').jsdom
+  , myWindow = jsdom().createWindow()
+  , $ = require('jQuery')
+  , jq = require('jQuery').create()
+  , jQuery = require('jQuery').create(myWindow)
+  ;
+  */
 //global.L = require('../addons/leaflet/leaflet.js');
 require('mocha-jsdom');
 
-*/
-var assert = chai.assert;
-var expect = chai.expect;
+
+//var assert = chai.assert;
+//var expect = chai.expect;
 chai.should();
 
 
@@ -187,7 +202,7 @@ var reviewsJSON =
     }
   ];
 
-
+/*
 describe('Testing restaurant requests', function () {
   before(function() {
     //global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
@@ -319,17 +334,17 @@ describe('Testing restaurant requests', function () {
     });
 
 });
-
+*/
 
 describe('Testing restaurant review requests', function () {
   before(function() {
-    //global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-    //global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
+    global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
 
   })
 
   after(function() {
-    //delete global.XMLHttpRequest;
+    delete global.XMLHttpRequest;
   })
 
   beforeEach(function() {
@@ -340,6 +355,23 @@ describe('Testing restaurant review requests', function () {
       this.requests.push(xhr);
     }.bind(this);
 
+
+    var doc = jsdom("<html><head></head>"+
+          "<body>"+
+            "<div class='container-fluid'>"+
+              "<div id='map'></div>" +
+              "<div id='popContent'></div>"+
+            "</div>"+
+
+            "</body></html>", {});
+      global.window = doc.defaultView;
+      global.document = window.document;
+      global.navigator = {
+            userAgent: 'nodejs'
+          }
+
+  global.$ = require('jQuery');
+  require('')
  
   });
 
@@ -372,6 +404,85 @@ describe('Testing restaurant review requests', function () {
 
     
 });
+
+
+
+
+
+describe('Testing restaurant requests', function () {
+  before(function() {
+    //global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    //global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
+
+  })
+
+  after(function() {
+    //delete global.XMLHttpRequest;
+  })
+
+  beforeEach(function() {
+    this.xhr = sinon.useFakeXMLHttpRequest();
+
+    this.requests = [];
+    this.xhr.onCreate = function(xhr) {
+      this.requests.push(xhr);
+    }.bind(this);
+
+
+
+
+ 
+  });
+
+  afterEach(function() {
+    this.xhr.restore();
+
+
+  });
+
+
+    it('Test set mark info', function(done) {
+
+      var expectedFormat = [ 
+        { 
+          name: 'Retaurant1',
+          address: 'Street 1',
+          locality: 'Locality 1',
+          region: 'Region 1',
+          telephone: '111 111 111',
+          description: 'Restaurant description 1',
+          ratingValue: 1,
+          reviewCount: 1,
+          coords: [ 42.8404625, -2.5123277 ] 
+        },
+        { 
+          name: 'Restaurant2',
+          address: 'Street 2',
+          locality: 'Locality 2',
+          region: 'Region 2',
+          telephone: '222 222 222',
+          description: 'Restaurant description 2',
+          ratingValue: 2,
+          reviewCount: 2,
+          coords: [ 42.8538811, -2.7006836 ] 
+        } 
+      ];
+
+        var data = restaurantsJSON;
+        var dataJson = JSON.stringify(data);
+        var restaurants = data;
+        var  restaurantMarks = [];
+        restaurants.forEach(function(restaurant) {
+          restaurantsAPI.setMarkInfo(restaurant, restaurantMarks);
+        });
+
+        expect(restaurantMarks).to.be.a('array').and.to.have.lengthOf(2);
+
+        expect(restaurantMarks).to.deep.equal(expectedFormat);      
+        done();
+        
+      });
+  });
 
 
 

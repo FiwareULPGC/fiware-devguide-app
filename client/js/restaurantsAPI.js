@@ -58,7 +58,7 @@ var restaurantsAPI = (function() {
     };
   }
 
-  /*show restaurants from the API response*/
+  /*show restaurants from the api response*/
   function showRestaurants(restaurants) {
     restaurants = JSON.parse(restaurants);
     //console.log(restaurants);
@@ -90,7 +90,7 @@ var restaurantsAPI = (function() {
       }
 
     });
-   
+
     console.log(' \n\n\n\n');
     console.log(' -----  FLATEN -----');
     var flatten = require('flat');
@@ -877,11 +877,11 @@ var restaurantsAPI = (function() {
 
 
   function getRestaurantReviews(id, callback, error_cb) {
-    if(!((callback && typeof callback == "function"))) {
+    if (!((callback && typeof callback == 'function'))) {
       callback = showRestaurantReviews;
     }
 
-    if(!((error_cb && typeof error_cb == "function"))) {
+    if (!((error_cb && typeof error_cb == 'function'))) {
       error_cb = function() {
           var error = document.createElement('H2');
           error.textContent = 'Cannot get reviews.';
@@ -1353,7 +1353,8 @@ var restaurantsAPI = (function() {
     getUserReservations: getUserReservations,
     getUserReviews: getUserReviews,
     getOrganizationRestaurants: getOrganizationRestaurants,
-    getRestaurantReviews:getRestaurantReviews,
+    getRestaurantReviews: getRestaurantReviews,
+    setMarkInfo: setMarkInfo,
     setMap: setMap
   };
 })();
