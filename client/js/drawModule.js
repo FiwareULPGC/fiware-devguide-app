@@ -3,8 +3,11 @@ var connectionsAPI;
 var AJAXRequest;
 var drawModule =  (function () {
 
+    var maxRating = 5;
     var viewReservationAction = function () {};
     var viewReviewAction = function () {};
+    var createNewReviewAction = function () {};
+    createNewReservationAction = function () {};
 
 
     function setViewReservationAction (action) {
@@ -13,6 +16,14 @@ var drawModule =  (function () {
 
     function setViewReviewAction (action) {
         viewReviewAction = action;
+    }
+
+    function setCreateNewReviewAction (action) {
+        createNewReviewAction = action;
+    }
+
+    function setCreateNewReservationAction (action) {
+        createNewReviewAction = action;
     }
 
 
@@ -93,18 +104,18 @@ var drawModule =  (function () {
     popHTML.appendChild(document.createElement('BR'));
 
     
-    /*
+    
     var createReview = addCreateReviewLink(mark.name);
     if (null != createReview) {
         popHTML.appendChild(createReview);
         popHTML.appendChild(document.createElement('BR'));
     }
-
+    
     var createReservation = addCreateReservationLink(mark.name);
     if (null != createReservation) {
         popHTML.appendChild(createReservation);
     }
-    */
+    
     return popHTML;
   }
 
@@ -260,6 +271,268 @@ var drawModule =  (function () {
   }
 
 
+
+    function addCreateReviewLink(restaurantName) {
+        var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+        //TODO avoid interdependecy
+        if (! connectionsAPI.hasRole(userInfo,
+            connectionsAPI.rol.endUser)) {
+          return null;
+        }
+
+        var createReviewLink = document.createElement('A');
+        createReviewLink.textContent = 'Create review';
+        createReviewLink.onclick = (function(restaurantName) {
+          return function() {
+            createAndShowReviewForm(restaurantName);
+          };
+        })(restaurantName);
+
+        return createReviewLink;
+  }
+
+
+  function createAndShowReviewForm(restaurantName) {
+    reviewForm = createReviewForm(restaurantName);
+    var title = "Create review for: "+ restaurantName;
+    setPopupTitle(title);
+    setPopupContent(reviewForm);
+    openPopUpWindow();
+  }
+
+  function createReviewForm(restaurantName) {
+    var reviewForm = document.createElement('FORM');
+    reviewForm.name = 'editReviewForm';
+    reviewForm.className = 'editReviewForm';
+    reviewForm.onsubmit = function() {
+        var ratingValue = 
+            parseInt(document.forms.editReviewForm.ratingValue.value);
+        
+        var reviewBody = document.forms.editReviewForm.reviewBody.value;
+        createNewReviewAction(restaurantName, ratingValue, reviewBody);
+        
+        return false;
+    };
+
+    var reviewLabel = document.createElement('LABEL');
+    reviewLabel.textContent = 'Your review: ';
+    reviewForm.appendChild(reviewLabel);
+    reviewForm.appendChild(document.createElement('BR'));
+
+    var reviewBody = document.createElement('TEXTAREA');
+    reviewBody.name = 'reviewBody';
+    reviewForm.appendChild(reviewBody);
+    reviewForm.appendChild(document.createElement('BR'));
+
+    var ratingLabel = document.createElement('LABEL');
+    ratingLabel.textContent = 'Rating value: ';
+    reviewForm.appendChild(ratingLabel);
+
+    var ratingValueSelect = document.createElement('SELECT');
+    ratingValueSelect.name = 'ratingValue';
+
+    var option;
+    for (var i = 0; i <= maxRating; i++) {
+      option = document.createElement('OPTION');
+      option.value = i;
+      option.textContent = i + ' Star' + (1 != i ? 's' : '');
+      ratingValueSelect.appendChild(option);
+    }
+
+    reviewForm.appendChild(ratingValueSelect);
+
+    var submit = document.createElement('INPUT');
+    submit.type = 'submit';
+    submit.value = 'Create Review';
+    reviewForm.appendChild(submit);
+
+    return reviewForm;
+  }
+
+
+
+
+
+  function addCreateReservationLink(restaurantName) {
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+    //TODO avoid interdependecy
+    if (! connectionsAPI.hasRole(userInfo,
+        connectionsAPI.rol.endUser)) {
+      return null;
+    }
+
+    var createReservationLink = document.createElement('A');
+    createReservationLink.textContent = 'Make a reservation';
+    createReservationLink.onclick = (function(restaurantName) {
+      return function() {
+        createAndShowReservationForm(restaurantName);
+      };
+    })(restaurantName);
+
+    return createReservationLink;
+  }
+
+
+  function createAndShowReservationForm(restaurantName) {
+    reservationForm = createReservationForm(restaurantName);
+    var title = "Make reservation for: "+ restaurantName;
+    setPopupTitle(title);
+    setPopupContent(reservationForm);
+    //TODO 
+    //initReservationForm();
+    openPopUpWindow();
+  }
+
+
+
+  function createReservationForm(restaurantName) {
+
+    reservationsPerDate = null;
+    //TODO
+    //getReservationsPerDate(restaurantName);
+    document.getElementById('popTitle').textContent = 'Reservation for ' +
+       restaurantName;
+
+    var reservationForm = document.createElement('FORM');
+    reservationForm.name = 'editReservationForm';
+    reservationForm.onsubmit = function() {
+        //abort if not ready submit
+        if (document.getElementById('submitReservation').disabled) {
+          return false;
+        }
+
+        //get values
+        var partySize =
+          document.forms.editReservationForm.partySize.valueAsNumber;
+        var reservationDatetime =
+          new Date(document.forms.editReservationForm.reservationDate.value);
+        var reservationTime =
+          new Date($('#reservationTime').timepicker('getTime'));
+
+        reservationDatetime.setHours(reservationTime.getHours(),
+                                      reservationTime.getMinutes());
+
+
+        createNewReservationAction(restaurantName, partySize, reservationDatetime);
+        return false;
+      };
+
+    var name = document.createElement('INPUT');
+    name.type = 'hidden';
+    name.name = 'restaurantName';
+    name.id = 'restaurantName';
+    name.value = restaurantName;
+    reservationForm.appendChild(name);
+
+    var dinersLabel = document.createElement('SPAN');
+    dinersLabel.textContent = 'Number of diners';
+    reservationForm.appendChild(dinersLabel);
+
+    reservationForm.appendChild(document.createElement('BR'));
+    reservationForm.appendChild(document.createElement('BR'));
+    var nDiners = document.createElement('INPUT');
+    nDiners.name = 'partySize';
+    nDiners.id = 'partySize';
+    nDiners.type = 'number';
+    nDiners.setAttribute('min', '1');
+    reservationForm.appendChild(nDiners);
+
+    reservationForm.appendChild(document.createElement('BR'));
+
+    var dateLabel = document.createElement('SPAN');
+    dateLabel.textContent = 'Date';
+    reservationForm.appendChild(dateLabel);
+
+    reservationForm.appendChild(document.createElement('BR'));
+
+    var reservationDate = document.createElement('INPUT');
+    reservationDate.type = 'date';
+    reservationDate.id = 'reservationDate';
+    reservationDate.disabled = true;
+    reservationForm.appendChild(reservationDate);
+
+    reservationForm.appendChild(document.createElement('BR'));
+
+    var timeLabel = document.createElement('SPAN');
+    timeLabel.textContent = 'Time:';
+    reservationForm.appendChild(timeLabel);
+
+    reservationForm.appendChild(document.createElement('BR'));
+
+    var reservationTime = document.createElement('INPUT');
+    reservationTime.type = 'time';
+    reservationTime.id = 'reservationTime';
+    reservationTime.disabled = true;
+    reservationForm.appendChild(reservationTime);
+
+    reservationForm.appendChild(document.createElement('BR'));
+
+    var loadingTime = document.createElement('DIV');
+    loadingTime.id = 'loadingTime';
+    loadingTime.textContent = 'Calculating availability';
+    loadingTime.style.visibility = 'hidden';
+
+    var loadingTimeImg = document.createElement('IMG');
+    loadingTimeImg.src = 'img/loading.gif';
+    loadingTime.appendChild(loadingTimeImg);
+
+    reservationForm.appendChild(loadingTime);
+
+    var submit = document.createElement('INPUT');
+    submit.type = 'submit';
+    submit.id = 'submitReservation';
+    submit.value = 'Create Reservation';
+    submit.disabled = true;
+    reservationForm.appendChild(submit);
+
+    //document.getElementById('popContent').innerHTML = '';
+
+    //document.getElementById('popContent').appendChild(reservationForm);
+
+    //open
+    //openPopUpWindow();
+
+    return reservationForm;
+  }
+
+
+  function initReservationForm() {
+        //init elements
+    $('#reservationDate').datepicker({
+      dateFormat: 'yy-mm-dd',
+      minDate: '-0d',//only allow future reservations
+      maxDate: '+90d', // 3 month max
+      firstDay: 0,
+      beforeShowDay: function(date) {
+        return calcCurrentReservations(date, restaurantName);
+      },
+      onSelect: initReservationTime //enable select time
+    });
+
+    $('#reservationTime').timepicker({
+      'timeFormat': 'H:i:s',
+      'minTime': minTime.hours + ':' + minTime.minutes,
+      'maxTime': maxTime.hours + ':' + maxTime.minutes,
+      'disableTimeRanges': [
+        ['4pm', '8:01pm']
+      ]
+    });
+
+    $('#reservationTime').on('changeTime', function() {
+        if (document.getElementById('reservationTime').value !== '') {
+          document.getElementById('submitReservation').disabled = false;
+        }
+      }
+    );
+
+    //party_size does not fire initReservatiomTime yet
+    alreadyPartySizeInit = false;
+
+    document.getElementById('partySize').addEventListener('change',
+                          enableCalendar);
+  }
   /* aux function that opens the PopUp windows */
   function openPopUpWindow() {
     $('#popWindow').modal('show');
@@ -278,6 +551,8 @@ var drawModule =  (function () {
     createReservationsDiv: createReservationsDiv,
     setViewReservationAction: setViewReservationAction,
     setViewReviewAction: setViewReviewAction,
+    setCreateNewReviewAction: setCreateNewReviewAction,
+    setCreateNewReservationAction: setCreateNewReservationAction,
     openPopUpWindow: openPopUpWindow,
     closePopUpWindow: closePopUpWindow
   };

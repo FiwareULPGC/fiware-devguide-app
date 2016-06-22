@@ -30,6 +30,15 @@ var initIndex = function() {
         '&copy; <a href="http://osm.org/copyright">' +
         'OpenStreetMap</a> contributors'
   }).addTo(map);
+
+
+  clientLogic.showAllRestaurants();
+  drawModule.setViewReviewAction(clientLogic.showRestaurantReviews);
+  drawModule.setViewReservationAction(clientLogic.showRestaurantReservations);
+  drawModule.setCreateNewReviewAction(clientLogic.createNewReview);
+  drawModule.setCreateNewReservationAction(clientLogic.createNewReservation);
+
+
 };
 
 utils.addLoadEvent(initIndex);

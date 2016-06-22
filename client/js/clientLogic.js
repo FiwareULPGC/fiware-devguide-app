@@ -75,6 +75,32 @@ var clientLogic = (function (){
     );
   }
 
+  function createNewReview(name, rating, description) {
+
+    restaurantsAPI.createNewReview(name, rating, description,
+      drawModule.closePopUpWindow,
+      function(err) {
+        alert('Cannot add review'); 
+        console.log(err);
+      }
+    );
+  }
+
+
+  function createNewReservation(name, partySize, time) {
+
+    restaurantsAPI.createNewReservation(name, partySize, time,
+      drawModule.closePopUpWindow,
+      function(err) {
+        alert('Cannot add Reservation'); 
+        console.log(err);
+      }
+    );
+  }
+
+
+
+
 
 
 
@@ -82,6 +108,7 @@ var clientLogic = (function (){
     showAllRestaurants : showAllRestaurants,
     showOrganizationRestaurants: showOrganizationRestaurants,
     showRestaurantReviews: showRestaurantReviews,
-    showRestaurantReservations: showRestaurantReservations
+    showRestaurantReservations: showRestaurantReservations,
+    createNewReview: createNewReview
   }
 })()
