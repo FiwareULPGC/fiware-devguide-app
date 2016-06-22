@@ -48,6 +48,12 @@ var utils = (function() {
     }
   }
 
+  /* aux function, it changes the date format to print reservations */
+  function fixBookingTime(bookingTime) {
+    var d = new Date(bookingTime);
+    return '' + d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+  }
+
   function capitalize(str) {
     return str.split('').map(function(char) {
       return char.toUpperCase();
@@ -58,6 +64,7 @@ var utils = (function() {
   return {
     addLoadEvent: addLoadEvent,
     showMessage: showMessage,
+    fixBookingTime: fixBookingTime,
     capitalize: capitalize
   };
 })();

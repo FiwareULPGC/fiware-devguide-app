@@ -13,6 +13,7 @@ var map;
 var connectionsAPI;
 var restaurantsAPI;
 var utils;
+var drawModule;
 //initialization
 var initIndex = function() {
 
