@@ -37,6 +37,8 @@ var initIndex = function() {
   drawModule.setViewReservationAction(clientLogic.showRestaurantReservations);
   drawModule.setCreateNewReviewAction(clientLogic.createNewReview);
   drawModule.setCreateNewReservationAction(clientLogic.createNewReservation);
+  //todo interface via clientLogic
+  drawModule.setGetReservationsByDateAction(restaurantsAPI.getRestaurantReservationsByDate);
 
 
 };

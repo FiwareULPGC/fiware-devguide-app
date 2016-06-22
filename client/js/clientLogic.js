@@ -92,7 +92,7 @@ var clientLogic = (function (){
     restaurantsAPI.createNewReservation(name, partySize, time,
       drawModule.closePopUpWindow,
       function(err) {
-        alert('Cannot add Reservation'); 
+        alert('Cannot add reservation'); 
         console.log(err);
       }
     );
@@ -109,6 +109,7 @@ var clientLogic = (function (){
     showOrganizationRestaurants: showOrganizationRestaurants,
     showRestaurantReviews: showRestaurantReviews,
     showRestaurantReservations: showRestaurantReservations,
-    createNewReview: createNewReview
+    createNewReview: createNewReview,
+    createNewReservation: createNewReservation
   }
 })()

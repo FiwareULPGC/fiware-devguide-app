@@ -4,10 +4,22 @@ var AJAXRequest;
 var drawModule =  (function () {
 
     var maxRating = 5;
+    var alreadyPartySizeInit = false;
+    var availabilityTimeCount;
+    var availableTimeArray;
+    var minTime = {
+        hours: 12,
+        minutes: 30
+    };
+    var maxTime = {
+        hours: 22,
+        minutes: 30
+    };
     var viewReservationAction = function () {};
     var viewReviewAction = function () {};
     var createNewReviewAction = function () {};
-    createNewReservationAction = function () {};
+    var createNewReservationAction = function () {};
+    var getReservationsByDateAction = function () {};
 
 
     function setViewReservationAction (action) {
@@ -23,7 +35,11 @@ var drawModule =  (function () {
     }
 
     function setCreateNewReservationAction (action) {
-        createNewReviewAction = action;
+        createNewReservationAction = action;
+    }
+
+    function setGetReservationsByDateAction (action) {
+        getReservationsByDateAction = action;
     }
 
 
@@ -381,7 +397,7 @@ var drawModule =  (function () {
     setPopupTitle(title);
     setPopupContent(reservationForm);
     //TODO 
-    //initReservationForm();
+    initReservationForm();
     openPopUpWindow();
   }
 
@@ -390,7 +406,7 @@ var drawModule =  (function () {
   function createReservationForm(restaurantName) {
 
     reservationsPerDate = null;
-    //TODO
+    //TODO gonna be removed
     //getReservationsPerDate(restaurantName);
     document.getElementById('popTitle').textContent = 'Reservation for ' +
        restaurantName;
@@ -506,7 +522,7 @@ var drawModule =  (function () {
       maxDate: '+90d', // 3 month max
       firstDay: 0,
       beforeShowDay: function(date) {
-        return calcCurrentReservations(date, restaurantName);
+        return dayAvailableForReservation(date, restaurantName);
       },
       onSelect: initReservationTime //enable select time
     });
@@ -533,6 +549,150 @@ var drawModule =  (function () {
     document.getElementById('partySize').addEventListener('change',
                           enableCalendar);
   }
+
+
+  function dayAvailableForReservation(date, restaurantName) {
+    if (date < new Date()) {
+      return [false, 'pastDate', ''];
+    }
+      return [true, 'availableReservations', ''];
+  }
+
+  function enableCalendar() {
+    document.getElementById('reservationDate').disabled = false;
+  }
+
+
+  function initReservationTime() {
+    if (alreadyPartySizeInit === false) {
+      alreadyPartySizeInit = true;
+      document.getElementById('partySize').addEventListener('change',
+        initReservationTime);
+    }
+
+    document.getElementById('loadingTime').style.visibility = '';
+
+    //call availability for each time
+    setTimeAvailability();
+  }
+
+
+    function setTimeAvailability() {
+        //don't allow select time during process
+        document.getElementById('reservationTime').disabled = true;
+        document.getElementById('submitReservation').disabled = true;
+        var day = new Date(document.getElementById('reservationDate').value);
+
+        var maxDate = new Date(day.getTime());
+        maxDate.setHours(maxTime.hours, maxTime.minutes);
+
+        var date = new Date(day.getTime());
+        date.setHours(minTime.hours, minTime.minutes);
+
+        availabilityTimeCount = (maxDate.getTime() -
+          date.getTime()) / 1000 / 60 / 30; //get number of steps (30 min)
+
+        availabilityTimeCount++;
+        availableTimeArray = {};
+
+        var restaurantName = 
+            document.getElementById('restaurantName').value;
+        while (date.getTime() <= maxDate.getTime()) {
+          var time = date.toISOString();
+          
+          getReservationsByDateAction(restaurantName, time,
+            function (response) {
+                processOccupancyResponse(response);
+                checkEnablereservationTime();
+            },
+            checkEnablereservationTime
+          );
+          /*AJAXRequest.get(URL + time,
+            processOccupancyResponse,
+            checkEnablereservationTime
+            );*/
+
+          //add 30 minutes to reservation date
+          date.setTime(date.getTime() + 30 * 60 * 1000);
+        }
+  }
+
+    function checkEnablereservationTime() {
+        if (! --availabilityTimeCount) {
+          //process finished enabled it
+          document.getElementById('reservationTime').disabled = false;
+          document.getElementById('loadingTime').style.visibility = 'hidden';
+          if (document.getElementById('reservationTime').value !== '') {
+            document.getElementById('submitReservation').disabled = false;
+          }
+
+          createDisableTimeRanges(availableTimeArray);
+        }
+  }
+
+
+
+  function processOccupancyResponse(restaurantResponse) {
+    console.log('processOccupancyResponse CALLED');
+    restaurantResponse = JSON.parse(restaurantResponse);
+    if (restaurantResponse.length != 1) {
+      console.log('ERROR: NOT RETRIEVED EXACTLY ONE RESTAURANT');
+    }
+
+    restaurantResponse = restaurantResponse[0];
+    console.log('\n------\n');
+    console.log("\n\nDEBUG:");
+    console.log(restaurantResponse);
+    var properties = restaurantResponse.additionalProperty;
+    var capacity, occupancyLevel, time;
+
+    for (var i = 0; i < properties.length; i++) {
+      if ('capacity' == properties[i].name) {
+        capacity = properties[i].value;
+      }
+
+      if ('occupancyLevels' == properties[i].name) {
+        occupancyLevel = properties[i].value;
+        time = properties[i].timestamp;
+      }
+    }
+
+    var nDiners = document.getElementById('partySize').valueAsNumber;
+
+    console.log("Debug :");
+    console.log("capacity: ", capacity, " occupancyLevel: ", occupancyLevel, " nDiners: ", nDiners);
+    console.log("time: ", time, " available: ",(capacity - occupancyLevel - nDiners) >= 0 );
+    availableTimeArray[new Date(time).toLocaleTimeString()] =
+      ((capacity - occupancyLevel - nDiners) >= 0);
+
+    console.log(availableTimeArray);
+  }
+
+
+  function createDisableTimeRanges(dates) {
+    console.log('createDisableTimeRanges CALLED');
+    var disableTimeRanges = [];
+    var day;
+    var maxRange;
+    var maxDate;
+    for (var key in availableTimeArray) {
+      if (availableTimeArray.hasOwnProperty(key)) {
+        if (!availableTimeArray[key]) {
+          day = new Date(document.getElementById('reservationDate').value);
+          maxDate = day;
+          maxDate.setHours(parseInt(key.split(':')[0]),
+                           parseInt(key.split(':')[1]));
+          maxRange =
+            new Date(maxDate.getTime() + (1000 * 60 * 29)).toLocaleTimeString();
+          disableTimeRanges.push([key, maxRange]);
+        }
+      }
+    }
+    console.log(availableTimeArray);
+    console.log(disableTimeRanges);
+    $('#reservationTime').timepicker('option', { 'disableTimeRanges':
+                          disableTimeRanges });
+  }
   /* aux function that opens the PopUp windows */
   function openPopUpWindow() {
     $('#popWindow').modal('show');
@@ -553,6 +713,7 @@ var drawModule =  (function () {
     setViewReviewAction: setViewReviewAction,
     setCreateNewReviewAction: setCreateNewReviewAction,
     setCreateNewReservationAction: setCreateNewReservationAction,
+    setGetReservationsByDateAction: setGetReservationsByDateAction,
     openPopUpWindow: openPopUpWindow,
     closePopUpWindow: closePopUpWindow
   };

@@ -184,7 +184,13 @@ var restaurantsAPI = (function() {
   }
 */
 
+  function getRestaurantReservationsByDate(restaurantName, time,
+    cb, err_cb) {
 
+    var URL = 
+      baseURL + 'restaurant/' + restaurantName + '/date/' + time;
+      AJAXRequest.get(URL, cb, err_cb);
+  }
 
   function editNewReview(restaurantName) {
     document.getElementById('popTitle').textContent = restaurantName;
@@ -881,6 +887,7 @@ var restaurantsAPI = (function() {
     getOrganizationRestaurants: getOrganizationRestaurants,
     getRestaurantReviews: getRestaurantReviews,
     getRestaurantReservations: getRestaurantReservations,
+    getRestaurantReservationsByDate: getRestaurantReservationsByDate,
     createNewReview: createNewReview,
     createNewReservation: createNewReservation,
     simplifyRestaurantsFormat: simplifyRestaurantsFormat,
