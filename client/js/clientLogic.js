@@ -26,7 +26,8 @@ var clientLogic = (function (){
     restaurantsAPI.getOrganizationRestaurants(
       organization,
       function (response) { //success
-        var restaurants = simplifyRestaurantsFormat(response);
+        var restaurants = 
+          restaurantsAPI.simplifyRestaurantsFormat(response);
         drawModule.addRestaurantstoMap(restaurants);
       }, 
       function (response) { //error
@@ -75,6 +76,25 @@ var clientLogic = (function (){
     );
   }
 
+
+  function getMyReviews() {
+    var user = 'user1';
+    if (user) {
+      showReviewsByUser(username);
+    }
+  }
+
+  function showReviewsByUser(username) {
+    restaurantsAPI.getUserReviews(username,
+      function (reviewsResponse) {
+        drawModule.createReviewsTable(reviewsResponse);
+      },
+      function (error) {
+        alert('Cannot get user reviews for: '+ username);
+        console.log(error);
+      })
+  }
+
   function createNewReview(name, rating, description) {
 
     restaurantsAPI.createNewReview(name, rating, description,
@@ -86,6 +106,52 @@ var clientLogic = (function (){
     );
   }
 
+  function updateReview(reviewId, rating, description) {
+
+    restaurantsAPI.updateReview(reviewId, rating, description,
+      drawModule.closePopUpWindow,
+      function(err) {
+        alert('Cannot update review'); 
+        console.log(err);
+      }
+    );
+  }
+
+  function showReview(reviewId) {
+
+    restaurantsAPI.getReview(reviewId, function (reviewResponse){
+      //'Edit review ' + ' for ' + review.itemReviewed.name;
+      var restaurantReviewed = 
+        JSON.parse(reviewResponse)[0].itemReviewed.name;
+      var reviewDiv = drawModule.createViewReviewDiv(reviewResponse);
+      drawModule.setPopupTitle('Review for '+restaurantReviewed);
+      drawModule.setPopupContent(reviewDiv);
+      drawModule.openPopUpWindow();
+    },
+    function (err) {
+      alert('Cannot get the specified review');
+      console.log(err);
+    })
+    
+  }
+
+  function showUpdateReviewForm(reviewId) {
+    restaurantsAPI.getReview(reviewId,
+      function (reviewResponse) {
+        var review = JSON.parse(reviewResponse)[0];
+        var formDiv = 
+          drawModule.createReviewForm(review.itemReviewed.name, review);
+        drawModule.setPopupTitle(
+          'Edit Review for '+review.itemReviewed.name);
+        drawModule.setPopupContent(formDiv);
+        drawModule.inicializeReviewForm(review);
+        drawModule.openPopUpWindow();
+      },
+      function (err) {
+        alert('Error retrieving the review');
+        console.log(err);
+      })
+  }
 
   function createNewReservation(name, partySize, time) {
 
@@ -98,7 +164,30 @@ var clientLogic = (function (){
     );
   }
 
+  function deleteReview(reviewId) {
+    restaurantsAPI.deleteReview(reviewId,
+      function () {
+        location.reload();
+      },
+      function () {
+        alert('Could not delete the review.');
+        console.log(err);
+      });
+  }
 
+
+  function setUpDrawModule() {
+    drawModule.setViewRestaurantReviewsAction(showRestaurantReviews);
+    drawModule.setViewReservationAction(showRestaurantReservations);
+    drawModule.setCreateNewReviewAction(createNewReview);
+    drawModule.setCreateNewReservationAction(createNewReservation);
+    //todo interface via clientLogic
+    drawModule.setGetReservationsByDateAction(restaurantsAPI.getRestaurantReservationsByDate);
+    drawModule.setViewReviewAction(showReview);
+    drawModule.setShowEditReviewAction(showUpdateReviewForm);
+    drawModule.setUpdateReviewAction(updateReview);
+    //drawModule.setDeleteReviewAction(function () {});
+  }
 
 
 
@@ -109,7 +198,12 @@ var clientLogic = (function (){
     showOrganizationRestaurants: showOrganizationRestaurants,
     showRestaurantReviews: showRestaurantReviews,
     showRestaurantReservations: showRestaurantReservations,
+    showReviewsByUser: showReviewsByUser,
     createNewReview: createNewReview,
-    createNewReservation: createNewReservation
+    createNewReservation: createNewReservation,
+    deleteReview: deleteReview,
+    updateReview: updateReview,
+    showReviewsByUser: showReviewsByUser,
+    setUpDrawModule: setUpDrawModule
   }
 })()

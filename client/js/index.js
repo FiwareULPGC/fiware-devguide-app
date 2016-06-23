@@ -31,15 +31,8 @@ var initIndex = function() {
         'OpenStreetMap</a> contributors'
   }).addTo(map);
 
-
+  clientLogic.setUpDrawModule();
   clientLogic.showAllRestaurants();
-  drawModule.setViewReviewAction(clientLogic.showRestaurantReviews);
-  drawModule.setViewReservationAction(clientLogic.showRestaurantReservations);
-  drawModule.setCreateNewReviewAction(clientLogic.createNewReview);
-  drawModule.setCreateNewReservationAction(clientLogic.createNewReservation);
-  //todo interface via clientLogic
-  drawModule.setGetReservationsByDateAction(restaurantsAPI.getRestaurantReservationsByDate);
-
 
 };
 

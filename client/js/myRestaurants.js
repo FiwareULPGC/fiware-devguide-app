@@ -12,17 +12,21 @@
 var map;
 var restaurantsAPI;
 var utils;
+var clientLogic;
 //initialization
 var initIndex = function() {
   map = L.map('map').setView([42.90816007196054, -2.52960205078125], 8);
+
+  clientLogic.setUpDrawModule();
 
   //get franchise from url
   var franchise = window.location.search.replace('?', '');
   var prefix = 'franchise=';
   if (franchise.slice(0, prefix.length) == prefix) {
-    restaurantsAPI.getOrganizationRestaurants(
+    clientLogic.showOrganizationRestaurants(
       franchise.slice(prefix.length));
   }
+
 
   //set tile layer
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {

@@ -12,12 +12,16 @@
 var connectionsAPI;
 var restaurantsAPI;
 var utils;
+var clientLogic;
 //initialization
 var initReviews = function() {
   //only gets reviews if the user is logged
+
+    clientLogic.setUpDrawModule();
+
   connectionsAPI.loginNeeded(function() {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    restaurantsAPI.getUserReviews(userInfo.displayName);
+    clientLogic.showReviewsByUser(userInfo.displayName);
   });
 
 

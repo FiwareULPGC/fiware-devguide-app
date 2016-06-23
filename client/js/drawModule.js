@@ -16,18 +16,23 @@ var drawModule =  (function () {
         minutes: 30
     };
     var viewReservationAction = function () {};
-    var viewReviewAction = function () {};
+    var viewRestaurantReviewsAction = function () {};
     var createNewReviewAction = function () {};
     var createNewReservationAction = function () {};
     var getReservationsByDateAction = function () {};
+    var viewReviewAction = function () {};
+    var editReviewAction = function () {};
+    var deleteReviewAction = function () {};
+    var showEditReviewAction = function () {};
+    var updateReviewAction = function () {};
 
 
     function setViewReservationAction (action) {
         viewReservationAction = action;
     }
 
-    function setViewReviewAction (action) {
-        viewReviewAction = action;
+    function setViewRestaurantReviewsAction (action) {
+        viewRestaurantReviewsAction = action;
     }
 
     function setCreateNewReviewAction (action) {
@@ -38,11 +43,29 @@ var drawModule =  (function () {
         createNewReservationAction = action;
     }
 
+    function setViewReviewAction(action) {
+        viewReviewAction = action;
+    }
+
+    function setEditReviewAction(action) {
+        editReviewAction = action;
+    }
+
+    function setDeleteReviewAction(action) {
+        deleteReviewAction = action;
+    }
+
     function setGetReservationsByDateAction (action) {
         getReservationsByDateAction = action;
     }
 
+    function setShowEditReviewAction(action) {
+        showEditReviewAction = action;
+    }
 
+    function setUpdateReviewAction(action) {
+        updateReviewAction = action;
+    }
 
     function addRestaurantstoMap(restaurants) {
         
@@ -104,7 +127,7 @@ var drawModule =  (function () {
     var showReviews = document.createElement('A');
     showReviews.textContent = 'Show reviews';
     showReviews.onclick = function () {
-      viewReviewAction(mark.name);
+      viewRestaurantReviewsAction(mark.name);
     };
 
     popHTML.appendChild(showReviews);
@@ -317,16 +340,28 @@ var drawModule =  (function () {
     openPopUpWindow();
   }
 
-  function createReviewForm(restaurantName) {
+  function createReviewForm(restaurantName, review) {
     var reviewForm = document.createElement('FORM');
     reviewForm.name = 'editReviewForm';
     reviewForm.className = 'editReviewForm';
+    //if (updateResponse) {
+    //    
+    //    if (updateResponse.length != 1) {
+    //      window.alert('Error: more than one review received.');
+    //    }
+//
+    //    review = updateResponse[0];
+    //}
     reviewForm.onsubmit = function() {
         var ratingValue = 
             parseInt(document.forms.editReviewForm.ratingValue.value);
         
         var reviewBody = document.forms.editReviewForm.reviewBody.value;
-        createNewReviewAction(restaurantName, ratingValue, reviewBody);
+        if (review){
+            updateReviewAction(review.name, ratingValue, reviewBody);
+        } else {
+            createNewReviewAction(restaurantName, ratingValue, reviewBody);
+        }
         
         return false;
     };
@@ -361,12 +396,26 @@ var drawModule =  (function () {
     var submit = document.createElement('INPUT');
     submit.type = 'submit';
     submit.value = 'Create Review';
+    submit.name = 'submitReview';
     reviewForm.appendChild(submit);
+
 
     return reviewForm;
   }
 
+    function inicializeReviewForm(review) {
 
+         var reviewForm =
+            document.forms.namedItem('editReviewForm');
+
+        markSelectedValue(reviewForm.children.ratingValue
+            , review.reviewRating.ratingValue);
+
+        reviewForm.children.reviewBody.textContent =
+            review.reviewBody;
+
+        reviewForm.submitReview.value = 'Update review';
+    }
 
 
 
@@ -693,6 +742,250 @@ var drawModule =  (function () {
     $('#reservationTime').timepicker('option', { 'disableTimeRanges':
                           disableTimeRanges });
   }
+
+
+
+  function createReviewsTable(reviewsResponse) {
+    reviewsResponse = JSON.parse(reviewsResponse);
+
+    //clean previous table content
+    var myNode = document.getElementById('reviewsTableBody');
+    myNode.innerHTML = '';
+
+    if (reviewsResponse.length < 1) {
+      var error = document.createElement('TR');
+      error.textContent = 'No reviews are available.';
+      document.getElementById('reviewsTableBody').appendChild(error);
+      return;
+    }
+
+    //add entries
+    reviewsResponse.forEach(createReviewsTableEntry);
+  }
+
+  function createReviewsTableEntry(review) {
+    var row = document.createElement('TR');
+    var name = document.createElement('TD');
+    name.textContent = review.itemReviewed.name;
+    name.className = 'col-xs-4';
+    row.appendChild(name);
+
+    var rating = document.createElement('TD');
+    rating.textContent = review.reviewRating.ratingValue;
+    rating.className = 'col-xs-2';
+    row.appendChild(rating);
+
+    var view = document.createElement('TD');
+    view.className = 'col-xs-2';
+
+    var viewLink = document.createElement('A');
+    viewLink.textContent = 'View review';
+    viewLink.onclick = createViewReviewLink(review.name);
+
+    view.appendChild(viewLink);
+    row.appendChild(view);
+
+    var edit = document.createElement('TD');
+    edit.className = 'col-xs-2';
+
+    var editLink = document.createElement('A');
+    editLink.textContent = 'Edit review';
+    editLink.onclick = createEditReviewLink(review.name);
+
+    edit.appendChild(editLink);
+    row.appendChild(edit);
+
+    var del = document.createElement('TD');
+    del.className = 'col-xs-2';
+
+    var delLink = document.createElement('A');
+    delLink.textContent = 'Delete review';
+    delLink.onclick = createDelReviewLink(review.name);
+
+    del.appendChild(delLink);
+    row.appendChild(del);
+
+    document.getElementById('reviewsTableBody').appendChild(row);
+  }
+
+
+    function createViewReviewLink(reviewId) {
+    return function() {
+      viewReviewAction(reviewId);
+    };
+  }
+
+  function createEditReviewLink(reviewId) {
+    return function() {
+      showEditReviewAction(reviewId);
+    };
+  }
+
+  function createDelReviewLink(reviewId) {
+    return function() {
+        if (!(window.confirm('Delete review?'))) {
+            return;
+        }
+      deleteReviewAction(reviewId);
+    };
+  }
+
+
+
+  function createViewReviewDiv(reviewResponse) {
+    reviewResponse = JSON.parse(reviewResponse);
+    if (reviewResponse.length != 1) {
+      window.alert('Error: more than one review received.');
+    }
+
+    var review = reviewResponse[0];
+
+    //document.getElementById('popTitle').textContent = 'Edit review ' +
+    //  ' for ' + review.itemReviewed.name;
+    //remove previous content
+    //var myNode = document.getElementById('popContent');
+    //myNode.innerHTML = '';
+
+    var reviewElement = document.createElement('DIV');
+    reviewElement.className = 'reviewElement';
+
+    //top container
+    var top = document.createElement('DIV');
+    top.class = 'review-top';
+
+    //rating
+    var rating = document.createElement('DIV');
+    rating.class = 'rating-div';
+
+    var ratingLabel = document.createElement('SPAN');
+    ratingLabel.className = 'ratingLabel';
+    ratingLabel.textContent = 'Rating: ';
+
+    var ratingValue = document.createElement('SPAN');
+    ratingValue.className = 'ratingValue';
+    ratingValue.textContent = review.reviewRating.ratingValue;
+
+    rating.appendChild(ratingLabel);
+    rating.appendChild(ratingValue);
+    top.appendChild(rating);
+
+    //author
+    var author = document.createElement('DIV');
+    author.class = 'author-div';
+
+    var authorLabel = document.createElement('SPAN');
+    authorLabel.className = 'authorLabel';
+    authorLabel.textContent = 'Author: ';
+
+    var authorValue = document.createElement('SPAN');
+    authorValue.className = 'authorValue';
+    authorValue.textContent = review.author.name;
+
+    author.appendChild(authorLabel);
+    author.appendChild(authorValue);
+    top.appendChild(author);
+
+    reviewElement.appendChild(top);
+
+    var hr = document.createElement('HR');
+    reviewElement.appendChild(hr);
+    //body
+    var body = document.createElement('DIV');
+    body.class = 'reviewBodyDiv';
+
+    var bodyLabel = document.createElement('SPAN');
+    bodyLabel.className = 'bodyLabel';
+
+    var bodyValue = document.createElement('SPAN');
+    bodyValue.className = 'bodyValue';
+    bodyValue.textContent = review.reviewBody;
+
+    body.appendChild(bodyLabel);
+    body.appendChild(bodyValue);
+    reviewElement.appendChild(body);
+
+    return reviewElement;
+    //myNode.appendChild(reviewElement);
+
+    //  openPopUpWindow();
+  }
+
+/*
+    function createEditReviewDiv(reviewResponse) {
+    reviewResponse = JSON.parse(reviewResponse);
+    if (reviewResponse.length != 1) {
+      window.alert('Error: more than one review received.');
+    }
+
+    var review = reviewResponse[0];
+
+    document.getElementById('popTitle').textContent = 'Edit review ' +
+      ' for ' + review.itemReviewed.name;
+    var reviewForm = document.createElement('FORM');
+    reviewForm.name = 'editReviewForm';
+    reviewForm.className = 'editReviewForm';
+    reviewForm.onsubmit = function() {
+        updateReview(review.name);
+        return false;
+      };
+
+    var reviewLabel = document.createElement('LABEL');
+    reviewLabel.textContent = 'Your review: ';
+    reviewForm.appendChild(reviewLabel);
+    reviewForm.appendChild(document.createElement('BR'));
+
+    var reviewBody = document.createElement('TEXTAREA');
+    reviewBody.name = 'reviewBody';
+    reviewBody.textContent = review.reviewBody;
+    reviewForm.appendChild(reviewBody);
+    reviewForm.appendChild(document.createElement('BR'));
+
+    var ratingLabel = document.createElement('LABEL');
+    ratingLabel.textContent = 'Rating value: ';
+    reviewForm.appendChild(ratingLabel);
+
+    var ratingValueSelect = document.createElement('SELECT');
+    ratingValueSelect.name = 'ratingValue';
+
+    var option;
+    for (var i = 0; i <= maxRating; i++) {
+      option = document.createElement('OPTION');
+      option.value = i;
+      option.textContent = i + ' Star' + (1 != i ? 's' : '');
+      ratingValueSelect.appendChild(option);
+    }
+
+    reviewForm.appendChild(ratingValueSelect);
+
+    var submit = document.createElement('INPUT');
+    submit.type = 'submit';
+    submit.value = 'Update review';
+    reviewForm.appendChild(submit);
+
+    document.getElementById('popContent').innerHTML = '';
+    document.getElementById('popContent').appendChild(reviewForm);
+
+    //mark the selected rating
+    var value = review.reviewRating.ratingValue;
+    markSelectedValue(ratingValueSelect, value);
+
+    //openPopUpWindow();
+  }
+*/
+
+
+
+  function markSelectedValue(selectObject, value) {
+    for (var i = 0; i < selectObject.options.length; i++) {
+      if (String(selectObject.options[i].value) == String(value)) {
+        selectObject.options[i].selected = true;
+      }
+      else {
+        selectObject.options[i].selected = false;
+      }
+    }
+  }
+
   /* aux function that opens the PopUp windows */
   function openPopUpWindow() {
     $('#popWindow').modal('show');
@@ -709,11 +1002,18 @@ var drawModule =  (function () {
     setPopupContent: setPopupContent,
     createReviewsDiv: createReviewsDiv,
     createReservationsDiv: createReservationsDiv,
+    createReviewsTable: createReviewsTable,
+    createReviewForm: createReviewForm,
+    createViewReviewDiv:createViewReviewDiv,
     setViewReservationAction: setViewReservationAction,
-    setViewReviewAction: setViewReviewAction,
+    setViewRestaurantReviewsAction: setViewRestaurantReviewsAction,
     setCreateNewReviewAction: setCreateNewReviewAction,
     setCreateNewReservationAction: setCreateNewReservationAction,
     setGetReservationsByDateAction: setGetReservationsByDateAction,
+    setViewReviewAction: setViewReviewAction,
+    setShowEditReviewAction: setShowEditReviewAction,
+    setUpdateReviewAction: setUpdateReviewAction,
+    inicializeReviewForm: inicializeReviewForm,
     openPopUpWindow: openPopUpWindow,
     closePopUpWindow: closePopUpWindow
   };
