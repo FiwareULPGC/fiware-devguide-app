@@ -18,20 +18,6 @@ var AJAXRequest;
 var restaurantsAPI = (function() {
   var baseURL = 'http://tourguide/api/orion/';
 
-  /*var reservationsPerDate;
-  var minTime = {
-    hours: 12,
-    minutes: 30
-  };
-  var maxTime = {
-    hours: 22,
-    minutes: 30
-  };
-  var alreadyPartySizeInit = false;
-  var availabilityTimeCount;
-  var availableTimeArray;
-  var maxRating = 5;
-*/
   /* get all restaurants and show them */
   function getAllRestaurants(cb, err_cb) {
     AJAXRequest.get(baseURL + 'restaurants/', cb, err_cb);
@@ -170,20 +156,6 @@ var restaurantsAPI = (function() {
   }
 
   
-/*
-  function createShowRestaurantReviewsLink(restaurantName) {
-    return function() {
-      getAndShowRestaurantReviews(restaurantName);
-    };
-  }
-
-  function createShowRestaurantReservationsLink(restaurantName) {
-    return function() {
-      getAndShowRestaurantReservations(restaurantName);
-    };
-  }
-*/
-
   function getRestaurantReservationsByDate(restaurantName, time,
     cb, err_cb) {
 
@@ -264,8 +236,6 @@ var restaurantsAPI = (function() {
 
 
   function createNewReview(restaurantName, ratingValue, reviewBody, cb, err_cb) {
-    //var ratingValue = parseInt(document.forms.editReviewForm.ratingValue.value);
-    //var reviewBody = document.forms.editReviewForm.reviewBody.value;
 
     var data = {
       '@type': 'Review',
@@ -285,39 +255,20 @@ var restaurantsAPI = (function() {
       cb, err_cb, data);
   }
 
-
   function updateReview(reviewId, ratingValue, reviewBody, cb, err_cb) {
-    //var ratingValue = parseInt(document.forms.editReviewForm.ratingValue.value);
-    //var reviewBody = document.forms.editReviewForm.reviewBody.value;
 
     var data = {
       'reviewBody': '' + reviewBody,
       'reviewRating': parseInt(ratingValue, 10)
     };
 
-    /*AJAXRequest.patch(baseURL + 'review/' + reviewId,
-      function() {closePopUpWindow(); location.reload();},
-      function(err) {
-        alert('Cannot update review'), console.log(err),
-        closePopUpWindow();
-      }, data);
-  */
     var url = baseURL + 'review/' + reviewId;
     AJAXRequest.patch(url, cb, err_cb, data);
   }
 
 
   function createNewReservation(restaurantName, partySize, reservationDatetime, cb, err_cb) {
-    /*var partySize =
-      document.forms.editReservationForm.partySize.valueAsNumber;
-    var reservationDatetime =
-      new Date(document.forms.editReservationForm.reservationDate.value);
-    var reservationTime =
-      new Date($('#reservationTime').timepicker('getTime'));
 
-    reservationDatetime.setHours(reservationTime.getHours(),
-                                  reservationTime.getMinutes());
-  */
     var data = {
       '@type': 'FoodEstablishmentReservation',
       'partySize': partySize,
@@ -335,41 +286,6 @@ var restaurantsAPI = (function() {
   }
 
 
-//  /*get reviews from a restaurant an show it */
-//  function getAndShowRestaurantReviews(id) {
-//    var URL = baseURL + 'reviews/restaurant/' + id;
-//    document.getElementById('popTitle').textContent = id;
-//    AJAXRequest.get(URL,
-//        showRestaurantReviews,
-//         function() {
-//          var error = document.createElement('H2');
-//          error.textContent = 'Cannot get reviews.';
-//          document.getElementById('popContent').appendChild(error);
-//          openPopUpWindow();
-//         });
-//  }
-//
-//
-//  /*get reservations from a restaurant an show it */
-//  function getAndShowRestaurantReservations(id) {
-//    var URL = baseURL + 'reservations/restaurant/' + id;
-//    document.getElementById('popTitle').textContent = id;
-//    AJAXRequest.get(URL,
-//      showRestaurantReservations,
-//      function() {
-//        var error = document.createElement('H2');
-//        error.textContent = 'Cannot get reservations.';
-//        document.getElementById('popContent').appendChild(error);
-//        openPopUpWindow();
-//    });
-//  }
-//
-
-  /*show restaurant reservations from a API response */
-  /* At this moment, only show the reservations without pagination */
-  
-
-
   function getUserReservations(username, cb, err_cb) {
     var URL = baseURL + 'reservations/user/' + username;
     AJAXRequest.get(URL,
@@ -382,11 +298,6 @@ var restaurantsAPI = (function() {
 
   function cancelReservation(reservationId, cb, err_cb) {
    
-   /*
-    if (!(window.confirm('Delete reservation?'))) {
-      return;
-    }
-  */
     var URL = baseURL + 'reservation/' + reservationId;
 
     AJAXRequest.del(URL, cb, err_cb);
@@ -397,109 +308,17 @@ var restaurantsAPI = (function() {
     var URL = baseURL + 'reviews/user/' + userName;
     AJAXRequest.get(URL, cb, err_cb);
 
-    /*AJAXRequest.get(URL,
-      createReviewsTable,
-      function() {alert('cannot get your reviews');});
-  */
   }
 
-/*
-  function createViewReviewLink(reviewId) {
-    return function() {
-      viewReview(reviewId);
-    };
-  }
 
-  function createEditReviewLink(reviewId) {
-    return function() {
-      editReview(reviewId);
-    };
-  }
-
-  function createDelReviewLink(reviewId) {
-    return function() {
-      deleteReview(reviewId);
-    };
-  }
-*/
 
   function deleteReview(reviewId, cb, err_cb) {
-    //TODO move to drawModule
-    /*if (!(window.confirm('Delete review?'))) {
-      return;
-    }*/
+
     var url = baseURL + 'review/' + reviewId;
     AJAXRequest.del(url, cb, err_cb);
   }
 
 
-
-
-
-/*TODO TO BE DELETED  
-  function calcCurrentReservations(date, restaurantName) {
-    if (date < new Date()) {
-      return [false, 'pastDate', ''];
-    }
-
-    var stringDate = date.toLocaleDateString();
-
-    if ('undefined' === typeof(reservationsPerDate[stringDate])) {
-      return [true, 'availableReservations', ''];
-    }
-
-    if (0 > reservationsPerDate[stringDate]) {
-      return [false, 'notAllowed fullReservations',
-          'No reservations allowed for this day'];
-    }
-
-    if (5 > reservationsPerDate[stringDate]) {
-      return [true, 'availableReservations', reservationsPerDate[date]];
-    }
-
-    if (10 > reservationsPerDate[stringDate]) {
-      return [true, 'lastReservations', reservationsPerDate[date]];
-    }
-
-   return [false, 'fullReservations', 'Full reservations'];
-  }
-
-  function getReservationsPerDate(restaurantName) {
-    var URL = baseURL + 'reservations/restaurant/' + restaurantName;
-    AJAXRequest.get(URL,
-        setReservationsPerDateVar,
-         function() {
-          reservationsPerDate = [];
-         });
-  }
-
-
-  function setReservationsPerDateVar(reservationsResponse) {
-    reservationsResponse = JSON.parse(reservationsResponse);
-    reservationsPerDate = [];
-    if (reservationsResponse.length < 1) {
-      return;
-    }
-
-    var dateDay;
-    var j;
-    var lim;
-    for (j = 0, lim = reservationsResponse.length; j < lim; j++) {
-
-      dateDay = new Date(reservationsResponse[j].startTime);
-      dateDay = '' + dateDay.toLocaleDateString();
-
-      if ('undefined' === typeof(reservationsPerDate[dateDay])) {
-        reservationsPerDate[dateDay] = 1;
-      }
-      else {
-        reservationsPerDate[dateDay] =
-          reservationsPerDate[dateDay] + 1;
-      }
-    }
-  }
-
-*/
   function setMap(newMap) {
     map = newMap;
   }
