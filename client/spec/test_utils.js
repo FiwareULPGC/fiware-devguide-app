@@ -74,5 +74,29 @@ describe('Testing utils module', function () {
     })
   })
 
+//TODO change locale
+/*
+  describe('Testing fixBookingTime', function () {
+    
+    it('Locale...', function() {
+      var expectedDates = [{
+        'input': '2015-11-03T17:11:04.676Z',
+        'output': '3/11/2015 17:11:04'
+      },{
+        'input': '2015-1-13T17:11:04.676Z',
+        'output': '13/1/2015 17:11:04'
+      }];
+
+      var result;
+      expectedDates.forEach(function (expectedDate) {
+        result = utils.fixBookingTime(expectedDate.input);
+        expect(result).to.be.equal(expectedDate.output);
+      });
+
+    });
+
+  })
+*/
+
 });
   

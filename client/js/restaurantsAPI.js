@@ -237,8 +237,6 @@ var restaurantsAPI = (function() {
 
 
 
-
-
   function createNewReview(
     restaurantName, ratingValue, reviewBody, cb, err_cb) {
 
