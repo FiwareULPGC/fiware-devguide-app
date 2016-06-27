@@ -205,13 +205,13 @@ var connectionsAPI = (function() {
 
 
   function loginNeeded(action) {
-    if (null != localStorage.getItem('userInfo')) {
+    if (null != getUser) {
       action();
       return;
     }
 
     setTimeout(function() {
-      if (null != localStorage.getItem('userInfo')) {
+      if (null != getUser) {
           action();
           return;
       }
@@ -221,12 +221,18 @@ var connectionsAPI = (function() {
     }, loginTimeout);
   }
 
+  //should be called once logged
+  function getUser() {
+    return JSON.parse(localStorage.getItem('userInfo'));
+  }
+
   return {
     loginNeeded: loginNeeded,
     loggedIn: loggedIn,
     notLoggedIn: notLoggedIn,
     hasRole: hasRole,
-    rol: rol
+    rol: rol,
+    getUser: getUser
   };
 })();
 

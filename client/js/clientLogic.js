@@ -1,3 +1,4 @@
+'use strict';
 /*
  * clientLogic.js
  * Copyright(c) 2016 Universidad de Las Palmas de Gran Canaria
@@ -9,44 +10,45 @@
 
 */
 
-var map; //map instance
-var connectionsAPI;
-var AJAXRequest;
-var drawModule;
+/*exported clientLogic */
 
-var clientLogic = (function (){
+var connectionsAPI;
+var drawModule;
+var restaurantsAPI;
+
+var clientLogic = (function() {
 
   function showAllRestaurants() {
     restaurantsAPI.getAllRestaurants(
-      function (response) { //success
-        var restaurants = 
+      function(response) { //success
+        var restaurants =
           restaurantsAPI.simplifyRestaurantsFormat(response);
         drawModule.addRestaurantstoMap(restaurants);
-      }, 
-      function (response) { //error
+      },
+      function(response) { //error
         alert('Could not retrieve restaurants');
         if (response) {
           console.log(response);
         }
       }
-    )
+    );
   }
 
   function showOrganizationRestaurants(organization) {
     restaurantsAPI.getOrganizationRestaurants(
       organization,
-      function (response) { //success
-        var restaurants = 
+      function(response) { //success
+        var restaurants =
           restaurantsAPI.simplifyRestaurantsFormat(response);
         drawModule.addRestaurantstoMap(restaurants);
-      }, 
-      function (response) { //error
+      },
+      function(response) { //error
         alert('Could not retrieve restaurants');
         if (response) {
           console.log(response);
         }
       }
-    )
+    );
   }
 
 
@@ -54,7 +56,7 @@ var clientLogic = (function (){
 
     restaurantsAPI.getRestaurantReviews(name,
       function(response) {
-        reviewsDiv = drawModule.createReviewsDiv(response);
+        var reviewsDiv = drawModule.createReviewsDiv(response);
         drawModule.setPopupTitle(name);
         drawModule.setPopupContent(reviewsDiv);
         drawModule.openPopUpWindow();
@@ -63,7 +65,7 @@ var clientLogic = (function (){
         var error = document.createElement('H2');
         error.textContent = 'Cannot get reviews.';
         document.getElementById('popContent').appendChild(error);
-        openPopUpWindow();
+        drawModule.openPopUpWindow();
       }
     );
   }
@@ -72,7 +74,7 @@ var clientLogic = (function (){
 
     restaurantsAPI.getRestaurantReservations(name,
       function(response) {
-        reservationsDiv = drawModule.createReservationsDiv(response);
+        var reservationsDiv = drawModule.createReservationsDiv(response);
         drawModule.setPopupTitle(name);
         drawModule.setPopupContent(reservationsDiv);
         drawModule.openPopUpWindow();
@@ -81,47 +83,47 @@ var clientLogic = (function (){
         var error = document.createElement('H2');
         error.textContent = 'Cannot get reservations.';
         document.getElementById('popContent').appendChild(error);
-        openPopUpWindow();
+        drawModule.openPopUpWindow();
       }
     );
   }
 
 
   function getMyReviews() {
-    var user = 'user1';
-    if (user) {
+    var username = connectionsAPI.getUser().displayName;
+    if (username) {
       showReviewsByUser(username);
     }
   }
 
   function showReviewsByUser(username) {
     restaurantsAPI.getUserReviews(username,
-      function (reviewsResponse) {
+      function(reviewsResponse) {
         drawModule.createReviewsTable(reviewsResponse);
       },
-      function (error) {
-        alert('Cannot get user reviews for: '+ username);
+      function(error) {
+        alert('Cannot get user reviews for: ' + username);
         console.log(error);
-      })
+      });
   }
 
 
   function getMyReservations() {
-    var user = 'user1';
-    if (user) {
-      showReviewsByUser(username);
+    var username = connectionsAPI.getUser().displayName;
+    if (username) {
+      showReservationsByUser(username);
     }
   }
 
   function showReservationsByUser(username) {
     restaurantsAPI.getUserReservations(username,
-      function (reservationsResponse) {
+      function(reservationsResponse) {
         drawModule.createReservationsTable(reservationsResponse);
       },
-      function (error) {
-        alert('Cannot get user reservations for: '+ username);
+      function(error) {
+        alert('Cannot get user reservations for: ' + username);
         console.log(error);
-      })
+      });
   }
 
   function createNewReview(name, rating, description) {
@@ -129,7 +131,7 @@ var clientLogic = (function (){
     restaurantsAPI.createNewReview(name, rating, description,
       drawModule.closePopUpWindow,
       function(err) {
-        alert('Cannot add review'); 
+        alert('Cannot add review');
         console.log(err);
       }
     );
@@ -140,7 +142,7 @@ var clientLogic = (function (){
     restaurantsAPI.updateReview(reviewId, rating, description,
       drawModule.closePopUpWindow,
       function(err) {
-        alert('Cannot update review'); 
+        alert('Cannot update review');
         console.log(err);
       }
     );
@@ -148,38 +150,38 @@ var clientLogic = (function (){
 
   function showReview(reviewId) {
 
-    restaurantsAPI.getReview(reviewId, function (reviewResponse){
+    restaurantsAPI.getReview(reviewId, function(reviewResponse) {
       //'Edit review ' + ' for ' + review.itemReviewed.name;
-      var restaurantReviewed = 
+      var restaurantReviewed =
         JSON.parse(reviewResponse)[0].itemReviewed.name;
       var reviewDiv = drawModule.createViewReviewDiv(reviewResponse);
-      drawModule.setPopupTitle('Review for '+restaurantReviewed);
+      drawModule.setPopupTitle('Review for ' + restaurantReviewed);
       drawModule.setPopupContent(reviewDiv);
       drawModule.openPopUpWindow();
     },
-    function (err) {
+    function(err) {
       alert('Cannot get the specified review');
       console.log(err);
-    })
-    
+    });
+
   }
 
   function showUpdateReviewForm(reviewId) {
     restaurantsAPI.getReview(reviewId,
-      function (reviewResponse) {
+      function(reviewResponse) {
         var review = JSON.parse(reviewResponse)[0];
-        var formDiv = 
+        var formDiv =
           drawModule.createReviewForm(review.itemReviewed.name, review);
         drawModule.setPopupTitle(
-          'Edit Review for '+review.itemReviewed.name);
+          'Edit Review for ' + review.itemReviewed.name);
         drawModule.setPopupContent(formDiv);
         drawModule.inicializeReviewForm(review);
         drawModule.openPopUpWindow();
       },
-      function (err) {
+      function(err) {
         alert('Error retrieving the review');
         console.log(err);
-      })
+      });
   }
 
   function createNewReservation(name, partySize, time) {
@@ -187,7 +189,7 @@ var clientLogic = (function (){
     restaurantsAPI.createNewReservation(name, partySize, time,
       drawModule.closePopUpWindow,
       function(err) {
-        alert('Cannot add reservation'); 
+        alert('Cannot add reservation');
         console.log(err);
       }
     );
@@ -195,10 +197,10 @@ var clientLogic = (function (){
 
   function deleteReview(reviewId) {
     restaurantsAPI.deleteReview(reviewId,
-      function () {
+      function() {
         location.reload();
       },
-      function () {
+      function(err) {
         alert('Could not delete the reservation.');
         console.log(err);
       });
@@ -206,10 +208,10 @@ var clientLogic = (function (){
 
   function cancelReservation(reservationId) {
     restaurantsAPI.cancelReservation(reservationId,
-      function () {
+      function() {
         location.reload();
       },
-      function () {
+      function(err) {
         alert('Could not delete the review.');
         console.log(err);
       });
@@ -222,7 +224,8 @@ var clientLogic = (function (){
     drawModule.setCreateNewReviewAction(createNewReview);
     drawModule.setCreateNewReservationAction(createNewReservation);
     //todo interface via clientLogic
-    drawModule.setGetReservationsByDateAction(restaurantsAPI.getRestaurantReservationsByDate);
+    drawModule.setGetReservationsByDateAction(
+      restaurantsAPI.getRestaurantReservationsByDate);
     drawModule.setViewReviewAction(showReview);
     drawModule.setShowEditReviewAction(showUpdateReviewForm);
     drawModule.setUpdateReviewAction(updateReview);
@@ -235,7 +238,7 @@ var clientLogic = (function (){
 
 
   return {
-    showAllRestaurants : showAllRestaurants,
+    showAllRestaurants: showAllRestaurants,
     showOrganizationRestaurants: showOrganizationRestaurants,
     showRestaurantReviews: showRestaurantReviews,
     showRestaurantReservations: showRestaurantReservations,
@@ -244,8 +247,10 @@ var clientLogic = (function (){
     createNewReservation: createNewReservation,
     deleteReview: deleteReview,
     updateReview: updateReview,
-    showReviewsByUser: showReviewsByUser,
+    //showReviewsByUser: showReviewsByUser,
     showReservationsByUser: showReservationsByUser,
+    getMyReviews: getMyReviews,
+    getMyReservations: getMyReservations,
     setUpDrawModule: setUpDrawModule
-  }
-})()
+  };
+})();

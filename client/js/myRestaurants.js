@@ -10,7 +10,6 @@
 
 */
 var map;
-var restaurantsAPI;
 var utils;
 var clientLogic;
 //initialization

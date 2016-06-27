@@ -10,7 +10,7 @@
 
 */
 var connectionsAPI;
-var restaurantsAPI;
+//var restaurantsAPI;
 var utils;
 var clientLogic;
 //initialization
@@ -20,8 +20,7 @@ var initReviews = function() {
     clientLogic.setUpDrawModule();
 
   connectionsAPI.loginNeeded(function() {
-    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    clientLogic.showReviewsByUser(userInfo.displayName);
+    clientLogic.getMyReviews();
   });
 
 

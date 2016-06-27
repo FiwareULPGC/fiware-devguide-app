@@ -10,11 +10,12 @@
 
 */
 
-
+/*exported drawModule */
 var map; //map instance
 var connectionsAPI;
-var AJAXRequest;
-var drawModule =  (function () {
+//var AJAXRequest;
+var utils;
+var drawModule = (function() {
 
   var maxRating = 5;
   var alreadyPartySizeInit = false;
@@ -28,32 +29,32 @@ var drawModule =  (function () {
     hours: 22,
     minutes: 30
   };
-  var viewReservationAction = function () {};
-  var viewRestaurantReviewsAction = function () {};
-  var createNewReviewAction = function () {};
-  var createNewReservationAction = function () {};
-  var getReservationsByDateAction = function () {};
-  var viewReviewAction = function () {};
-  var editReviewAction = function () {};
-  var deleteReviewAction = function () {};
-  var showEditReviewAction = function () {};
-  var updateReviewAction = function () {};
-  var cancelReservationAction = function () {};
+  var viewReservationAction = function() {};
+  var viewRestaurantReviewsAction = function() {};
+  var createNewReviewAction = function() {};
+  var createNewReservationAction = function() {};
+  var getReservationsByDateAction = function() {};
+  var viewReviewAction = function() {};
+  //var editReviewAction = function() {};
+  var deleteReviewAction = function() {};
+  var showEditReviewAction = function() {};
+  var updateReviewAction = function() {};
+  var cancelReservationAction = function() {};
 
 
-  function setViewReservationAction (action) {
+  function setViewReservationAction(action) {
     viewReservationAction = action;
   }
 
-  function setViewRestaurantReviewsAction (action) {
+  function setViewRestaurantReviewsAction(action) {
     viewRestaurantReviewsAction = action;
   }
 
-  function setCreateNewReviewAction (action) {
+  function setCreateNewReviewAction(action) {
     createNewReviewAction = action;
   }
 
-  function setCreateNewReservationAction (action) {
+  function setCreateNewReservationAction(action) {
     createNewReservationAction = action;
   }
 
@@ -61,15 +62,15 @@ var drawModule =  (function () {
     viewReviewAction = action;
   }
 
-  function setEditReviewAction(action) {
+  /*function setEditReviewAction(action) {
     editReviewAction = action;
   }
-
+*/
   function setDeleteReviewAction(action) {
     deleteReviewAction = action;
   }
 
-  function setGetReservationsByDateAction (action) {
+  function setGetReservationsByDateAction(action) {
     getReservationsByDateAction = action;
   }
 
@@ -86,7 +87,7 @@ var drawModule =  (function () {
   }
 
   function addRestaurantstoMap(restaurants) {
-    
+
     /* add marks with clustering approach */
     var markerClusters = L.markerClusterGroup({showCoverageOnHover: true});
     restaurants.forEach(function(currentMark) {
@@ -98,11 +99,11 @@ var drawModule =  (function () {
 
 
   function addRestaurantMark(currentMark, markerCluster) {
-  
+
     //add mark to map
     currentMark.mark = L.marker(currentMark.coords);
-    
-    var popHTML = generateMarkPopup(currentMark)
+
+    var popHTML = generateMarkPopup(currentMark);
     currentMark.mark.bindPopup(popHTML);
 
     //reference all mark info to be used from leaflet
@@ -144,7 +145,7 @@ var drawModule =  (function () {
 
     var showReviews = document.createElement('A');
     showReviews.textContent = 'Show reviews';
-    showReviews.onclick = function () {
+    showReviews.onclick = function() {
       viewRestaurantReviewsAction(mark.name);
     };
 
@@ -153,25 +154,25 @@ var drawModule =  (function () {
 
     var showReservations = document.createElement('A');
     showReservations.textContent = 'Show reservations';
-    showReservations.onclick = function () {
+    showReservations.onclick = function() {
       viewReservationAction(mark.name);
     };
 
     popHTML.appendChild(showReservations);
     popHTML.appendChild(document.createElement('BR'));
 
-    
+
     var createReview = addCreateReviewLink(mark.name);
     if (null != createReview) {
       popHTML.appendChild(createReview);
       popHTML.appendChild(document.createElement('BR'));
     }
-    
+
     var createReservation = addCreateReservationLink(mark.name);
     if (null != createReservation) {
       popHTML.appendChild(createReservation);
     }
-    
+
     return popHTML;
   }
 
@@ -310,7 +311,7 @@ var drawModule =  (function () {
 
       var time = document.createElement('TD');
       time.classList.add('class', 'col-xs-4');
-      time.textContent = 
+      time.textContent =
       utils.fixBookingTime(reservationsResponse[j].startTime);
       row.appendChild(time);
 
@@ -350,8 +351,8 @@ var drawModule =  (function () {
 
 
   function createAndShowReviewForm(restaurantName) {
-    reviewForm = createReviewForm(restaurantName);
-    var title = "Create review for: "+ restaurantName;
+    var reviewForm = createReviewForm(restaurantName);
+    var title = 'Create review for: ' + restaurantName;
     setPopupTitle(title);
     setPopupContent(reviewForm);
     openPopUpWindow();
@@ -362,7 +363,7 @@ var drawModule =  (function () {
     reviewForm.name = 'editReviewForm';
     reviewForm.className = 'editReviewForm';
   //if (updateResponse) {
-  //    
+  //
   //    if (updateResponse.length != 1) {
   //      window.alert('Error: more than one review received.');
   //    }
@@ -370,17 +371,17 @@ var drawModule =  (function () {
   //    review = updateResponse[0];
   //}
     reviewForm.onsubmit = function() {
-      var ratingValue = 
+      var ratingValue =
         parseInt(document.forms.editReviewForm.ratingValue.value);
-    
+
       var reviewBody = document.forms.editReviewForm.reviewBody.value;
-      if (review){
+      if (review) {
         updateReviewAction(review.name, ratingValue, reviewBody);
-      } 
+      }
       else {
         createNewReviewAction(restaurantName, ratingValue, reviewBody);
       }
-      
+
       return false;
     };
 
@@ -426,8 +427,8 @@ var drawModule =  (function () {
     var reviewForm =
       document.forms.namedItem('editReviewForm');
 
-    markSelectedValue(reviewForm.children.ratingValue
-      , review.reviewRating.ratingValue);
+    markSelectedValue(reviewForm.children.ratingValue,
+      review.reviewRating.ratingValue);
 
     reviewForm.children.reviewBody.textContent =
       review.reviewBody;
@@ -459,11 +460,11 @@ var drawModule =  (function () {
 
 
   function createAndShowReservationForm(restaurantName) {
-    reservationForm = createReservationForm(restaurantName);
-    var title = "Make reservation for: "+ restaurantName;
+    var reservationForm = createReservationForm(restaurantName);
+    var title = 'Make reservation for: ' + restaurantName;
     setPopupTitle(title);
     setPopupContent(reservationForm);
-    //TODO 
+    //TODO
     initReservationForm();
     openPopUpWindow();
   }
@@ -472,7 +473,7 @@ var drawModule =  (function () {
 
   function createReservationForm(restaurantName) {
 
-    reservationsPerDate = null;
+    //reservationsPerDate = null;
     //TODO gonna be removed
     //getReservationsPerDate(restaurantName);
     document.getElementById('popTitle').textContent = 'Reservation for ' +
@@ -498,7 +499,8 @@ var drawModule =  (function () {
                       reservationTime.getMinutes());
 
 
-      createNewReservationAction(restaurantName, partySize, reservationDatetime);
+      createNewReservationAction(
+        restaurantName, partySize, reservationDatetime);
       return false;
     };
 
@@ -582,17 +584,17 @@ var drawModule =  (function () {
       maxDate: '+90d', // 3 month max
       firstDay: 0,
       beforeShowDay: function(date) {
-      return dayAvailableForReservation(date, restaurantName);
+        return dayAvailableForReservation(date);
       },
       onSelect: initReservationTime //enable select time
     });
 
     $('#reservationTime').timepicker({
-      'timeFormat': 'H:i:s',
-      'minTime': minTime.hours + ':' + minTime.minutes,
-      'maxTime': maxTime.hours + ':' + maxTime.minutes,
-      'disableTimeRanges': [
-      ['4pm', '8:01pm']
+        'timeFormat': 'H:i:s',
+        'minTime': minTime.hours + ':' + minTime.minutes,
+        'maxTime': maxTime.hours + ':' + maxTime.minutes,
+        'disableTimeRanges': [
+        ['4pm', '8:01pm']
       ]
     });
 
@@ -635,6 +637,10 @@ var drawModule =  (function () {
     setTimeAvailability();
   }
 
+  var _proceesAvailabilityResponse = function(response) {
+          processOccupancyResponse(response);
+          checkEnablereservationTime();
+      };
 
   function setTimeAvailability() {
     //don't allow select time during process
@@ -654,17 +660,14 @@ var drawModule =  (function () {
     availabilityTimeCount++;
     availableTimeArray = {};
 
-    var restaurantName = 
+    var restaurantName =
       document.getElementById('restaurantName').value;
     while (date.getTime() <= maxDate.getTime()) {
       var time = date.toISOString();
-      
+
       getReservationsByDateAction(restaurantName, time,
-      function (response) {
-        processOccupancyResponse(response);
-        checkEnablereservationTime();
-      },
-      checkEnablereservationTime
+        _proceesAvailabilityResponse,
+        checkEnablereservationTime
       );
       /*AJAXRequest.get(URL + time,
       processOccupancyResponse,
@@ -675,6 +678,8 @@ var drawModule =  (function () {
       date.setTime(date.getTime() + 30 * 60 * 1000);
     }
   }
+
+
 
   function checkEnablereservationTime() {
     if (! --availabilityTimeCount) {
@@ -700,7 +705,7 @@ var drawModule =  (function () {
 
     restaurantResponse = restaurantResponse[0];
     console.log('\n------\n');
-    console.log("\n\nDEBUG:");
+    console.log('\n\nDEBUG:');
     console.log(restaurantResponse);
     var properties = restaurantResponse.additionalProperty;
     var capacity, occupancyLevel, time;
@@ -718,9 +723,11 @@ var drawModule =  (function () {
 
     var nDiners = document.getElementById('partySize').valueAsNumber;
 
-    console.log("Debug :");
-    console.log("capacity: ", capacity, " occupancyLevel: ", occupancyLevel, " nDiners: ", nDiners);
-    console.log("time: ", time, " available: ",(capacity - occupancyLevel - nDiners) >= 0 );
+    console.log('Debug :');
+    console.log('capacity: ', capacity, ' occupancyLevel: ',
+      occupancyLevel, ' nDiners: ', nDiners);
+    console.log('time: ', time, ' available: ',
+      (capacity - occupancyLevel - nDiners) >= 0);
     availableTimeArray[new Date(time).toLocaleTimeString()] =
       ((capacity - occupancyLevel - nDiners) >= 0);
 
@@ -998,7 +1005,7 @@ var drawModule =  (function () {
     createReviewsTable: createReviewsTable,
     createReservationsTable: createReservationsTable,
     createReviewForm: createReviewForm,
-    createViewReviewDiv:createViewReviewDiv,
+    createViewReviewDiv: createViewReviewDiv,
     setViewReservationAction: setViewReservationAction,
     setViewRestaurantReviewsAction: setViewRestaurantReviewsAction,
     setCreateNewReviewAction: setCreateNewReviewAction,
@@ -1013,4 +1020,4 @@ var drawModule =  (function () {
     openPopUpWindow: openPopUpWindow,
     closePopUpWindow: closePopUpWindow
   };
-})()
+})();

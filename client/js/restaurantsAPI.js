@@ -11,6 +11,7 @@
 */
 
 /*exported restaurantsAPI */
+
 //global vars
 var map; //map instance
 var connectionsAPI;
@@ -41,7 +42,7 @@ var restaurantsAPI = (function() {
 
 
   /*Simplify the restaurant format using only useful info */
-  function simplifyRestaurantsFormat (restaurants) {
+  function simplifyRestaurantsFormat(restaurants) {
     restaurants = JSON.parse(restaurants);
     var convertedRestaurants = [];
 
@@ -102,14 +103,16 @@ var restaurantsAPI = (function() {
 
     if (restaurant.aggregateRating) {
       if (typeof restaurant.aggregateRating.ratingValue === 'number') {
-        convertedRestaurant.ratingValue = restaurant.aggregateRating.ratingValue;
+        convertedRestaurant.ratingValue =
+          restaurant.aggregateRating.ratingValue;
       }
       else {
         console.log('Cannot get ratingValue for ' + restaurant.name);
       }
 
       if (typeof restaurant.aggregateRating.reviewCount === 'number') {
-        convertedRestaurant.reviewCount = restaurant.aggregateRating.reviewCount;
+        convertedRestaurant.reviewCount =
+          restaurant.aggregateRating.reviewCount;
       }
       else {
         console.log('Cannot get reviewCount for ' + restaurant.name);
@@ -155,16 +158,16 @@ var restaurantsAPI = (function() {
     return convertedRestaurant;
   }
 
-  
+
   function getRestaurantReservationsByDate(restaurantName, time,
     cb, err_cb) {
 
-    var URL = 
+    var URL =
       baseURL + 'restaurant/' + restaurantName + '/date/' + time;
       AJAXRequest.get(URL, cb, err_cb);
   }
 
-
+/*
   function editNewReview(restaurantName) {
     document.getElementById('popTitle').textContent = restaurantName;
     var reviewForm = document.createElement('FORM');
@@ -213,8 +216,9 @@ var restaurantsAPI = (function() {
 
     openPopUpWindow();
   }
+*/
 
-
+/*
   function editReview(reviewId) {
     var URL = baseURL + 'review/' + reviewId;
     AJAXRequest.get(URL,
@@ -223,7 +227,7 @@ var restaurantsAPI = (function() {
           window.alert('Cannot get review ' + reviewId);
          });
   }
-
+*/
 
 
   function getReview(reviewId, cb, err_cb) {
@@ -235,7 +239,8 @@ var restaurantsAPI = (function() {
 
 
 
-  function createNewReview(restaurantName, ratingValue, reviewBody, cb, err_cb) {
+  function createNewReview(
+    restaurantName, ratingValue, reviewBody, cb, err_cb) {
 
     var data = {
       '@type': 'Review',
@@ -267,7 +272,8 @@ var restaurantsAPI = (function() {
   }
 
 
-  function createNewReservation(restaurantName, partySize, reservationDatetime, cb, err_cb) {
+  function createNewReservation(
+    restaurantName, partySize, reservationDatetime, cb, err_cb) {
 
     var data = {
       '@type': 'FoodEstablishmentReservation',
@@ -297,7 +303,7 @@ var restaurantsAPI = (function() {
 
 
   function cancelReservation(reservationId, cb, err_cb) {
-   
+
     var URL = baseURL + 'reservation/' + reservationId;
 
     AJAXRequest.del(URL, cb, err_cb);

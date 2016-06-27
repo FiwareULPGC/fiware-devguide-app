@@ -11,9 +11,9 @@
 */
 var map;
 var connectionsAPI;
-var restaurantsAPI;
 var utils;
-var drawModule;
+var clientLogic;
+
 //initialization
 var initIndex = function() {
 
@@ -22,7 +22,7 @@ var initIndex = function() {
 
   //only gets restaurants if the user is logged
   connectionsAPI.loginNeeded(function() {
-    restaurantsAPI.getAllRestaurants();
+    //restaurantsAPI.getAllRestaurants();
   });
   //set tile layer
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
