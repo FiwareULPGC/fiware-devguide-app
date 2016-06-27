@@ -95,6 +95,25 @@ var clientLogic = (function (){
       })
   }
 
+
+  function getMyReservations() {
+    var user = 'user1';
+    if (user) {
+      showReviewsByUser(username);
+    }
+  }
+
+  function showReservationsByUser(username) {
+    restaurantsAPI.getUserReservations(username,
+      function (reservationsResponse) {
+        drawModule.createReservationsTable(reservationsResponse);
+      },
+      function (error) {
+        alert('Cannot get user reservations for: '+ username);
+        console.log(error);
+      })
+  }
+
   function createNewReview(name, rating, description) {
 
     restaurantsAPI.createNewReview(name, rating, description,
@@ -170,6 +189,17 @@ var clientLogic = (function (){
         location.reload();
       },
       function () {
+        alert('Could not delete the reservation.');
+        console.log(err);
+      });
+  }
+
+  function cancelReservation(reservationId) {
+    restaurantsAPI.cancelReservation(reservationId,
+      function () {
+        location.reload();
+      },
+      function () {
         alert('Could not delete the review.');
         console.log(err);
       });
@@ -186,7 +216,8 @@ var clientLogic = (function (){
     drawModule.setViewReviewAction(showReview);
     drawModule.setShowEditReviewAction(showUpdateReviewForm);
     drawModule.setUpdateReviewAction(updateReview);
-    //drawModule.setDeleteReviewAction(function () {});
+    drawModule.setDeleteReviewAction(deleteReview);
+    drawModule.setCancelReservationAction(cancelReservation);
   }
 
 
@@ -204,6 +235,7 @@ var clientLogic = (function (){
     deleteReview: deleteReview,
     updateReview: updateReview,
     showReviewsByUser: showReviewsByUser,
+    showReservationsByUser: showReservationsByUser,
     setUpDrawModule: setUpDrawModule
   }
 })()

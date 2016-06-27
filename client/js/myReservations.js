@@ -12,15 +12,18 @@
 var connectionsAPI;
 var restaurantsAPI;
 var utils;
+var clientLogic;
+
 //initialization
 var initReservations = function() {
 
   $('#popWindow').modal();
 
+  clientLogic.setUpDrawModule();
   //only gets reservations if the user is logged
   connectionsAPI.loginNeeded(function() {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    restaurantsAPI.getUserReservations(userInfo.displayName);
+    clientLogic.showReservationsByUser(userInfo.displayName);
   });
 
 

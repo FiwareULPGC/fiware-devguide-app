@@ -25,6 +25,7 @@ var drawModule =  (function () {
     var deleteReviewAction = function () {};
     var showEditReviewAction = function () {};
     var updateReviewAction = function () {};
+    var cancelReservationAction = function () {};
 
 
     function setViewReservationAction (action) {
@@ -65,6 +66,10 @@ var drawModule =  (function () {
 
     function setUpdateReviewAction(action) {
         updateReviewAction = action;
+    }
+
+    function setCancelReservationAction(action) {
+        cancelReservationAction = action;
     }
 
     function addRestaurantstoMap(restaurants) {
@@ -830,6 +835,14 @@ var drawModule =  (function () {
     };
   }
 
+    function createCancelReservationLink(reservationId) {
+   return function() {
+        if (!(window.confirm('Cancel reservation?'))) {
+            return;
+        }
+      cancelReservationAction(reservationId);
+    };
+  }
 
 
   function createViewReviewDiv(reviewResponse) {
@@ -986,6 +999,54 @@ var drawModule =  (function () {
     }
   }
 
+function createReservationsTable(reservationsResponse) {
+    reservationsResponse = JSON.parse(reservationsResponse);
+
+    //clean previous table content
+    var myNode = document.getElementById('reservationsTableBody');
+    myNode.innerHTML = '';
+
+
+    if (reservationsResponse.length < 1) {
+      var error = document.createElement('TR');
+      error.textContent = 'No reservations are available';
+      document.getElementById('reservationsTableBody').appendChild(error);
+      return;
+    }
+
+    //add entries
+    reservationsResponse.forEach(createReservationsTableEntry);
+  }
+
+  function createReservationsTableEntry(reservation) {
+    var row = document.createElement('TR');
+
+    var name = document.createElement('TD');
+    name.textContent = reservation.reservationFor.name;
+    row.appendChild(name);
+
+    var time = document.createElement('TD');
+    time.textContent = utils.fixBookingTime(reservation.startTime);
+    row.appendChild(time);
+
+    var diners = document.createElement('TD');
+    diners.textContent = reservation.partySize;
+    row.appendChild(diners);
+
+    var cancel = document.createElement('TD');
+
+    var cancelLink = document.createElement('A');
+    cancelLink.textContent = 'Cancel reservation';
+    cancelLink.onclick =
+      createCancelReservationLink(reservation.reservationId);
+    cancel.appendChild(cancelLink);
+    row.appendChild(cancel);
+
+    document.getElementById('reservationsTableBody').appendChild(row);
+  }
+
+
+
   /* aux function that opens the PopUp windows */
   function openPopUpWindow() {
     $('#popWindow').modal('show');
@@ -1003,6 +1064,7 @@ var drawModule =  (function () {
     createReviewsDiv: createReviewsDiv,
     createReservationsDiv: createReservationsDiv,
     createReviewsTable: createReviewsTable,
+    createReservationsTable: createReservationsTable,
     createReviewForm: createReviewForm,
     createViewReviewDiv:createViewReviewDiv,
     setViewReservationAction: setViewReservationAction,
@@ -1013,6 +1075,8 @@ var drawModule =  (function () {
     setViewReviewAction: setViewReviewAction,
     setShowEditReviewAction: setShowEditReviewAction,
     setUpdateReviewAction: setUpdateReviewAction,
+    setCancelReservationAction: setCancelReservationAction,
+    setDeleteReviewAction: setDeleteReviewAction,
     inicializeReviewForm: inicializeReviewForm,
     openPopUpWindow: openPopUpWindow,
     closePopUpWindow: closePopUpWindow

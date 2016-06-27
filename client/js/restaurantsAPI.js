@@ -370,77 +370,26 @@ var restaurantsAPI = (function() {
   
 
 
-  function getUserReservations(username) {
+  function getUserReservations(username, cb, err_cb) {
     var URL = baseURL + 'reservations/user/' + username;
     AJAXRequest.get(URL,
-      createReservationsTable,
-      function() {alert('cannot get your reservations');});
-  }
-
-  function createCancelReservationLink(reservationId) {
-    return function() {
-      cancelReservation(reservationId);
-    };
-  }
-
-  function createReservationsTable(reservationsResponse) {
-    reservationsResponse = JSON.parse(reservationsResponse);
-
-    //clean previous table content
-    var myNode = document.getElementById('reservationsTableBody');
-    myNode.innerHTML = '';
-
-
-    if (reservationsResponse.length < 1) {
-      var error = document.createElement('TR');
-      error.textContent = 'No reservations are available';
-      document.getElementById('reservationsTableBody').appendChild(error);
-      return;
-    }
-
-    //add entries
-    reservationsResponse.forEach(createReservationsTableEntry);
-  }
-
-  function createReservationsTableEntry(reservation) {
-    var row = document.createElement('TR');
-
-    var name = document.createElement('TD');
-    name.textContent = reservation.reservationFor.name;
-    row.appendChild(name);
-
-    var time = document.createElement('TD');
-    time.textContent = fixBookingTime(reservation.startTime);
-    row.appendChild(time);
-
-    var diners = document.createElement('TD');
-    diners.textContent = reservation.partySize;
-    row.appendChild(diners);
-
-    var cancel = document.createElement('TD');
-
-    var cancelLink = document.createElement('A');
-    cancelLink.textContent = 'Cancel reservation';
-    cancelLink.onclick =
-      createCancelReservationLink(reservation.reservationId);
-    cancel.appendChild(cancelLink);
-    row.appendChild(cancel);
-
-    document.getElementById('reservationsTableBody').appendChild(row);
+      cb,
+      err_cb);
   }
 
 
 
-  function cancelReservation(reservationId) {
+
+  function cancelReservation(reservationId, cb, err_cb) {
+   
+   /*
     if (!(window.confirm('Delete reservation?'))) {
       return;
     }
+  */
+    var URL = baseURL + 'reservation/' + reservationId;
 
-    AJAXRequest.del(baseURL + 'reservation/' + reservationId,
-        function() {location.reload();},
-        function(err) {
-          alert('Could not delete the reservation.'); console.log(err);
-        });
+    AJAXRequest.del(URL, cb, err_cb);
   }
 
 
@@ -474,7 +423,7 @@ var restaurantsAPI = (function() {
   }
 */
 
-  function deleteReview(reviewId) {
+  function deleteReview(reviewId, cb, err_cb) {
     //TODO move to drawModule
     /*if (!(window.confirm('Delete review?'))) {
       return;
@@ -568,6 +517,7 @@ var restaurantsAPI = (function() {
     createNewReservation: createNewReservation,
     updateReview: updateReview,
     deleteReview: deleteReview,
+    cancelReservation: cancelReservation,
     simplifyRestaurantsFormat: simplifyRestaurantsFormat,
     setMap: setMap
   };
