@@ -34,9 +34,19 @@ var restaurantsAPI = (function() {
     AJAXRequest.get(URL, cb, err_cb);
   }
 
+  function getOrganizationReviews(name, cb, err_cb) {
+    var URL = baseURL + 'reviews/organization/' + name;
+    AJAXRequest.get(URL, cb, err_cb);
+  }
+
 
   function getRestaurantReservations(name, cb, err_cb) {
     var URL = baseURL + 'reservations/restaurant/' + name;
+    AJAXRequest.get(URL, cb, err_cb);
+  }
+
+  function getOrganizationReservations(name, cb, err_cb) {
+    var URL = baseURL + 'reservations/organization/' + name;
     AJAXRequest.get(URL, cb, err_cb);
   }
 
@@ -332,6 +342,8 @@ var restaurantsAPI = (function() {
     getUserReservations: getUserReservations,
     getUserReviews: getUserReviews,
     getOrganizationRestaurants: getOrganizationRestaurants,
+    getOrganizationReservations: getOrganizationReservations,
+    getOrganizationReviews: getOrganizationReviews,
     getRestaurantReviews: getRestaurantReviews,
     getRestaurantReservations: getRestaurantReservations,
     getRestaurantReservationsByDate: getRestaurantReservationsByDate,
