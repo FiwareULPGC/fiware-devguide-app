@@ -515,4 +515,110 @@ describe('Testing drawModule', function () {
 
     })
    
+
+ it('Test create reviews table', function() {
+
+    var doc = jsdom("<html><head></head>"+
+          "<body>"+
+            "<div class='container-fluid'>"+
+            "<table>" +
+              "<tbody id ='reviewsTableBody'></tbody>" +
+            "</div>"+
+            "</body></html>", {});
+      
+      global.window = doc.defaultView;
+      global.document = window.document;
+      global.navigator = {
+            userAgent: 'nodejs'
+          }
+
+
+    var expectedEle = document.createElement('TBODY');
+
+    var tr1 = document.createElement('TR');
+
+    var res1 = document.createElement('TD');
+    res1.className = 'col-xs-4';
+    res1.textContent = 'Armentegi';
+
+    var rat1 = document.createElement('TD');
+    rat1.className = 'col-xs-2';
+    rat1.textContent = '4';
+
+    var viewTd1 = document.createElement('TD');
+    viewTd1.className = 'col-xs-2';
+
+    var viewLink1 = document.createElement('A');
+    viewLink1.textContent = 'View review'
+    viewTd1.appendChild(viewLink1);
+    
+    var editTd1 = document.createElement('TD');
+    editTd1.className = 'col-xs-2';
+
+    var editLink1 = document.createElement('A');
+    editLink1.textContent = 'Edit review';
+    editTd1.appendChild(editLink1);   
+    
+    var deleteTd1 = document.createElement('TD');
+    deleteTd1.className = 'col-xs-2';
+
+    var deleteLink1 = document.createElement('A');
+    deleteLink1.textContent = 'Delete review';
+    deleteTd1.appendChild(deleteLink1);
+
+    tr1.appendChild(res1);
+    tr1.appendChild(rat1);
+    tr1.appendChild(viewTd1);
+    tr1.appendChild(editTd1);
+    tr1.appendChild(deleteTd1);
+
+    expectedEle.appendChild(tr1);
+
+
+    var tr2 = document.createElement('TR');
+
+    var res2 = document.createElement('TD');
+    res2.className = 'col-xs-4';
+    res2.textContent = 'Biltoki';
+
+    var rat2 = document.createElement('TD');
+    rat2.className = 'col-xs-2';
+    rat2.textContent = '5';
+
+    var viewTd2 = document.createElement('TD');
+    viewTd2.className = 'col-xs-2';
+
+    var viewLink2 = document.createElement('A');
+    viewLink2.textContent = 'View review'
+    viewTd2.appendChild(viewLink2);
+    
+    var editTd2 = document.createElement('TD');
+    editTd2.className = 'col-xs-2';
+
+    var editLink2 = document.createElement('A');
+    editLink2.textContent = 'Edit review';
+    editTd2.appendChild(editLink2);   
+    
+    var deleteTd2 = document.createElement('TD');
+    deleteTd2.className = 'col-xs-2';
+
+    var deleteLink2 = document.createElement('A');
+    deleteLink2.textContent = 'Delete review';
+    deleteTd2.appendChild(deleteLink2);
+
+    tr2.appendChild(res2);
+    tr2.appendChild(rat2);
+    tr2.appendChild(viewTd2);
+    tr2.appendChild(editTd2);
+    tr2.appendChild(deleteTd2);
+
+    expectedEle.appendChild(tr2);
+
+
+
+    var reviewsResponse = JSON.stringify(reviewsJSON);
+    drawModule.createReviewsTable(reviewsResponse);
+    expect(document.getElementById('reviewsTableBody').innerHTML).to.be.deep.equal(expectedEle.innerHTML);
+ })
+
 })
