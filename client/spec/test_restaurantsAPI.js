@@ -228,6 +228,45 @@ describe('Testing restaurantsAPI', function () {
     this.xhr.restore();
   });
 
+    it('Get all restaurants', function(done) {
+      
+      var dataJson = JSON.stringify(restaurantsJSON);
+
+      restaurantsAPI.getAllRestaurants(function(result){
+          assert(true, 'Success function called');
+          JSON.parse(result).should.deep.equal(restaurantsJSON);
+          done();
+        }, 
+        function(){
+          assert(false, 'Error function called');
+          done();
+        });
+        this.requests[0].url.should.equal(
+            'http://tourguide/api/orion/restaurants/');
+        this.requests[0].method.should.equal( 'GET');
+        this.requests[0].respond(200, { 'Content-Type': 'text/json' }, dataJson);
+    });
+
+    it('Get restaurants by organization', function(done) {
+      
+      var organizationName = 'organization1';
+      var dataJson = JSON.stringify(restaurantsJSON);
+
+      restaurantsAPI.getOrganizationRestaurants(organizationName,function(result){
+          assert(true, 'Success function called');
+          JSON.parse(result).should.deep.equal(restaurantsJSON);
+          done();
+        }, 
+        function(){
+          assert(false, 'Error function called');
+          done();
+        });
+        this.requests[0].url.should.equal(
+            'http://tourguide/api/orion/restaurants/organization/'+organizationName);
+        this.requests[0].method.should.equal( 'GET');
+        this.requests[0].respond(200, { 'Content-Type': 'text/json' }, dataJson);
+    });
+
 
     it('Simplify restaurants format', function() {
         

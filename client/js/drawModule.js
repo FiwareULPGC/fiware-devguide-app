@@ -205,7 +205,7 @@ var drawModule = (function() {
 
       var ratingLabel = document.createElement('SPAN');
       ratingLabel.className = 'ratingLabel';
-      ratingLabel.textContent = 'Rating :';
+      ratingLabel.textContent = 'Rating: ';
 
       var ratingValue = document.createElement('SPAN');
       ratingValue.className = 'ratingValue';
@@ -257,6 +257,7 @@ var drawModule = (function() {
     }
 
     //return reviews div
+
     return reviewList;
   }
 
@@ -283,17 +284,17 @@ var drawModule = (function() {
 
     var underNameHead = document.createElement('TH');
     underNameHead.className = 'col-xs-6';
-    underNameHead.textContent = 'Reserved by: ';
+    underNameHead.textContent = 'Reserved by:';
     row.appendChild(underNameHead);
 
     var timeHead = document.createElement('TH');
     timeHead.className = 'col-xs-4';
-    timeHead.textContent = 'Resrevation time: ';
+    timeHead.textContent = 'Reservation time:';
     row.appendChild(timeHead);
 
     var dinersHead = document.createElement('TH');
     dinersHead.className = 'col-xs-2';
-    dinersHead.textContent = 'Diners: ';
+    dinersHead.textContent = 'Diners:';
     row.appendChild(dinersHead);
 
     tableHead.appendChild(row);
@@ -305,18 +306,18 @@ var drawModule = (function() {
       row = document.createElement('TR'); //defined previously
 
       var underName = document.createElement('TD');
-      underName.classList.add('class', 'col-xs-6');
+      underName.classList.add('col-xs-6');
       underName.textContent = reservationsResponse[j].underName.name;
       row.appendChild(underName);
 
       var time = document.createElement('TD');
-      time.classList.add('class', 'col-xs-4');
+      time.classList.add('col-xs-4');
       time.textContent =
-      utils.fixBookingTime(reservationsResponse[j].startTime);
+        utils.fixBookingTime(reservationsResponse[j].startTime);
       row.appendChild(time);
 
       var diners = document.createElement('TD');
-      diners.classList.add('class', 'col-xs-2');
+      diners.classList.add('col-xs-2');
       diners.textContent = reservationsResponse[j].partySize;
       row.appendChild(diners);
 
@@ -1021,3 +1022,37 @@ var drawModule = (function() {
     closePopUpWindow: closePopUpWindow
   };
 })();
+
+
+
+if (typeof exports !== 'undefined') {
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = drawModule;
+    connectionsAPI = require('./connectionsAPI.js');
+    utils = require('./utils.js');
+
+    /* jshint ignore:start */
+    //var jsdom = require('jsdom').jsdom;
+
+
+    //allows to load leaflet
+    /*GLOBAL.window = {};
+    GLOBAL.document = {
+      documentElement: {
+        style: {}
+      },
+      getElementsByTagName: function() { return []; },
+      createElement: function() { return {}; },
+      getElementById: function() { return []; }
+    };*/
+
+
+    /*GLOBAL.L = require('../addons/leaflet/leaflet.js');
+    require(
+      '../addons/leaflet/leaflet.markercluster.js');
+    */
+    /* jshint ignore:end */
+
+     GLOBAL.localStorage = require('localStorage');
+  }
+}

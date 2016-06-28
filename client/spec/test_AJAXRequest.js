@@ -55,12 +55,12 @@ describe('Testing AJAXRequest', function () {
             done();
         },
         function(error) {
-          console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAA');
+          
            assert(true, 'Fail function called');
            done();
         });
 
-        this.requests[0].respond(500);
+        this.requests[0].respond(404,{},"" );
     });
     */
 
