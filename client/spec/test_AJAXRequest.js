@@ -97,7 +97,7 @@ describe('Testing AJAXRequest', function () {
     });
 
 
-    it('PATcH. Should send given data as JSON body', function() {
+    it('PATCH. Should send given data as JSON body', function() {
       var data = { hello: 'world' };
       var dataJson = JSON.stringify(data);
 
