@@ -10,15 +10,14 @@
 
 */
 var connectionsAPI;
-//var restaurantsAPI;
 var utils;
 var clientLogic;
 //initialization
 var initReviews = function() {
+
+  clientLogic.setUpDrawModule();
+
   //only gets reviews if the user is logged
-
-    clientLogic.setUpDrawModule();
-
   connectionsAPI.loginNeeded(function() {
     clientLogic.getMyReviews();
   });

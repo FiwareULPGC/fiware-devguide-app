@@ -21,8 +21,6 @@ var initReservations = function() {
   clientLogic.setUpDrawModule();
   //only gets reservations if the user is logged
   connectionsAPI.loginNeeded(function() {
-    //var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    //clientLogic.showReservationsByUser(userInfo.displayName);
     clientLogic.getMyReservations();
   });
 

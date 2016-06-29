@@ -302,29 +302,5 @@ if (typeof exports !== 'undefined') {
     module.exports = restaurantsAPI;
     AJAXRequest = require('./AJAXRequest.js');
     connectionsAPI = require('./connectionsAPI.js');
-
-    /* jshint ignore:start */
-    //var jsdom = require('jsdom').jsdom;
-
-
-    //allows to load leaflet
-    /*GLOBAL.window = {};
-    GLOBAL.document = {
-      documentElement: {
-        style: {}
-      },
-      getElementsByTagName: function() { return []; },
-      createElement: function() { return {}; },
-      getElementById: function() { return []; }
-    };*/
-
-
-    /*GLOBAL.L = require('../addons/leaflet/leaflet.js');
-    require(
-      '../addons/leaflet/leaflet.markercluster.js');
-    */
-    /* jshint ignore:end */
-
-     GLOBAL.localStorage = require('localStorage');
   }
 }

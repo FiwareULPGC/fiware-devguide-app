@@ -13,7 +13,6 @@
 /*exported drawModule */
 var map; //map instance
 var connectionsAPI;
-//var AJAXRequest;
 var utils;
 var drawModule = (function() {
 
@@ -35,7 +34,6 @@ var drawModule = (function() {
   var createNewReservationAction = function() {};
   var getReservationsByDateAction = function() {};
   var viewReviewAction = function() {};
-  //var editReviewAction = function() {};
   var deleteReviewAction = function() {};
   var showEditReviewAction = function() {};
   var updateReviewAction = function() {};
@@ -62,10 +60,6 @@ var drawModule = (function() {
     viewReviewAction = action;
   }
 
-  /*function setEditReviewAction(action) {
-    editReviewAction = action;
-  }
-*/
   function setDeleteReviewAction(action) {
     deleteReviewAction = action;
   }
@@ -362,14 +356,7 @@ var drawModule = (function() {
     var reviewForm = document.createElement('FORM');
     reviewForm.name = 'editReviewForm';
     reviewForm.className = 'editReviewForm';
-  //if (updateResponse) {
-  //
-  //    if (updateResponse.length != 1) {
-  //      window.alert('Error: more than one review received.');
-  //    }
-//
-  //    review = updateResponse[0];
-  //}
+
     reviewForm.onsubmit = function() {
       var ratingValue =
         parseInt(document.forms.editReviewForm.ratingValue.value);
@@ -860,27 +847,7 @@ var drawModule = (function() {
 
     view.appendChild(viewLink);
     row.appendChild(view);
-    /*
-    var edit = document.createElement('TD');
-    edit.className = 'col-xs-2';
 
-    var editLink = document.createElement('A');
-    editLink.textContent = 'Edit review';
-    editLink.onclick = createEditReviewLink(review.name);
-
-    edit.appendChild(editLink);
-    row.appendChild(edit);
-
-    var del = document.createElement('TD');
-    del.className = 'col-xs-2';
-
-    var delLink = document.createElement('A');
-    delLink.textContent = 'Delete review';
-    delLink.onclick = createDelReviewLink(review.name);
-
-    del.appendChild(delLink);
-    row.appendChild(del);
-    */
     document.getElementById('reviewsTableBody').appendChild(row);
   }
 
@@ -1089,29 +1056,6 @@ if (typeof exports !== 'undefined') {
     module.exports = drawModule;
     connectionsAPI = require('./connectionsAPI.js');
     utils = require('./utils.js');
-
-    /* jshint ignore:start */
-    //var jsdom = require('jsdom').jsdom;
-
-
-    //allows to load leaflet
-    /*GLOBAL.window = {};
-    GLOBAL.document = {
-      documentElement: {
-        style: {}
-      },
-      getElementsByTagName: function() { return []; },
-      createElement: function() { return {}; },
-      getElementById: function() { return []; }
-    };*/
-
-
-    /*GLOBAL.L = require('../addons/leaflet/leaflet.js');
-    require(
-      '../addons/leaflet/leaflet.markercluster.js');
-    */
-    /* jshint ignore:end */
-
-     GLOBAL.localStorage = require('localStorage');
+    GLOBAL.localStorage = require('localStorage');
   }
 }

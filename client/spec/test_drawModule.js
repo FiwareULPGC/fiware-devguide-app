@@ -441,7 +441,7 @@ describe('Testing drawModule', function () {
       expect(testDiv.innerHTML).to.be.deep.equal(expectedDiv.innerHTML);
     })
 
-    it('test create reservations table', function() {
+    it('Test create reservations table', function() {
 
      var doc = jsdom("<html><head></head>"+
           "<body>"+

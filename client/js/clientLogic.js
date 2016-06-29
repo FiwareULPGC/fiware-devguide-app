@@ -134,7 +134,7 @@ var clientLogic = (function() {
         alert('Cannot get user reservations for: ' + username);
         console.log(error);
       });
-  }  
+  }
 
 
   function showReservationsByOrganization(organization) {

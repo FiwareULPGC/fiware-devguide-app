@@ -10,7 +10,6 @@
 
 */
 var map;
-var connectionsAPI;
 var utils;
 var clientLogic;
 
@@ -20,10 +19,6 @@ var initIndex = function() {
   $('#popWindow').modal();
   map = L.map('map').setView([42.90816007196054, -2.52960205078125], 8);
 
-  //only gets restaurants if the user is logged
-  connectionsAPI.loginNeeded(function() {
-    //restaurantsAPI.getAllRestaurants();
-  });
   //set tile layer
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
     attribution:

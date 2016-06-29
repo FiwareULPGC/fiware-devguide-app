@@ -31,7 +31,7 @@ describe('Testing utils module', function () {
     })
 
 
-    it('test alert-danger message', function() {
+    it('Test alert-danger message', function() {
       var message = 'test 1';
       utils.showMessage(message, 'alert-danger');
 
@@ -44,7 +44,7 @@ describe('Testing utils module', function () {
 
     })
 
-    it('test alert-warning message', function() {
+    it('Test alert-warning message', function() {
       var message = 'test 2';
       utils.showMessage(message, 'alert-warning');
 
@@ -56,7 +56,7 @@ describe('Testing utils module', function () {
 
     })
 
-    it('test default message', function() {
+    it('Test default message', function() {
       var message = 'test 3';
       utils.showMessage(message);
 
