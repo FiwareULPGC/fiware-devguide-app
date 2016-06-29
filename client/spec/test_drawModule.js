@@ -621,4 +621,144 @@ describe('Testing drawModule', function () {
     expect(document.getElementById('reviewsTableBody').innerHTML).to.be.deep.equal(expectedEle.innerHTML);
  })
 
+
+  it('Create review form (new)', function() {
+
+     var doc = jsdom("<html><head></head>"+
+          "<body>"+
+            "<div class='container-fluid'>"+
+            "</div>"+
+            "</body></html>", {});
+      
+      global.window = doc.defaultView;
+      global.document = window.document;
+      global.navigator = {
+            userAgent: 'nodejs'
+          }
+
+
+      var expectedForm = document.createElement('DIV');
+      expectedForm.className = 'editReviewForm';
+      expectedForm.name = 'editReviewForm';
+
+      var iniLab = document.createElement('LABEL');
+      iniLab.textContent = 'Your review: ';
+      expectedForm.appendChild(iniLab);
+
+      expectedForm.appendChild(document.createElement('BR'));
+
+      var textArea = document.createElement('TEXTAREA');
+      textArea.name = 'reviewBody';
+      expectedForm.appendChild(textArea);
+
+      expectedForm.appendChild(document.createElement('BR'));
+
+      var ratLab = document.createElement('LABEL');
+      ratLab.textContent = 'Rating value: ';
+      expectedForm.appendChild(ratLab);
+
+      var select = document.createElement('SELECT');
+      select.name = 'ratingValue';
+
+      for (var i = 0 ; i <=5; i++) {
+        var option = document.createElement('OPTION');
+        option.value = i;
+        option.textContent = i + ' Star' + (1 != i ? 's' : '');
+        select.appendChild(option);
+      };
+
+      expectedForm.appendChild(select);
+
+      var input = document.createElement('INPUT');
+      input.type = 'submit';
+      input.value = 'Create Review';
+      input.name = 'submitReview';
+
+      expectedForm.appendChild(input);
+
+
+      //var reviewsResponse = JSON.stringify(reviewsJSON)
+      var testForm = drawModule.createReviewForm('Restaurant1');
+
+      expect(testForm.innerHTML).to.be.deep.equal(expectedForm.innerHTML);
+
+  })
+
+
+  it('Create review form (update)', function() {
+
+     var doc = jsdom("<html><head></head>"+
+          "<body>"+
+            "<div class='container-fluid'>"+
+            "</div>"+
+            "</body></html>", {});
+      
+      global.window = doc.defaultView;
+      global.document = window.document;
+      global.navigator = {
+            userAgent: 'nodejs'
+          }
+
+      var singleReviewJSON = reviewsJSON[0];
+      var singleReview = JSON.stringify(singleReview);
+
+      var expectedForm = document.createElement('DIV');
+      expectedForm.className = 'editReviewForm';
+      expectedForm.name = 'editReviewForm';
+
+      var iniLab = document.createElement('LABEL');
+      iniLab.textContent = 'Your review: ';
+      expectedForm.appendChild(iniLab);
+
+      expectedForm.appendChild(document.createElement('BR'));
+
+      var textArea = document.createElement('TEXTAREA');
+      textArea.name = 'reviewBody';
+      textArea.value = singleReviewJSON.reviewBody;
+
+      expectedForm.appendChild(textArea);
+
+      expectedForm.appendChild(document.createElement('BR'));
+
+      var ratLab = document.createElement('LABEL');
+      ratLab.textContent = 'Rating value: ';
+      expectedForm.appendChild(ratLab);
+
+      var select = document.createElement('SELECT');
+      select.name = 'ratingValue';
+
+      for (var i = 0 ; i <=5; i++) {
+        var option = document.createElement('OPTION');
+        option.value = i;
+        option.textContent = i + ' Star' + (1 != i ? 's' : '');
+        select.appendChild(option);
+      };
+
+      expectedForm.appendChild(select);
+
+      var input = document.createElement('INPUT');
+      input.type = 'submit';
+      input.value = 'Create Review';
+      input.name = 'submitReview';
+
+      expectedForm.appendChild(input);
+
+      var testForm = drawModule.createReviewForm('Restaurant1', singleReview);
+
+      expect(testForm.innerHTML).to.be.deep.equal(expectedForm.innerHTML);
+
+      document.getElementsByClassName('container-fluid')[0].appendChild(testForm);
+
+      //hack because it fails in JSDOM
+      document.forms.namedItem = function (name) {
+        return document.forms[0];
+      }
+
+      drawModule.inicializeReviewForm(singleReviewJSON);
+      expect(document.getElementsByName('reviewBody')[0].value).to.be.equal(singleReviewJSON.reviewBody);
+      expect(document.getElementsByName('ratingValue')[0].value).to.be.equal(singleReviewJSON.reviewRating.ratingValue+'');
+
+
+  })
+
 })

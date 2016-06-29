@@ -434,7 +434,7 @@ var drawModule = (function() {
     reviewForm.children.reviewBody.textContent =
       review.reviewBody;
 
-    reviewForm.submitReview.value = 'Update review';
+    reviewForm.children.submitReview.value = 'Update review';
   }
 
 
