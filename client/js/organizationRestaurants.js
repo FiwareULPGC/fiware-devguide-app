@@ -1,6 +1,6 @@
 'use strict';
 /*
- * myRestaurants.js
+ * organizationRestaurants.js
  * Copyright(c) 2016 Universidad de Las Palmas de Gran Canaria
  * Authors:
  *   Jaisiel Santana <jaisiel@gmail.com>
@@ -20,7 +20,7 @@ var initIndex = function() {
 
   //get franchise from url
   var franchise = window.location.search.replace('?', '');
-  var prefix = 'franchise=';
+  var prefix = 'organization=';
   if (franchise.slice(0, prefix.length) == prefix) {
     clientLogic.showOrganizationRestaurants(
       franchise.slice(prefix.length));

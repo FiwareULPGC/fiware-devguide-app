@@ -94,8 +94,8 @@ var connectionsAPI = (function() {
     if (hasRole(userInfo, rol.restaurantViewer) ||
         hasRole(userInfo, rol.globalManager) || true) {//hacked
 
-      //we should ask before for each organization but the user hasn't yet
-      if (userInfo.organizations.length > 0) {
+      var organizations = userInfo.organizations;
+      if (organizations.length > 0) {
         var myOrganizationsLi = document.createElement('LI');
         myOrganizationsLi.className = 'dropdown';
 
@@ -119,7 +119,11 @@ var connectionsAPI = (function() {
                                       'myOrganizationsButtonLink');
         organizationsMenu.setAttribute('role', 'menu');
 
-        for (var index = 0; index < userInfo.organizations.length; index++) {
+        for (var index = 0; index < organizations.length; index++) {
+          if (! (is_organization_manager(organizations[index]) ||
+            hasRole(userInfo, rol.globalManager))) {
+            continue;
+          }
           var organizationLi = document.createElement('LI');
           organizationLi.className = 'dropdown-submenu';
           //organizationLi.setAttribute('role', 'presentation');
@@ -139,18 +143,44 @@ var connectionsAPI = (function() {
           var organizationSubMenu = document.createElement('UL');
           organizationSubMenu.className = 'dropdown-menu';
 
+          //restaurants submenu
           var restaurantLi = document.createElement('LI');
-
           var restaurantA = document.createElement('A');
           restaurantA.tabIndex = -1;
           restaurantA.href =
             'organizationRestaurants.html?organization=' +
-            userInfo.organizations[index]['name'];
+            userInfo.organizations[index].name;
           restaurantA.textContent = 'Restaurants';
 
           restaurantLi.appendChild(restaurantA);
           //organizationLi.appendChild(restaurantLi);
           organizationSubMenu.appendChild(restaurantLi);
+
+          //reviews submenu
+          var reviewLi = document.createElement('LI');
+          var reviewA = document.createElement('A');
+          reviewA.tabIndex = -1;
+          reviewA.href =
+            'organizationReviews.html?organization=' +
+            userInfo.organizations[index].name;
+          reviewA.textContent = 'Reviews';
+
+          reviewLi.appendChild(reviewA);
+          //organizationLi.appendChild(reviewLi);
+          organizationSubMenu.appendChild(reviewLi);
+
+          //reservations submenu
+          var reservationsLi = document.createElement('LI');
+          var reservationsA = document.createElement('A');
+          reservationsA.tabIndex = -1;
+          reservationsA.href =
+            'organizationReservationss.html?organization=' +
+            userInfo.organizations[index].name;
+          reservationsA.textContent = 'Reservationss';
+
+          reservationsLi.appendChild(reservationsA);
+          //organizationLi.appendChild(reservationsLi);
+          organizationSubMenu.appendChild(reservationsLi);
 
           organizationLi.appendChild(organizationSubMenu);
           organizationsMenu.appendChild(organizationLi);
@@ -246,6 +276,19 @@ var connectionsAPI = (function() {
   //should be called once logged
   function getUser() {
     return JSON.parse(localStorage.getItem('userInfo'));
+  }
+
+  function is_organization_manager(organization) {
+    if (organization.roles) {
+      for (var i = organization.roles.length - 1; i >= 0; i--) {
+       if (rol.franchiseManager == organization.roles[i].name ||
+        rol.globalManager == organization.roles[i].name) {
+
+          return true;
+       }
+      }
+    }
+    return false;
   }
 
   return {
