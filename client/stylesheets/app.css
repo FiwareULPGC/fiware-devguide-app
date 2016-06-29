@@ -259,15 +259,18 @@
 
 .alert {
   position:relative;
-  z-index:50;
-  margin-top: 50px;
-  margin-right: 10px;
+  z-index:5000;
+  margin-bottom: 5px;
+  margin-right: 20px;
   margin-left: 50px;
+  opacity: 0.9 !important;
+}
+.alert:first-of-type {
+  margin-top: 50px;
 }
 
 
 /* dropdown submenu */
-
 
 .dropdown-submenu {
     position: relative;

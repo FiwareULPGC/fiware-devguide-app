@@ -8,6 +8,8 @@
  *   Pablo Fernández <pablo.fernandez@ulpgc.es>
  * MIT Licensed
 
+  Module that allows to encapsulate the tourguide AJAX resquests.
+
 */
 /*exported AJAXRequest */
 var AJAXRequest = (function() {

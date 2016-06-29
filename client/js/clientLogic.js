@@ -8,6 +8,9 @@
  *   Pablo Fernández <pablo.fernandez@ulpgc.es>
  * MIT Licensed
 
+  This module specifies the client application behaviour.
+  It connects restaurantsAPI with drawModule.
+
 */
 
 /*exported clientLogic */
@@ -240,6 +243,8 @@ var clientLogic = (function() {
   }
 
 
+  /* This function sets the method to be used for the differents
+  operations performed from the graphic interface */
   function setUpDrawModule() {
     drawModule.setViewRestaurantReviewsAction(showRestaurantReviews);
     drawModule.setViewReservationAction(showRestaurantReservations);
@@ -253,9 +258,6 @@ var clientLogic = (function() {
     drawModule.setDeleteReviewAction(deleteReview);
     drawModule.setCancelReservationAction(cancelReservation);
   }
-
-
-
 
 
   return {

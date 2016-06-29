@@ -8,6 +8,8 @@
  *   Pablo Fernández <pablo.fernandez@ulpgc.es>
  * MIT Licensed
 
+  This module contains a set of util to be used from another modules.
+
 */
 /*exported utils*/
 var utils = (function() {

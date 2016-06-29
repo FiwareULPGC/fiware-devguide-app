@@ -6,7 +6,6 @@ chai.should();
 
 describe('Testing AJAXRequest', function () {
   before(function() {
-    //global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
   })
 
@@ -29,20 +28,20 @@ describe('Testing AJAXRequest', function () {
 
 
     it('GET. Should execute success function', function(done) {
-        var data = { foo: 'bar' };
-        var dataJson = JSON.stringify(data);
+      var data = { foo: 'bar' };
+      var dataJson = JSON.stringify(data);
 
-        AJAXRequest.get('http://example.com',function(result) {
-            assert(true, 'Success function called');
-            done();
-        },
+      AJAXRequest.get('http://example.com',function(result) {
+        assert(true, 'Success function called');
+        done();
+      },
 
-        function(fail){
-           assert(false, 'Unexpected response');
-           done();
-        });
+      function(fail){
+        assert(false, 'Unexpected response');
+        done();
+      });
 
-        this.requests[0].respond(200,{},"");
+      this.requests[0].respond(200,{},"");
     });
 
     /*
@@ -66,20 +65,20 @@ describe('Testing AJAXRequest', function () {
 
 
     it('GET. Should parse fetched data as JSON', function(done) {
-        var data = { foo: 'bar' };
-        var dataJson = JSON.stringify(data);
+      var data = { foo: 'bar' };
+      var dataJson = JSON.stringify(data);
 
-        AJAXRequest.get('http://example.com',function(result) {
-            JSON.parse(result).should.deep.equal(data);
-            done();
-        },
+      AJAXRequest.get('http://example.com',function(result) {
+        JSON.parse(result).should.deep.equal(data);
+        done();
+      },
 
-        function(fail){
-           assert(false, 'Unexpected response');
-           done();
-        });
+      function(fail){
+        assert(false, 'Unexpected response');
+        done();
+      });
 
-        this.requests[0].respond(200, { 'Content-Type': 'text/json' }, dataJson);
+      this.requests[0].respond(200, { 'Content-Type': 'text/json' }, dataJson);
     });
 
 
@@ -109,7 +108,6 @@ describe('Testing AJAXRequest', function () {
         }, data);
         this.requests[0].requestBody.should.equal(dataJson);
     });
-
 
 
 })

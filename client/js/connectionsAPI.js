@@ -8,6 +8,8 @@
  *   Pablo Fernández <pablo.fernandez@ulpgc.es>
  * MIT Licensed
 
+  Module that contains funcionalities related to user and log in.
+
 */
 
 /*exported connectionsAPI */
@@ -72,8 +74,6 @@ var connectionsAPI = (function() {
 
   function createAndShowMenu(userInfo) {
 
-    //TODO check roles
-
     var loggedMenu = document.createElement('UL');
     loggedMenu.id = 'loggedMenu';
     loggedMenu.classList.add('nav', 'navbar-nav', 'pull-left');
@@ -87,8 +87,6 @@ var connectionsAPI = (function() {
 
     home.appendChild(homeLink);
     loggedMenu.appendChild(home);
-
-    //check each menu element
 
     //view organizations restaurants
     if (hasRole(userInfo, rol.restaurantViewer) ||
@@ -126,14 +124,10 @@ var connectionsAPI = (function() {
           }
           var organizationLi = document.createElement('LI');
           organizationLi.className = 'dropdown-submenu';
-          //organizationLi.setAttribute('role', 'presentation');
 
           var organizationA = document.createElement('A');
-          //organizationA.setAttribute('role', 'menuitem');
           organizationA.tabIndex = -1;
-          /*organizationA.href =
-            'myRestaurants.html?franchise=' +
-            userInfo.organizations[index].name;*/
+
             organizationA.href = '#';
           organizationA.textContent = userInfo.organizations[index].name;
 
@@ -166,7 +160,6 @@ var connectionsAPI = (function() {
           reviewA.textContent = 'Reviews';
 
           reviewLi.appendChild(reviewA);
-          //organizationLi.appendChild(reviewLi);
           organizationSubMenu.appendChild(reviewLi);
 
           //reservations submenu
@@ -179,7 +172,6 @@ var connectionsAPI = (function() {
           reservationsA.textContent = 'Reservations';
 
           reservationsLi.appendChild(reservationsA);
-          //organizationLi.appendChild(reservationsLi);
           organizationSubMenu.appendChild(reservationsLi);
 
           organizationLi.appendChild(organizationSubMenu);
@@ -310,15 +302,12 @@ var initConnections = function() {
 };
 
 
-
 if (typeof exports !== 'undefined') {
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = connectionsAPI;
     utils = require('./utils.js');
   }
 }
-
-
 
 
 utils.addLoadEvent(initConnections);

@@ -8,6 +8,9 @@
  *   Pablo Fernández <pablo.fernandez@ulpgc.es>
  * MIT Licensed
 
+  Module that contains wraps to the tourguide application.
+  It also provides some functions to simplify the responses
+
 */
 
 /*exported restaurantsAPI */
@@ -202,8 +205,7 @@ var restaurantsAPI = (function() {
       }
     };
 
-    AJAXRequest.post(baseURL + 'review/',
-      cb, err_cb, data);
+    AJAXRequest.post(baseURL + 'review/', cb, err_cb, data);
   }
 
   function updateReview(reviewId, ratingValue, reviewBody, cb, err_cb) {
@@ -231,18 +233,14 @@ var restaurantsAPI = (function() {
       'startTime': reservationDatetime.toISOString()
     };
 
-
     AJAXRequest.post(baseURL + 'reservation/',
-      cb,
-      err_cb, data);
+      cb, err_cb, data);
   }
 
 
   function getUserReservations(username, cb, err_cb) {
     var URL = baseURL + 'reservations/user/' + username;
-    AJAXRequest.get(URL,
-      cb,
-      err_cb);
+    AJAXRequest.get(URL, cb, err_cb);
   }
 
 
@@ -251,7 +249,6 @@ var restaurantsAPI = (function() {
   function cancelReservation(reservationId, cb, err_cb) {
 
     var URL = baseURL + 'reservation/' + reservationId;
-
     AJAXRequest.del(URL, cb, err_cb);
   }
 
@@ -262,14 +259,11 @@ var restaurantsAPI = (function() {
 
   }
 
-
-
   function deleteReview(reviewId, cb, err_cb) {
 
     var url = baseURL + 'review/' + reviewId;
     AJAXRequest.del(url, cb, err_cb);
   }
-
 
   function setMap(newMap) {
     map = newMap;

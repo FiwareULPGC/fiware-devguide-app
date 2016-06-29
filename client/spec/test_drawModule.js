@@ -13,122 +13,107 @@ var time1 = "2015-11-05T06:25:56.577Z" ;
 var time2 = "2015-11-06T21:57:22.604Z";
 
 var reviewsJSON = [
-    {
-        "@context": "http://schema.org",
-        "@type": "Review",
-        "author":
-        {
-            "@type": "Person",
-            "name": "user1"
-        },
-        "dateCreated": "2016-06-08T11:43:54.008Z",
-        "itemReviewed":
-        {
-            "@type": "Restaurant",
-            "name": "Armentegi"
-        },
-        "name": "542e8baee4bbdc539487eb6d53636e99ad8e0126",
-        "publisher":
-        {
-            "@type": "Organization",
-            "name": "Bitergia"
-        },
-        "reviewBody": "Body review22225555",
-        "reviewRating":
-        {
-            "@type": "Rating",
-            "ratingValue": 4
-        }
+  {
+    "@context": "http://schema.org",
+    "@type": "Review",
+    "author":{
+      "@type": "Person",
+      "name": "user1"
     },
-    {
-        "@context": "http://schema.org",
-        "@type": "Review",
-        "author":
-        {
-            "@type": "Person",
-            "name": "user1"
-        },
-        "dateCreated": "2016-06-08T11:43:54.009Z",
-        "itemReviewed":
-        {
-            "@type": "Restaurant",
-            "name": "Biltoki"
-        },
-        "name": "66f0b52ab5be9e2d25cf72707e8b1ec0dad2eff1",
-        "publisher":
-        {
-            "@type": "Organization",
-            "name": "Bitergia"
-        },
-        "reviewBody": "Body review",
-        "reviewRating":
-        {
-            "@type": "Rating",
-            "ratingValue": 5
-        }
+    "dateCreated": "2016-06-08T11:43:54.008Z",
+    "itemReviewed":{
+      "@type": "Restaurant",
+      "name": "Armentegi"
+    },
+    "name": "542e8baee4bbdc539487eb6d53636e99ad8e0126",
+    "publisher":{
+      "@type": "Organization",
+      "name": "Bitergia"
+    },
+    "reviewBody": "Body review22225555",
+    "reviewRating":{
+      "@type": "Rating",
+      "ratingValue": 4
     }
+  },
+  {
+    "@context": "http://schema.org",
+    "@type": "Review",
+    "author":{
+      "@type": "Person",
+      "name": "user1"
+    },
+    "dateCreated": "2016-06-08T11:43:54.009Z",
+    "itemReviewed":{
+        "@type": "Restaurant",
+        "name": "Biltoki"
+    },
+    "name": "66f0b52ab5be9e2d25cf72707e8b1ec0dad2eff1",
+    "publisher":{
+      "@type": "Organization",
+      "name": "Bitergia"
+    },
+    "reviewBody": "Body review",
+    "reviewRating":{
+      "@type": "Rating",
+      "ratingValue": 5
+    }
+  }
 ];
 
 
 var reservationsJSON = [
-    {
-        "@context": "http://schema.org",
-        "@type": "FoodEstablishmentReservation",
-        "partySize": 19,
-        "reservationFor":
-        {
-            "@type": "FoodEstablishment",
-            "name": "Mitarte",
-            "address":
-            {
-                "@type": "PostalAddress",
-                "streetAddress": "De La Rioja Hiribidea 7",
-                "addressRegion": "Araba",
-                "addressLocality": "Labastida",
-                "postalCode": "01330"
-            }
-        },
-        "reservationId": "ec743b4c9b46578d48f62201187020397f88037c",
-        "reservationStatus": "Hold",
-        "startTime": time1,
-        "underName":
-        {
-            "@type": "Person",
-            "name": "user1"
-        }
-    },
-    {
-        "@context": "http://schema.org",
-        "@type": "FoodEstablishmentReservation",
-        "partySize": 8,
-        "reservationFor":
-        {
-            "@type": "FoodEstablishment",
-            "name": "El Medoc Alavés",
-            "address":
-            {
-                "@type": "PostalAddress",
-                "streetAddress": "San Raimundo Hiribidea 15",
-                "addressRegion": "Araba",
-                "addressLocality": "Guardia",
-                "postalCode": "01300"
-            }
-        },
-        "reservationId": "1212bc7fff8c7fb8bf3848f839e1dc810cf4911e",
-        "reservationStatus": "Pending",
-        "startTime": time2,
-        "underName":
-        {
-            "@type": "Person",
-            "name": "user1"
-        }
+  {
+    "@context": "http://schema.org",
+    "@type": "FoodEstablishmentReservation",
+    "partySize": 19,
+    "reservationFor":{
+    "@type": "FoodEstablishment",
+    "name": "Mitarte",
+    "address":{
+      "@type": "PostalAddress",
+      "streetAddress": "De La Rioja Hiribidea 7",
+      "addressRegion": "Araba",
+      "addressLocality": "Labastida",
+      "postalCode": "01330"
     }
+  },
+    "reservationId": "ec743b4c9b46578d48f62201187020397f88037c",
+    "reservationStatus": "Hold",
+    "startTime": time1,
+    "underName":{
+      "@type": "Person",
+      "name": "user1"
+    }
+  },
+  {
+    "@context": "http://schema.org",
+    "@type": "FoodEstablishmentReservation",
+    "partySize": 8,
+    "reservationFor":{
+      "@type": "FoodEstablishment",
+      "name": "El Medoc Alavés",
+      "address":{
+        "@type": "PostalAddress",
+        "streetAddress": "San Raimundo Hiribidea 15",
+        "addressRegion": "Araba",
+        "addressLocality": "Guardia",
+        "postalCode": "01300"
+      }
+    },
+    "reservationId": "1212bc7fff8c7fb8bf3848f839e1dc810cf4911e",
+    "reservationStatus": "Pending",
+    "startTime": time2,
+    "underName":{
+      "@type": "Person",
+      "name": "user1"
+    }
+  }
 ];
 
 
 describe('Testing drawModule', function () {
   before(function() {
-    //global.XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
   })
 
@@ -345,7 +330,6 @@ describe('Testing drawModule', function () {
 
       expect(testDiv.innerHTML).to.be.deep.equal(expectedDiv.innerHTML);
 
-
     })
 
 
@@ -388,7 +372,6 @@ describe('Testing drawModule', function () {
       headRow.appendChild(th3);
 
       thead.appendChild(headRow);
-
 
       var tbody = document.createElement('TBODY');
 
@@ -676,8 +659,6 @@ describe('Testing drawModule', function () {
 
       expectedForm.appendChild(input);
 
-
-      //var reviewsResponse = JSON.stringify(reviewsJSON)
       var testForm = drawModule.createReviewForm('Restaurant1');
 
       expect(testForm.innerHTML).to.be.deep.equal(expectedForm.innerHTML);
@@ -749,7 +730,7 @@ describe('Testing drawModule', function () {
 
       document.getElementsByClassName('container-fluid')[0].appendChild(testForm);
 
-      //hack because it fails in JSDOM
+      //hacked because it fails using JSDOM
       document.forms.namedItem = function (name) {
         return document.forms[0];
       }
@@ -761,10 +742,4 @@ describe('Testing drawModule', function () {
   })
 
 
-
-  it('Create reservation form', function () {
-
-    
-    
-  })
 })
