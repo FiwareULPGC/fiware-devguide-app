@@ -96,48 +96,69 @@ var connectionsAPI = (function() {
 
       //we should ask before for each organization but the user hasn't yet
       if (userInfo.organizations.length > 0) {
-        var myRestaurantsLi = document.createElement('LI');
-        myRestaurantsLi.className = 'dropdown';
+        var myOrganizationsLi = document.createElement('LI');
+        myOrganizationsLi.className = 'dropdown';
 
-        var myRestaurantsA = document.createElement('A');
-        myRestaurantsA.id = 'myRestaurantsButtonLink';
-        myRestaurantsA.className = 'dropdown-toggle';
-        myRestaurantsA.setAttribute('data-toggle', 'dropdown');
-        myRestaurantsA.setAttribute('role', 'button');
-        myRestaurantsA.href = '#';
-        myRestaurantsA.textContent = 'My restaurants';
+        var myOrganizationsA = document.createElement('A');
+        myOrganizationsA.id = 'myOrganizationsButtonLink';
+        myOrganizationsA.className = 'dropdown-toggle';
+        myOrganizationsA.setAttribute('data-toggle', 'dropdown');
+        myOrganizationsA.setAttribute('role', 'button');
+        myOrganizationsA.href = '#';
+        myOrganizationsA.textContent = 'My organizations';
 
         var caret = document.createElement('B');
         caret.className = 'caret';
 
-        myRestaurantsA.appendChild(caret);
-        myRestaurantsLi.appendChild(myRestaurantsA);
+        myOrganizationsA.appendChild(caret);
+        myOrganizationsLi.appendChild(myOrganizationsA);
 
         var organizationsMenu = document.createElement('UL');
-        organizationsMenu.className = 'dropdown-menu';
+        organizationsMenu.className = 'dropdown-menu multi-level';
         organizationsMenu.setAttribute('aria-labelledby',
-                                      'myRestaurantsButtonLink');
+                                      'myOrganizationsButtonLink');
         organizationsMenu.setAttribute('role', 'menu');
 
         for (var index = 0; index < userInfo.organizations.length; index++) {
           var organizationLi = document.createElement('LI');
-          organizationLi.setAttribute('role', 'presentation');
+          organizationLi.className = 'dropdown-submenu';
+          //organizationLi.setAttribute('role', 'presentation');
 
           var organizationA = document.createElement('A');
-          organizationA.setAttribute('role', 'menuitem');
+          //organizationA.setAttribute('role', 'menuitem');
           organizationA.tabIndex = -1;
-          organizationA.href =
+          /*organizationA.href =
             'myRestaurants.html?franchise=' +
-            userInfo.organizations[index].name;
+            userInfo.organizations[index].name;*/
+            organizationA.href = '#';
           organizationA.textContent = userInfo.organizations[index].name;
 
           organizationLi.appendChild(organizationA);
-          organizationsMenu.appendChild(organizationA);
+
+          //submenu
+          var organizationSubMenu = document.createElement('UL');
+          organizationSubMenu.className = 'dropdown-menu';
+
+          var restaurantLi = document.createElement('LI');
+
+          var restaurantA = document.createElement('A');
+          restaurantA.tabIndex = -1;
+          restaurantA.href =
+            'organizationRestaurants.html?organization=' +
+            userInfo.organizations[index]['name'];
+          restaurantA.textContent = 'Restaurants';
+
+          restaurantLi.appendChild(restaurantA);
+          //organizationLi.appendChild(restaurantLi);
+          organizationSubMenu.appendChild(restaurantLi);
+
+          organizationLi.appendChild(organizationSubMenu);
+          organizationsMenu.appendChild(organizationLi);
         }
 
-        myRestaurantsLi.appendChild(organizationsMenu);
+        myOrganizationsLi.appendChild(organizationsMenu);
 
-        loggedMenu.appendChild(myRestaurantsLi);
+        loggedMenu.appendChild(myOrganizationsLi);
       }
 
     }
