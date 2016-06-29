@@ -821,6 +821,69 @@ var drawModule = (function() {
     document.getElementById('reviewsTableBody').appendChild(row);
   }
 
+  function createOrganizationReviewsTable(reviewsResponse) {
+    reviewsResponse = JSON.parse(reviewsResponse);
+    //clean previous table content
+    var myNode = document.getElementById('reviewsTableBody');
+    myNode.innerHTML = '';
+
+    if (reviewsResponse.length < 1) {
+      var error = document.createElement('TR');
+      error.textContent = 'No reviews are available.';
+      document.getElementById('reviewsTableBody').appendChild(error);
+      return;
+    }
+
+    //add entries
+    reviewsResponse.forEach(createOrganizationReviewsTableEntry);
+  }
+
+  function createOrganizationReviewsTableEntry(review) {
+    var row = document.createElement('TR');
+    var name = document.createElement('TD');
+    name.textContent = review.itemReviewed.name;
+    name.className = 'col-xs-6';
+    row.appendChild(name);
+
+    var rating = document.createElement('TD');
+    rating.textContent = review.reviewRating.ratingValue;
+    rating.className = 'col-xs-3';
+    row.appendChild(rating);
+
+    var view = document.createElement('TD');
+    view.className = 'col-xs-3';
+
+
+    var viewLink = document.createElement('A');
+    viewLink.textContent = 'View review';
+    viewLink.onclick = createViewReviewLink(review.name);
+
+    view.appendChild(viewLink);
+    row.appendChild(view);
+    /*
+    var edit = document.createElement('TD');
+    edit.className = 'col-xs-2';
+
+    var editLink = document.createElement('A');
+    editLink.textContent = 'Edit review';
+    editLink.onclick = createEditReviewLink(review.name);
+
+    edit.appendChild(editLink);
+    row.appendChild(edit);
+
+    var del = document.createElement('TD');
+    del.className = 'col-xs-2';
+
+    var delLink = document.createElement('A');
+    delLink.textContent = 'Delete review';
+    delLink.onclick = createDelReviewLink(review.name);
+
+    del.appendChild(delLink);
+    row.appendChild(del);
+    */
+    document.getElementById('reviewsTableBody').appendChild(row);
+  }
+
 
   function createViewReviewLink(reviewId) {
     return function() {
@@ -999,6 +1062,7 @@ var drawModule = (function() {
     createReviewsDiv: createReviewsDiv,
     createReservationsDiv: createReservationsDiv,
     createReviewsTable: createReviewsTable,
+    createOrganizationReviewsTable: createOrganizationReviewsTable,
     createReservationsTable: createReservationsTable,
     createReviewForm: createReviewForm,
     createViewReviewDiv: createViewReviewDiv,

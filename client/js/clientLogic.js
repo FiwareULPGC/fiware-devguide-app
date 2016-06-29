@@ -106,6 +106,16 @@ var clientLogic = (function() {
         console.log(error);
       });
   }
+  function showReviewsByOrganization(organization) {
+    restaurantsAPI.getOrganizationReviews(organization,
+      function(reviewsResponse) {
+        drawModule.createOrganizationReviewsTable(reviewsResponse);
+      },
+      function(error) {
+        alert('Cannot get user reviews for: ' + organization);
+        console.log(error);
+      });
+  }
 
 
   function getMyReservations() {
@@ -122,6 +132,18 @@ var clientLogic = (function() {
       },
       function(error) {
         alert('Cannot get user reservations for: ' + username);
+        console.log(error);
+      });
+  }  
+
+
+  function showReservationsByOrganization(organization) {
+    restaurantsAPI.getOrganizationReservations(organization,
+      function(reservationsResponse) {
+        drawModule.createReservationsTable(reservationsResponse);
+      },
+      function(error) {
+        alert('Cannot get user reservations for: ' + organization);
         console.log(error);
       });
   }
@@ -239,9 +261,11 @@ var clientLogic = (function() {
   return {
     showAllRestaurants: showAllRestaurants,
     showOrganizationRestaurants: showOrganizationRestaurants,
+    showReservationsByOrganization: showReservationsByOrganization,
     showRestaurantReviews: showRestaurantReviews,
     showRestaurantReservations: showRestaurantReservations,
     showReviewsByUser: showReviewsByUser,
+    showReviewsByOrganization: showReviewsByOrganization,
     createNewReview: createNewReview,
     createNewReservation: createNewReservation,
     deleteReview: deleteReview,

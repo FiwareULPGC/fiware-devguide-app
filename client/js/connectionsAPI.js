@@ -174,9 +174,9 @@ var connectionsAPI = (function() {
           var reservationsA = document.createElement('A');
           reservationsA.tabIndex = -1;
           reservationsA.href =
-            'organizationReservationss.html?organization=' +
+            'organizationReservations.html?organization=' +
             userInfo.organizations[index].name;
-          reservationsA.textContent = 'Reservationss';
+          reservationsA.textContent = 'Reservations';
 
           reservationsLi.appendChild(reservationsA);
           //organizationLi.appendChild(reservationsLi);
