@@ -19,8 +19,9 @@ var connectionsAPI = (function() {
 
   var rol = {
     endUser: 'End user',
-    restaurantViewer: 'Restaurant Viewer',
-    globalManager: 'global manager'
+    restaurantViewer: 'Restaurant viewer',
+    globalManager: 'Global manager',
+    franchiseManager: 'Franchise manager'
   };
 
   var loginTimeout = 500;
