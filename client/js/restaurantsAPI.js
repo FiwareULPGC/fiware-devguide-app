@@ -66,7 +66,7 @@ var restaurantsAPI = (function() {
   }
 
 
-  //todo what return when error
+  //return nothing if error
   function convertRestaurant(restaurant) {
     var convertedRestaurant = {'name': restaurant.name};
 
@@ -176,68 +176,6 @@ var restaurantsAPI = (function() {
       baseURL + 'restaurant/' + restaurantName + '/date/' + time;
       AJAXRequest.get(URL, cb, err_cb);
   }
-
-/*
-  function editNewReview(restaurantName) {
-    document.getElementById('popTitle').textContent = restaurantName;
-    var reviewForm = document.createElement('FORM');
-    reviewForm.name = 'editReviewForm';
-    reviewForm.className = 'editReviewForm';
-    reviewForm.onsubmit = function() {
-        createNewReview(restaurantName);
-        return false;
-    };
-
-    var reviewLabel = document.createElement('LABEL');
-    reviewLabel.textContent = 'Your review: ';
-    reviewForm.appendChild(reviewLabel);
-    reviewForm.appendChild(document.createElement('BR'));
-
-    var reviewBody = document.createElement('TEXTAREA');
-    reviewBody.name = 'reviewBody';
-    reviewForm.appendChild(reviewBody);
-    reviewForm.appendChild(document.createElement('BR'));
-
-    var ratingLabel = document.createElement('LABEL');
-    ratingLabel.textContent = 'Rating value: ';
-    reviewForm.appendChild(ratingLabel);
-
-    var ratingValueSelect = document.createElement('SELECT');
-    ratingValueSelect.name = 'ratingValue';
-
-    var option;
-    for (var i = 0; i <= maxRating; i++) {
-      option = document.createElement('OPTION');
-      option.value = i;
-      option.textContent = i + ' Star' + (1 != i ? 's' : '');
-      ratingValueSelect.appendChild(option);
-    }
-
-    reviewForm.appendChild(ratingValueSelect);
-
-    var submit = document.createElement('INPUT');
-    submit.type = 'submit';
-    submit.value = 'Create Review';
-    reviewForm.appendChild(submit);
-
-    document.getElementById('popContent').innerHTML = '';
-
-    document.getElementById('popContent').appendChild(reviewForm);
-
-    openPopUpWindow();
-  }
-*/
-
-/*
-  function editReview(reviewId) {
-    var URL = baseURL + 'review/' + reviewId;
-    AJAXRequest.get(URL,
-        showEditReview,
-         function() {
-          window.alert('Cannot get review ' + reviewId);
-         });
-  }
-*/
 
 
   function getReview(reviewId, cb, err_cb) {

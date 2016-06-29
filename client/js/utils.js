@@ -54,18 +54,11 @@ var utils = (function() {
     return '' + d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
   }
 
-  function capitalize(str) {
-    return str.split('').map(function(char) {
-      return char.toUpperCase();
-    }).join('');
-  }
-
 
   return {
     addLoadEvent: addLoadEvent,
     showMessage: showMessage,
-    fixBookingTime: fixBookingTime,
-    capitalize: capitalize
+    fixBookingTime: fixBookingTime
   };
 })();
 

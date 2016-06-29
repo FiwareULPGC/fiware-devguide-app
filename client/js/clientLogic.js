@@ -223,7 +223,6 @@ var clientLogic = (function() {
     drawModule.setViewReservationAction(showRestaurantReservations);
     drawModule.setCreateNewReviewAction(createNewReview);
     drawModule.setCreateNewReservationAction(createNewReservation);
-    //todo interface via clientLogic
     drawModule.setGetReservationsByDateAction(
       restaurantsAPI.getRestaurantReservationsByDate);
     drawModule.setViewReviewAction(showReview);
@@ -247,7 +246,6 @@ var clientLogic = (function() {
     createNewReservation: createNewReservation,
     deleteReview: deleteReview,
     updateReview: updateReview,
-    //showReviewsByUser: showReviewsByUser,
     showReservationsByUser: showReservationsByUser,
     getMyReviews: getMyReviews,
     getMyReservations: getMyReservations,

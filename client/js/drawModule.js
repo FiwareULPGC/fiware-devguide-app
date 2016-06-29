@@ -333,7 +333,6 @@ var drawModule = (function() {
   function addCreateReviewLink(restaurantName) {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-    //TODO avoid interdependecy
     if (! connectionsAPI.hasRole(userInfo,
       connectionsAPI.rol.endUser)) {
       return null;
@@ -442,7 +441,6 @@ var drawModule = (function() {
   function addCreateReservationLink(restaurantName) {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-    //TODO avoid interdependecy
     if (! connectionsAPI.hasRole(userInfo,
       connectionsAPI.rol.endUser)) {
       return null;
@@ -465,7 +463,7 @@ var drawModule = (function() {
     var title = 'Make reservation for: ' + restaurantName;
     setPopupTitle(title);
     setPopupContent(reservationForm);
-    //TODO
+
     initReservationForm();
     openPopUpWindow();
   }
@@ -474,9 +472,6 @@ var drawModule = (function() {
 
   function createReservationForm(restaurantName) {
 
-    //reservationsPerDate = null;
-    //TODO gonna be removed
-    //getReservationsPerDate(restaurantName);
     document.getElementById('popTitle').textContent = 'Reservation for ' +
        restaurantName;
 

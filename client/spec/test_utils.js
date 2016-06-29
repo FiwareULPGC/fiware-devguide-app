@@ -9,11 +9,6 @@ require('mocha-jsdom')
 
 
 describe('Testing utils module', function () {
-  
-  it('capitalizes a string', function() {
-    var result = utils.capitalize('foobar');   
-    expect(result).to.be.a('string').and.equal('FOOBAR');
-  });
 
   describe('Testing showMessage function', function() {
 

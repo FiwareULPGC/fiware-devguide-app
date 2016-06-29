@@ -758,7 +758,13 @@ describe('Testing drawModule', function () {
       expect(document.getElementsByName('reviewBody')[0].value).to.be.equal(singleReviewJSON.reviewBody);
       expect(document.getElementsByName('ratingValue')[0].value).to.be.equal(singleReviewJSON.reviewRating.ratingValue+'');
 
-
   })
 
+
+
+  it('Create reservation form', function () {
+
+    
+    
+  })
 })
