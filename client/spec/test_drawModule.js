@@ -76,7 +76,6 @@ describe('Testing drawModule', function () {
     expect(document.getElementById('popContent').children[0]).to.be.deep.equal(nDiv);
   })
 
-
   it('Test create reviews div', function () {
     var doc = jsdom({});
     
@@ -95,7 +94,6 @@ describe('Testing drawModule', function () {
     expect(testDiv.innerHTML).to.be.equal(
       expectedDiv.defaultView.document.body.innerHTML);
   })
-
 
   it('Test create reservations div', function() {
     var doc = jsdom({});
@@ -140,7 +138,6 @@ describe('Testing drawModule', function () {
     .equal(expectedEle.defaultView.document.getElementById('testBody').innerHTML);
   })
  
-
   it('Test create reviews table', function() {
     var doc = jsdom("<html><head></head>" +
           "<body>" +
@@ -165,7 +162,6 @@ describe('Testing drawModule', function () {
       expectedEle.defaultView.document.getElementById('reviewsTableBody').innerHTML);
   })
 
-
   it('Create review form (new)', function() {
     var doc = jsdom({});
       
@@ -182,7 +178,6 @@ describe('Testing drawModule', function () {
     expect(testForm.innerHTML).to.be.deep.equal(
       expectedForm.defaultView.document.getElementById('testForm').innerHTML);
   })
-
 
   it('Create review form (update)', function() {
     var doc = jsdom("<html><head></head>" +

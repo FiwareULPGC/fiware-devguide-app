@@ -18,7 +18,6 @@ var AJAXRequest;
 var utils;
 
 var connectionsAPI = (function() {
-
   var role = {
     endUser: 'End user',
     restaurantViewer: 'Restaurant viewer',
@@ -73,7 +72,6 @@ var connectionsAPI = (function() {
   }
 
   function createAndShowMenu(userInfo) {
-
     var loggedMenu = document.createElement('UL');
     loggedMenu.id = 'loggedMenu';
     loggedMenu.classList.add('nav', 'navbar-nav', 'pull-left');
@@ -241,8 +239,8 @@ var connectionsAPI = (function() {
 
     setTimeout(function() {
       if (getUser() != null) {
-          action();
-          return;
+        action();
+        return;
       }
       else {
         utils.showMessage('Login required', 'alert-warning');
