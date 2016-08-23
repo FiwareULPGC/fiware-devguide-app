@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+#  load
+#  Copyright(c) 2016 Bitergia
+#  Author: Bitergia <fiware-testing@bitergia.com>
+#  MIT Licensed
+#
+#  load command for TourGuide CLI.
+#
+
+function module_help () {
+    exit 0
+}
+
+function module_options () {
+    exit 0
+}
+
+function module_cmd () {
+    not_implemented
+}
