@@ -23,11 +23,23 @@ The following commands are available:
 
 ### configure ###
 
+Allows the user to apply some configuration changes to some services.  This command has the following subcommands:
+
 #### configure cygnus ####
+
+Allows the user to configure the MySQL username and password for Cygnus.
+
+#### configure hosts ####
+
+Modify the hosts file to add entries for the running docker containers.
 
 #### configure keyrock ####
 
+Provision the TourGuide-App users, roles and permissions on Keyrock, then sync with Authzforce.
+
 #### configure oauth ####
+
+Get the OAuth credentials for TourGuide, as defined on Keyrock, and configure them on TourGuide-App container.
 
 ### load ###
 
