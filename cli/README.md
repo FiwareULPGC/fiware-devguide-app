@@ -31,11 +31,19 @@ The following commands are available:
 
 ### load ###
 
+Load sample data for TourGuide-App (restaurants, reservations and reviews).
+
 #### load restaurants ####
+
+Load sample restaurants for TourGuide-App.
 
 #### load reservations ####
 
+Create sample reservations for the restaurants available on TourGuide-App.
+
 #### load reviews ####
+
+Create sample reviews for the restaurants available on TourGuide-App.
 
 ### oauth-token ###
 
