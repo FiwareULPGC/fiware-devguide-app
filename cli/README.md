@@ -21,6 +21,7 @@ The following commands are available:
 
 ### check ###
 
+<<<<<<< HEAD
 Check if some required commands (both for running the containers and the scripts) are available.  The required commands are:
 
 * docker
@@ -60,6 +61,33 @@ Get the OAuth credentials for TourGuide, as defined on Keyrock, and configure th
 ### oauth-token ###
 
 Get the OAuth token for a specific user.  This may be needed to make requests via curl.
+=======
+### configure ###
+
+#### configure cygnus ####
+
+#### configure keyrock ####
+
+#### configure oauth ####
+
+### load ###
+
+Load sample data for TourGuide-App (restaurants, reservations and reviews).
+
+#### load restaurants ####
+
+Load sample restaurants for TourGuide-App.
+
+#### load reservations ####
+
+Create sample reservations for the restaurants available on TourGuide-App.
+
+#### load reviews ####
+
+Create sample reviews for the restaurants available on TourGuide-App.
+
+### oauth-token ###
+>>>>>>> dmabtrg/feature/cli-load
 
 ### sensors ###
 
@@ -73,8 +101,12 @@ Get the OAuth token for a specific user.  This may be needed to make requests vi
 
 ### start ###
 
+<<<<<<< HEAD
 Simple wrapper for docker-compose up.  Allows the user to start the TourGuide-App container and related services.
 
 ### stop ###
 
 Simple wrapper for docker-compose stop/rm.  Allows the user to stop the TourGuide-App container and related services.
+=======
+### stop ###
+>>>>>>> dmabtrg/feature/cli-load
